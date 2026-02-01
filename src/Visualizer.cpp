@@ -14,6 +14,12 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
+#include <Physics/Collision/RayCast.h>
+#include <Physics/Collision/CastResult.h>
+#include <Physics/Body/BodyFilter.h>
+#include <Physics/Body/BodyID.h>
+#include <Math/Vec3.h>
+#include <Math/Quat.h>
 #include <cmath>
 #include <cstdio>
 #include <fstream>
@@ -88,23 +94,23 @@ void update_camera_from_mouse(GLFWwindow* window, OrbitCamera& cam) {
   cam.last_y = ypos;
 }
 
-// Ray from camera through pixel (for middle-mouse drag)
+// Ray from camera through pixel (for R-drag body pick)
 void get_ray_from_pixel(const OrbitCamera& cam, double mouse_x, double mouse_y,
                         int fb_width, int fb_height,
-                        btVector3& ray_origin, btVector3& ray_dir) {
+                        JPH::Vec3& ray_origin, JPH::Vec3& ray_dir) {
   float az = cam.azimuth;
   float el = cam.elevation;
   float d = cam.distance;
-  btVector3 look_at(cam.look_at[0], cam.look_at[1], cam.look_at[2]);
-  btVector3 forward(std::sin(az) * std::cos(el), std::sin(el), std::cos(az) * std::cos(el));
+  JPH::Vec3 look_at(cam.look_at[0], cam.look_at[1], cam.look_at[2]);
+  JPH::Vec3 forward(std::sin(az) * std::cos(el), std::sin(el), std::cos(az) * std::cos(el));
   ray_origin = look_at - d * forward;
-  btVector3 right(std::cos(az), 0.f, -std::sin(az));
-  btVector3 up = right.cross(forward).normalized();
+  JPH::Vec3 right(std::cos(az), 0.f, -std::sin(az));
+  JPH::Vec3 up = right.Cross(forward).Normalized();
   float aspect = (fb_width > 0 && fb_height > 0) ? static_cast<float>(fb_width) / static_cast<float>(fb_height) : 1.f;
   float tan_half_fov = std::tan(25.f * 3.14159265f / 180.f);
   float ndc_x = (2.f * static_cast<float>(mouse_x) / static_cast<float>(fb_width) - 1.f);
   float ndc_y = (1.f - 2.f * static_cast<float>(mouse_y) / static_cast<float>(fb_height));
-  ray_dir = (forward + ndc_x * right * (tan_half_fov * aspect) + ndc_y * up * tan_half_fov).normalized();
+  ray_dir = (forward + ndc_x * right * (tan_half_fov * aspect) + ndc_y * up * tan_half_fov).Normalized();
 }
 
 // Chain scroll: give ImGui first, then zoom (so both work)
@@ -133,7 +139,6 @@ void run_demo_visual(const SimulatorConfig& config) {
     std::fprintf(stderr, "GLFW init failed\n");
     return;
   }
-
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -145,7 +150,6 @@ void run_demo_visual(const SimulatorConfig& config) {
     glfwTerminate();
     return;
   }
-
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
 
@@ -156,18 +160,24 @@ void run_demo_visual(const SimulatorConfig& config) {
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL2_Init();
-
   int fb_width, fb_height;
   glfwGetFramebufferSize(window, &fb_width, &fb_height);
   glViewport(0, 0, fb_width, fb_height);
 
   SimulatorScene scene;
   create_simulator_scene(config, scene);
-  zero_ragdoll_velocities(scene.ragdoll);
+  if (!scene.physics) {
+    std::fprintf(stderr, "create_simulator_scene failed (physics is null)\n");
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return;
+  }
+  zero_ragdoll_velocities(scene.ragdoll, scene.physics->GetBodyInterface());
 
   OpenGLDebugDrawer debug_drawer;
-  debug_drawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-  scene.world->setDebugDrawer(&debug_drawer);
 
   glEnable(GL_DEPTH_TEST);
   glClearColor(0.2f, 0.2f, 0.25f, 1.f);
@@ -175,7 +185,7 @@ void run_demo_visual(const SimulatorConfig& config) {
   ControllerState ctrl_state;
   int dm = config.default_motion_mode;
   ctrl_state.mode = (dm >= 0 && dm <= 2) ? static_cast<MotionMode>(dm) : MotionMode::Standing;
-  capture_rest_pose(scene.ragdoll, ctrl_state);
+  capture_rest_pose(scene.ragdoll, scene.physics->GetBodyInterface(), ctrl_state);
 
   OrbitCamera camera;
 
@@ -192,8 +202,8 @@ void run_demo_visual(const SimulatorConfig& config) {
   int frame_count = 0;
   MotionMode last_logged_mode = ctrl_state.mode;
   double test_float_until = 0.0;
-  btRigidBody* drag_body = nullptr;
-  btVector3 drag_hit_world(0.f, 0.f, 0.f);
+  JPH::BodyID drag_body;
+  JPH::Vec3 drag_hit_world(0.f, 0.f, 0.f);
   int middle_was_down = 0;
 
   glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int /*scancode*/, int action, int /*mods*/) {
@@ -213,6 +223,11 @@ void run_demo_visual(const SimulatorConfig& config) {
   });
 
   while (!glfwWindowShouldClose(window)) {
+    if (!scene.physics) {
+      log("[Visualizer] scene.physics is null; exiting loop");
+      break;
+    }
+    JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
     glfwPollEvents();
 
     ImGui_ImplOpenGL2_NewFrame();
@@ -239,17 +254,17 @@ void run_demo_visual(const SimulatorConfig& config) {
     }
     if (ImGui::Button("Reset", ImVec2(160, 0))) {
       test_float_until = 0.0;
-      drag_body = nullptr;
-      scene.world->setDebugDrawer(nullptr);
-      destroy_simulator_scene(scene);
-      create_simulator_scene(config, scene);
-      zero_ragdoll_velocities(scene.ragdoll);
-      scene.world->setDebugDrawer(&debug_drawer);
-      ctrl_state.mode = MotionMode::Standing;
-      ctrl_state.walk_phase = 0.f;
-      ctrl_state.jump_triggered = false;
-      ctrl_state.jump_frames_hold = 0;
-      capture_rest_pose(scene.ragdoll, ctrl_state);
+      drag_body = JPH::BodyID();
+      if (scene.physics) {
+        JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
+        JPH::RVec3 offset(0.f, config.ragdoll_height, 0.f);
+        reset_ragdoll_pose(bi, scene.ragdoll, offset, config.ragdoll_scale);
+        ctrl_state.mode = MotionMode::Standing;
+        ctrl_state.walk_phase = 0.f;
+        ctrl_state.jump_triggered = false;
+        ctrl_state.jump_frames_hold = 0;
+        capture_rest_pose(scene.ragdoll, bi, ctrl_state);
+      }
     }
     ImGui::Text("Camera: L-drag orbit, scroll zoom");
     ImGui::Text("Ragdoll: R-drag to pull body");
@@ -264,51 +279,52 @@ void run_demo_visual(const SimulatorConfig& config) {
         glfwGetWindowSize(window, &win_w, &win_h);
         double fb_mx = (win_w > 0) ? (mx * static_cast<double>(fb_width) / static_cast<double>(win_w)) : mx;
         double fb_my = (win_h > 0) ? (my * static_cast<double>(fb_height) / static_cast<double>(win_h)) : my;
-        btVector3 ray_origin, ray_dir;
+        JPH::Vec3 ray_origin, ray_dir;
         get_ray_from_pixel(camera, fb_mx, fb_my, fb_width, fb_height, ray_origin, ray_dir);
-        btVector3 ray_to = ray_origin + ray_dir * 1000.f;
-        btCollisionWorld::AllHitsRayResultCallback cb(ray_origin, ray_to);
-        scene.world->rayTest(ray_origin, ray_to, cb);
-        float best_fraction = 2.f;
-        for (int i = 0; i < cb.m_collisionObjects.size(); ++i) {
-          btRigidBody* hit = const_cast<btRigidBody*>(btRigidBody::upcast(cb.m_collisionObjects[i]));
-          if (!hit || cb.m_hitFractions[i] >= best_fraction) continue;
-          if (hit == scene.ground_body) continue;
-          for (btRigidBody* b : scene.ragdoll.bodies) {
-            if (b == hit) {
-              best_fraction = cb.m_hitFractions[i];
-              drag_body = hit;
-              drag_hit_world = cb.m_hitPointWorld[i];
+        JPH::RRayCast ray(JPH::RVec3(ray_origin), ray_dir * 1000.f);
+        JPH::RayCastResult result;
+        result.mFraction = 1.f;
+        JPH::IgnoreSingleBodyFilter skip_ground(scene.ground_id);
+        bool hit = scene.physics->GetNarrowPhaseQuery().CastRay(ray, result, {}, {}, skip_ground);
+        if (hit && !result.mBodyID.IsInvalid()) {
+          bool is_ragdoll = false;
+          for (JPH::BodyID id : scene.ragdoll.bodies) {
+            if (id == result.mBodyID) {
+              is_ragdoll = true;
               break;
             }
           }
+          if (is_ragdoll) {
+            drag_body = result.mBodyID;
+            drag_hit_world = JPH::Vec3(ray.GetPointOnRay(result.mFraction));
+            log("[R-drag] Picked body at %.2f, %.2f, %.2f", drag_hit_world.GetX(), drag_hit_world.GetY(), drag_hit_world.GetZ());
+          }
         }
-        if (!drag_body && !scene.ragdoll.bodies.empty()) {
+        if (drag_body.IsInvalid() && !scene.ragdoll.bodies.empty()) {
           float best_dist = 2.5f;
-          for (btRigidBody* b : scene.ragdoll.bodies) {
-            btVector3 c = b->getWorldTransform().getOrigin();
-            float t = (c - ray_origin).dot(ray_dir);
+          for (JPH::BodyID id : scene.ragdoll.bodies) {
+            if (id.IsInvalid()) continue;
+            JPH::Vec3 c = JPH::Vec3(bi.GetPosition(id));
+            float t = (c - ray_origin).Dot(ray_dir);
             if (t < 0.01f) continue;
-            btVector3 on_ray = ray_origin + ray_dir * t;
-            float d = (on_ray - c).length();
+            JPH::Vec3 on_ray = ray_origin + ray_dir * t;
+            float d = (on_ray - c).Length();
             if (d < best_dist) {
               best_dist = d;
-              drag_body = b;
+              drag_body = id;
               drag_hit_world = c;
             }
           }
-          if (drag_body)
-            log("[R-drag] Picked by proximity (dist=%.2f) at %.2f, %.2f, %.2f", best_dist, drag_hit_world.x(), drag_hit_world.y(), drag_hit_world.z());
+          if (!drag_body.IsInvalid())
+            log("[R-drag] Picked by proximity (dist=%.2f) at %.2f, %.2f, %.2f", best_dist, drag_hit_world.GetX(), drag_hit_world.GetY(), drag_hit_world.GetZ());
         }
-        if (drag_body && best_fraction < 2.f)
-          log("[R-drag] Picked body at %.2f, %.2f, %.2f", drag_hit_world.x(), drag_hit_world.y(), drag_hit_world.z());
-        else if (!drag_body)
-          log("[R-drag] No ragdoll hit (%u hits); right-click near character", static_cast<unsigned>(cb.m_collisionObjects.size()));
+        if (drag_body.IsInvalid())
+          log("[R-drag] No ragdoll hit; right-click near character");
       } else if (right_down != GLFW_PRESS) {
-        drag_body = nullptr;
+        drag_body = JPH::BodyID();
       }
     } else {
-      drag_body = nullptr;
+      drag_body = JPH::BodyID();
     }
     middle_was_down = right_down;
 
@@ -322,22 +338,26 @@ void run_demo_visual(const SimulatorConfig& config) {
         log("[UI] Mode -> Ragdoll");
     }
     if (ctrl_state.mode == MotionMode::Walking && frame_count % 60 == 0 && scene.ragdoll.bodies.size() >= static_cast<size_t>(BodyPart::RightLowerLeg) + 1u) {
-      float py = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)]->getWorldTransform().getOrigin().y();
-      float ly = scene.ragdoll.bodies[static_cast<int>(BodyPart::LeftLowerLeg)]->getWorldTransform().getOrigin().y();
-      float ry = scene.ragdoll.bodies[static_cast<int>(BodyPart::RightLowerLeg)]->getWorldTransform().getOrigin().y();
-      log("[Walk] phase=%.2f pelvis_y=%.2f L_foot_y=%.2f R_foot_y=%.2f", ctrl_state.walk_phase, py, ly, ry);
+      JPH::BodyID pid = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)];
+      JPH::BodyID lid = scene.ragdoll.bodies[static_cast<int>(BodyPart::LeftLowerLeg)];
+      JPH::BodyID rid = scene.ragdoll.bodies[static_cast<int>(BodyPart::RightLowerLeg)];
+      if (!pid.IsInvalid() && !lid.IsInvalid() && !rid.IsInvalid()) {
+        float py = float(bi.GetPosition(pid).GetY());
+        float ly = float(bi.GetPosition(lid).GetY());
+        float ry = float(bi.GetPosition(rid).GetY());
+        log("[Walk] phase=%.2f pelvis_y=%.2f L_foot_y=%.2f R_foot_y=%.2f", ctrl_state.walk_phase, py, ly, ry);
+      }
     }
     if (frame_count % 60 == 0 && scene.ragdoll.bodies.size() >= static_cast<size_t>(BodyPart::RightLowerArm) + 1u) {
-      btVector3 p = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)]->getWorldTransform().getOrigin();
-      btVector3 s = scene.ragdoll.bodies[static_cast<int>(BodyPart::Spine)]->getWorldTransform().getOrigin();
-      btVector3 h = scene.ragdoll.bodies[static_cast<int>(BodyPart::Head)]->getWorldTransform().getOrigin();
-      btVector3 lf = scene.ragdoll.bodies[static_cast<int>(BodyPart::LeftLowerLeg)]->getWorldTransform().getOrigin();
-      btVector3 rf = scene.ragdoll.bodies[static_cast<int>(BodyPart::RightLowerLeg)]->getWorldTransform().getOrigin();
-      btVector3 lhand = scene.ragdoll.bodies[static_cast<int>(BodyPart::LeftLowerArm)]->getWorldTransform().getOrigin();
-      btVector3 rhand = scene.ragdoll.bodies[static_cast<int>(BodyPart::RightLowerArm)]->getWorldTransform().getOrigin();
+      auto pos = [&](BodyPart part) { return bi.GetPosition(scene.ragdoll.bodies[static_cast<int>(part)]); };
+      JPH::RVec3 p = pos(BodyPart::Pelvis), s = pos(BodyPart::Spine), h = pos(BodyPart::Head);
+      JPH::RVec3 lf = pos(BodyPart::LeftLowerLeg), rf = pos(BodyPart::RightLowerLeg);
+      JPH::RVec3 lhand = pos(BodyPart::LeftLowerArm), rhand = pos(BodyPart::RightLowerArm);
       log("[Limbs] pelvis %.2f,%.2f,%.2f spine %.2f,%.2f,%.2f head %.2f,%.2f,%.2f L_foot %.2f,%.2f,%.2f R_foot %.2f,%.2f,%.2f L_hand %.2f,%.2f,%.2f R_hand %.2f,%.2f,%.2f",
-          p.x(), p.y(), p.z(), s.x(), s.y(), s.z(), h.x(), h.y(), h.z(),
-          lf.x(), lf.y(), lf.z(), rf.x(), rf.y(), rf.z(), lhand.x(), lhand.y(), lhand.z(), rhand.x(), rhand.y(), rhand.z());
+          float(p.GetX()), float(p.GetY()), float(p.GetZ()), float(s.GetX()), float(s.GetY()), float(s.GetZ()),
+          float(h.GetX()), float(h.GetY()), float(h.GetZ()), float(lf.GetX()), float(lf.GetY()), float(lf.GetZ()),
+          float(rf.GetX()), float(rf.GetY()), float(rf.GetZ()), float(lhand.GetX()), float(lhand.GetY()), float(lhand.GetZ()),
+          float(rhand.GetX()), float(rhand.GetY()), float(rhand.GetZ()));
     }
 
     ImGui::SetNextWindowPos(ImVec2(220, 10), ImGuiCond_FirstUseEver);
@@ -369,11 +389,14 @@ void run_demo_visual(const SimulatorConfig& config) {
                      static_cast<int>(BodyPart::RightUpperArm), static_cast<int>(BodyPart::RightLowerArm)};
       for (int i = 0; i < 11; ++i) {
         if (parts[i] < static_cast<int>(scene.ragdoll.bodies.size())) {
-          btVector3 p = scene.ragdoll.bodies[parts[i]]->getWorldTransform().getOrigin();
-          ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], p.x(), p.y(), p.z());
+          JPH::BodyID id = scene.ragdoll.bodies[parts[i]];
+          if (!id.IsInvalid()) {
+            JPH::RVec3 pos = bi.GetPosition(id);
+            ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], static_cast<double>(pos.GetX()), static_cast<double>(pos.GetY()), static_cast<double>(pos.GetZ()));
+          }
         }
       }
-      if (drag_body) ImGui::TextColored(ImVec4(0, 1, 0, 1), "R-drag active");
+      if (!drag_body.IsInvalid()) ImGui::TextColored(ImVec4(0, 1, 0, 1), "R-drag active");
     }
     ImGui::End();
 
@@ -384,38 +407,40 @@ void run_demo_visual(const SimulatorConfig& config) {
     setup_projection(fb_width, fb_height);
     setup_camera(camera);
 
-    apply_pose_control(scene.world, scene.ragdoll, ctrl_state, config);
+    apply_pose_control(scene.physics, scene.ragdoll, ctrl_state, config);
     if (test_float_until > 0 && glfwGetTime() < test_float_until && !scene.ragdoll.bodies.empty()) {
-      scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)]->applyCentralForce(btVector3(0, 150, 0));
+      JPH::BodyID pid = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)];
+      if (!pid.IsInvalid())
+        bi.AddForce(pid, JPH::Vec3(0, 450, 0));  // upward force so character rises
     }
-    if (drag_body) {
+    if (!drag_body.IsInvalid()) {
       double mx, my;
       glfwGetCursorPos(window, &mx, &my);
       int win_w, win_h;
       glfwGetWindowSize(window, &win_w, &win_h);
       double fb_mx = (win_w > 0) ? (mx * static_cast<double>(fb_width) / static_cast<double>(win_w)) : mx;
       double fb_my = (win_h > 0) ? (my * static_cast<double>(fb_height) / static_cast<double>(win_h)) : my;
-      btVector3 ray_origin, ray_dir;
+      JPH::Vec3 ray_origin, ray_dir;
       get_ray_from_pixel(camera, fb_mx, fb_my, fb_width, fb_height, ray_origin, ray_dir);
-      float t = (drag_hit_world - ray_origin).dot(ray_dir);
+      float t = (drag_hit_world - ray_origin).Dot(ray_dir);
       if (t > 0.01f) {
-        btVector3 target = ray_origin + ray_dir * t;
-        btVector3 body_pos = drag_body->getWorldTransform().getOrigin();
-        btVector3 to_target = target - body_pos;
-        btVector3 vel = drag_body->getLinearVelocity();
-        btVector3 force = to_target * 200.f - vel * 20.f;
-        float mag = force.length();
+        JPH::Vec3 target = ray_origin + ray_dir * t;
+        JPH::Vec3 body_pos = JPH::Vec3(bi.GetPosition(drag_body));
+        JPH::Vec3 to_target = target - body_pos;
+        JPH::Vec3 vel = bi.GetLinearVelocity(drag_body);
+        JPH::Vec3 force = to_target * 200.f - vel * 20.f;
+        float mag = force.Length();
         if (mag > 500.f && mag > 1e-5f) force *= 500.f / mag;
-        drag_body->applyCentralForce(force);
+        bi.AddForce(drag_body, force);
       }
     }
-    scene.world->stepSimulation(static_cast<btScalar>(config.time_step), 1);
-    clamp_ragdoll_velocities(scene.ragdoll);
+    scene.physics->Update(static_cast<float>(config.time_step), 1, scene.temp_allocator, scene.job_system);
+    clamp_ragdoll_velocities(scene.ragdoll, bi);
 
     frame_count++;
 
     glBegin(GL_LINES);
-    scene.world->debugDrawWorld();
+    debug_drawer.draw_bodies(scene.physics, scene.ragdoll, scene.ground_id);
     glEnd();
 
     glDisable(GL_DEPTH_TEST);
@@ -430,7 +455,6 @@ void run_demo_visual(const SimulatorConfig& config) {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 
-  scene.world->setDebugDrawer(nullptr);
   destroy_simulator_scene(scene);
   glfwDestroyWindow(window);
   glfwTerminate();

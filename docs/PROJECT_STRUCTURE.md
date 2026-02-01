@@ -2,16 +2,17 @@
 
 ```
 biomechanics-simulator/
-├── CMakeLists.txt          # Root build: Bullet + GLFW (vcpkg/FetchContent), main app, optional tests
-├── vcpkg.json              # vcpkg manifest (bullet3)
+├── CMakeLists.txt          # Root build: Jolt + GLFW (FetchContent), main app, optional tests
+├── vcpkg.json              # vcpkg manifest (optional; Jolt from FetchContent)
 ├── include/
 │   └── biomechanics/       # Public API
 │       ├── Config.hpp      # SimulatorConfig (gravity, time step, ragdoll, window size, etc.)
+│       ├── JoltLayers.hpp  # Broad-phase and object layers for Jolt
 │       ├── Ragdoll.hpp     # BodyPart enum, RagdollHandles, setup_ragdoll(), destroy_ragdoll()
 │       ├── Simulator.hpp   # run_demo(SimulatorConfig) – headless
 │       ├── SimulatorScene.hpp  # SimulatorScene, create_simulator_scene(), destroy_simulator_scene()
 │       ├── Visualizer.hpp  # run_demo_visual(SimulatorConfig) – window + OpenGL
-│       ├── OpenGLDebugDrawer.hpp  # btIDebugDraw implementation for wireframe
+│       ├── OpenGLDebugDrawer.hpp  # Wireframe drawing of Jolt bodies
 │       └── PoseController.hpp  # MotionMode, ControllerState, apply_pose_control() – standing/walking/jump
 ├── src/
 │   ├── main.cpp            # Entry point: --headless → run_demo(), else run_demo_visual()
@@ -23,7 +24,7 @@ biomechanics-simulator/
 │   └── OpenGLDebugDrawer.cpp  # drawLine, setDebugMode, etc. (OpenGL wireframe)
 ├── tests/
 │   ├── CMakeLists.txt      # Built when -DBUILD_TESTS=ON
-│   └── smoke_test.cpp     # Minimal Bullet world step
+│   └── smoke_test.cpp     # Minimal Jolt physics step
 ├── docs/
 │   └── PROJECT_STRUCTURE.md
 └── README.md

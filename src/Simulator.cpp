@@ -14,12 +14,17 @@ void run_demo(const SimulatorConfig& config) {
 
   SimulatorScene scene;
   create_simulator_scene(config, scene);
-  zero_ragdoll_velocities(scene.ragdoll);
+  if (!scene.physics) {
+    std::fprintf(stderr, "create_simulator_scene failed (physics is null)\n");
+    return;
+  }
+  JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
+  zero_ragdoll_velocities(scene.ragdoll, bi);
 
   ControllerState ctrl_state;
   int dm = config.default_motion_mode;
   ctrl_state.mode = (dm >= 0 && dm <= 2) ? static_cast<MotionMode>(dm) : MotionMode::Standing;
-  capture_rest_pose(scene.ragdoll, ctrl_state);
+  capture_rest_pose(scene.ragdoll, bi, ctrl_state);
 
   std::printf("Biomechanics Simulator: stepping %d times (dt=%.4f s), mode=%s\n",
               config.num_steps, config.time_step,
@@ -27,16 +32,18 @@ void run_demo(const SimulatorConfig& config) {
               ctrl_state.mode == MotionMode::Walking ? "walking" : "ragdoll");
 
   for (int i = 0; i < config.num_steps; ++i) {
-    apply_pose_control(scene.world, scene.ragdoll, ctrl_state, config);
-    scene.world->stepSimulation(static_cast<btScalar>(config.time_step), 1);
-    clamp_ragdoll_velocities(scene.ragdoll);
+    apply_pose_control(scene.physics, scene.ragdoll, ctrl_state, config);
+    scene.physics->Update(static_cast<float>(config.time_step), 1, scene.temp_allocator, scene.job_system);
+    clamp_ragdoll_velocities(scene.ragdoll, bi);
   }
 
-  btTransform trans;
-  scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)]->getMotionState()->getWorldTransform(trans);
-  std::printf("Pelvis position after simulation: (%.3f, %.3f, %.3f)\n",
-              trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z());
-  std::printf("World has %d collision objects.\n", scene.world->getNumCollisionObjects());
+  JPH::BodyID pelvis_id = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)];
+  if (!pelvis_id.IsInvalid()) {
+    JPH::RVec3 pos = bi.GetPosition(pelvis_id);
+    std::printf("Pelvis position after simulation: (%.3f, %.3f, %.3f)\n",
+                static_cast<double>(pos.GetX()), static_cast<double>(pos.GetY()), static_cast<double>(pos.GetZ()));
+  }
+  std::printf("Physics system has %u bodies.\n", scene.physics->GetNumBodies());
 
   destroy_simulator_scene(scene);
   std::printf("Done.\n");

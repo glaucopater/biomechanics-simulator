@@ -1,5 +1,6 @@
 #include "biomechanics/Log.hpp"
 #include <cstdio>
+#include <chrono>
 #include <fstream>
 #include <filesystem>
 #ifdef _WIN32
@@ -102,5 +103,24 @@ void clear_log(bool clear_file) {
     }
   }
 }
+
+// #region agent log
+static const char* k_debug_log_path = "c:/Users/glauc/github/biomechanics-simulator/.cursor/debug.log";
+
+void debug_instrument(const char* location, const char* message, const char* hypothesis_id, int data_val) {
+  std::error_code ec;
+  std::filesystem::path p(k_debug_log_path);
+  std::filesystem::create_directories(p.parent_path(), ec);
+  auto t = std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::steady_clock::now().time_since_epoch()).count();
+  std::ofstream f(k_debug_log_path, std::ios::app);
+  if (!f) return;
+  f << "{\"timestamp\":" << t << ",\"location\":\"" << location << "\",\"message\":\"" << message
+    << "\",\"hypothesisId\":\"" << hypothesis_id << "\",\"sessionId\":\"debug-session\",\"runId\":\"run1\"";
+  if (data_val != -999) f << ",\"data\":{\"val\":" << data_val << "}";
+  f << "}\n";
+  f.flush();
+}
+// #endregion
 
 }  // namespace biomechanics

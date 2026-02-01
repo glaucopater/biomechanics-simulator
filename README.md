@@ -1,6 +1,6 @@
 # Biomechanics Simulator (C++)
 
-Minimal C++ biomechanics simulator with ragdoll physics using [Bullet Physics](https://github.com/bulletphysics/bullet3): rigid bodies (capsules for limbs), 6-DOF joint constraints, and a dynamics world. The ragdoll is based on the [kripken/bullet GenericJointDemo Ragdoll](https://github.com/kripken/bullet/blob/master/Demos/GenericJointDemo/Ragdoll.cpp).
+Minimal C++ biomechanics simulator with ragdoll physics using [Jolt Physics](https://github.com/jrouwe/JoltPhysics): rigid bodies (capsules for limbs), 6-DOF joint constraints, and a dynamics world. Jolt is used in Horizon Forbidden West and Death Stranding 2.
 
 ## Requirements
 
@@ -12,7 +12,7 @@ Minimal C++ biomechanics simulator with ragdoll physics using [Bullet Physics](h
 
 ## Build
 
-**Option A – CMake only (Bullet fetched automatically)**  
+**Option A – CMake only (Jolt fetched automatically)**  
 From the project root:
 
 ```bash
@@ -22,8 +22,8 @@ cmake --build build
 
 On Windows with Visual Studio: `cmake -B build -G "Visual Studio 17 2022" -A x64` then open `build/biomechanics_simulator.sln` or run `cmake --build build --config Release`.
 
-**Option B – vcpkg (Bullet from vcpkg)**  
-Install [vcpkg](https://vcpkg.io/en/getting-started.html), then:
+**Option B – vcpkg**  
+Jolt is built from source via FetchContent; vcpkg is optional for other deps. If using vcpkg:
 
 ```bash
 cmake -B build -DCMAKE_TOOLCHAIN_FILE=[vcpkg]/scripts/buildsystems/vcpkg.cmake
@@ -71,23 +71,23 @@ The model has default **standing**, **walking**, and **jumping**:
 
 ## What it does
 
-- Creates a Bullet `btDiscreteDynamicsWorld` with gravity.
-- Adds a ground plane and a single ragdoll (pelvis, spine, head, arms, legs) built from capsule shapes and `btGeneric6DofConstraint` joints.
+- Creates a Jolt `PhysicsSystem` with gravity.
+- Adds a ground plane and a single ragdoll (pelvis, spine, head, arms, legs) built from capsule shapes and `SixDOFConstraint` joints.
 - **Default**: runs with a visualizer window; simulation steps in real time and the body is drawn as a wireframe. Starts in **Standing**. Use the on-screen **Stance** panel (Standing / Walk / Ragdoll / Jump / Reset) or keys **1** / **2** / **3** / **Space**. **Reset** restores the scene to the initial standing pose. **Camera**: left-drag to orbit, scroll to zoom. Close the window to exit.
 - **`--headless`**: steps the simulation 300 times at 60 Hz with pose control (standing by default; set `default_motion_mode` in config for walking/ragdoll), prints the pelvis position and "Done.", then exits.
 
 ## Project layout
 
-- `CMakeLists.txt` – root build; Bullet and GLFW (vcpkg or FetchContent), `biomechanics_simulator`, optional tests.
-- `vcpkg.json` – vcpkg manifest (bullet3).
-- `include/biomechanics/` – public API: `Config.hpp`, `Ragdoll.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, `PoseController.hpp`.
+- `CMakeLists.txt` – root build; Jolt and GLFW (FetchContent), `biomechanics_simulator`, optional tests.
+- `vcpkg.json` – vcpkg manifest (optional; Jolt is fetched from source).
+- `include/biomechanics/` – public API: `Config.hpp`, `JoltLayers.hpp`, `Ragdoll.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, `PoseController.hpp`.
 - `src/main.cpp` – entry point; parses `--headless`, calls `run_demo_visual()` (default) or `run_demo()`.
-- `src/Ragdoll.cpp` – ragdoll creation (capsules + 6-DOF joints).
-- `src/Simulator.cpp` – headless demo: world, ground, pose control, step loop, cleanup (uses `SimulatorScene`).
+- `src/Ragdoll.cpp` – ragdoll creation (Jolt capsules + SixDOF constraints).
+- `src/Simulator.cpp` – headless demo: physics, ground, pose control, step loop, cleanup (uses `SimulatorScene`).
 - `src/SimulatorScene.cpp` – shared scene setup: `create_simulator_scene()`, `destroy_simulator_scene()`.
 - `src/PoseController.cpp` – stance/walking/jump: PD control toward rest pose or cyclic gait; jump impulse.
 - `src/Visualizer.cpp` – visual mode: GLFW window, orbit/zoom camera (mouse drag + scroll), ImGui stance panel (Stand/Walk/Ragdoll/Jump), OpenGL debug drawer, key bindings (1/2/3/Space), step-and-draw loop.
-- `src/OpenGLDebugDrawer.cpp` – `btIDebugDraw` implementation for wireframe rendering.
+- `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies (capsules, box).
 - `tests/` – optional smoke test; build with `-DBUILD_TESTS=ON`.
 - `docs/PROJECT_STRUCTURE.md` – folder layout and roles.
 

@@ -21,4 +21,7 @@ const char* get_log_path();
 /** Clear in-memory buffer and optionally the log file. */
 void clear_log(bool clear_file = false);
 
+/** Write one NDJSON line to .cursor/debug.log for debug instrumentation. */
+void debug_instrument(const char* location, const char* message, const char* hypothesis_id, int data_val = -999);
+
 }  // namespace biomechanics

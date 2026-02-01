@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-# Use DLL CRT before project() so FetchContent subprojects (Bullet, GLFW, imgui) inherit it
+# Use DLL CRT before project() so FetchContent subprojects (Jolt, GLFW, imgui) inherit it
 if(MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL" CACHE STRING "MSVC runtime")
 endif()
@@ -13,31 +13,21 @@ endif()
 # Public include directory: #include "biomechanics/..."
 set(PROJECT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE PATH "Include directory")
 
-# Bullet Physics: prefer vcpkg; otherwise fetch and build from source
-find_package(Bullet CONFIG QUIET)
-if(NOT Bullet_FOUND)
-  message(STATUS "Bullet not found via vcpkg; fetching Bullet from GitHub...")
-  include(FetchContent)
-  set(BUILD_BULLET2_DEMOS OFF CACHE BOOL "" FORCE)
-  set(BUILD_CPU_DEMOS OFF CACHE BOOL "" FORCE)
-  set(BUILD_PYBULLET OFF CACHE BOOL "" FORCE)
-  set(BUILD_OPENGL3_DEMOS OFF CACHE BOOL "" FORCE)
-  set(BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE)
-  set(BUILD_BULLET3 OFF CACHE BOOL "" FORCE)
-  set(USE_GRAPHICAL_BENCHMARK OFF CACHE BOOL "" FORCE)
-  set(USE_SOFT_BODY_MULTI_BODY_DYNAMICS_WORLD OFF CACHE BOOL "" FORCE)
-
-  FetchContent_Declare(
-    bullet3
-    GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
-    GIT_TAG        master
-    GIT_SHALLOW    TRUE
-  )
-  FetchContent_Populate(bullet3)
-  set(BULLET_PHYSICS_SOURCE_DIR ${bullet3_SOURCE_DIR} CACHE PATH "" FORCE)
-  add_subdirectory(${bullet3_SOURCE_DIR} ${bullet3_BINARY_DIR} EXCLUDE_FROM_ALL)
-  set(BULLET_LIBRARIES BulletDynamics BulletCollision LinearMath)
-endif()
+# Jolt Physics: fetch and build from source (match our /MD runtime)
+include(FetchContent)
+set(USE_ASSERTS OFF CACHE BOOL "" FORCE)
+set(ENABLE_ALL_WARNINGS OFF CACHE BOOL "" FORCE)
+set(DEBUG_RENDERER_IN_DEBUG_AND_RELEASE OFF CACHE BOOL "" FORCE)
+set(PROFILER_IN_DEBUG_AND_RELEASE OFF CACHE BOOL "" FORCE)
+set(USE_STATIC_MSVC_RUNTIME_LIBRARY OFF CACHE BOOL "" FORCE)
+FetchContent_Declare(
+  JoltPhysics
+  GIT_REPOSITORY https://github.com/jrouwe/JoltPhysics.git
+  GIT_TAG        v5.0.0
+  GIT_SHALLOW    TRUE
+)
+FetchContent_Populate(JoltPhysics)
+add_subdirectory(${joltphysics_SOURCE_DIR}/Build ${joltphysics_BINARY_DIR})
 
 # GLFW: window and OpenGL context
 include(FetchContent)
@@ -89,14 +79,10 @@ add_executable(biomechanics_simulator
 )
 target_include_directories(biomechanics_simulator PRIVATE
   ${PROJECT_INCLUDE_DIR}
+  ${joltphysics_SOURCE_DIR}/Jolt
 )
-if(Bullet_FOUND)
-  target_link_libraries(biomechanics_simulator PRIVATE ${BULLET_LIBRARIES})
-else()
-  target_include_directories(biomechanics_simulator PRIVATE ${bullet3_SOURCE_DIR}/src)
-  target_link_libraries(biomechanics_simulator PRIVATE ${BULLET_LIBRARIES})
-endif()
 target_link_libraries(biomechanics_simulator PRIVATE
+  Jolt
   OpenGL::GL
   glfw
   imgui
