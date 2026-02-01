@@ -39,3 +39,14 @@
 
 # debug information files
 *.dwo
+
+# Build and CMake
+build/
+out/
+cmake-build-*/
+.vs/
+*.user
+
+# vcpkg
+vcpkg_installed/
+vcpkg_manifest.log

@@ -1,0 +1,380 @@
+[log cleared]
+App started. Stance: Standing / Walk / Ragdoll. Log file: .cursor/debug.log
+[Limbs] pelvis 0.00,1.04,0.00 spine 0.00,1.24,0.00 head 0.00,1.64,0.00 L_foot -0.18,0.24,0.00 R_foot 0.18,0.24,0.00 L_hand -0.20,0.94,0.00 R_hand 0.20,0.94,0.00
+[Limbs] pelvis -0.00,0.97,-0.00 spine -0.00,1.26,-0.00 head -0.01,1.70,-0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.96,0.00 R_hand 0.27,0.96,-0.00
+[Limbs] pelvis -0.00,0.97,-0.00 spine -0.01,1.26,-0.00 head -0.02,1.70,-0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.95,0.01 R_hand 0.27,0.97,-0.01
+[Limbs] pelvis 0.01,0.94,-0.00 spine -0.00,1.24,-0.00 head -0.07,1.67,-0.03 L_foot -0.21,0.23,0.01 R_foot 0.19,0.22,0.02 L_hand -0.22,0.92,0.17 R_hand 0.22,0.95,-0.13
+[Limbs] pelvis -0.00,0.91,-0.01 spine -0.14,1.12,-0.11 head -0.50,1.25,-0.32 L_foot -0.27,0.23,0.07 R_foot 0.27,0.21,0.06 L_hand -0.15,0.87,0.25 R_hand 0.14,0.86,-0.23
+[Limbs] pelvis 0.00,0.76,-0.01 spine -0.04,0.73,-0.28 head -0.07,0.47,-0.62 L_foot -0.11,0.25,0.52 R_foot 0.31,0.22,0.44 L_hand -0.28,0.53,0.05 R_hand 0.32,0.46,-0.04
+[Limbs] pelvis -0.01,0.77,-0.00 spine 0.10,0.75,-0.25 head 0.24,0.48,-0.55 L_foot -0.42,0.26,0.36 R_foot -0.06,0.21,0.49 L_hand -0.36,0.50,-0.21 R_hand 0.20,0.50,0.13
+[Limbs] pelvis 0.01,0.77,0.01 spine 0.25,0.74,-0.12 head 0.56,0.47,-0.24 L_foot -0.46,0.19,0.16 R_foot -0.26,0.28,0.51 L_hand -0.13,0.40,-0.27 R_hand 0.10,0.57,0.23
+[Limbs] pelvis -0.00,0.77,-0.01 spine 0.27,0.74,-0.02 head 0.60,0.46,-0.03 L_foot -0.49,0.20,-0.16 R_foot -0.47,0.27,0.28 L_hand -0.01,0.44,-0.38 R_hand -0.01,0.53,0.14
+[Limbs] pelvis -0.00,0.77,0.01 spine 0.25,0.73,0.11 head 0.52,0.45,0.27 L_foot -0.42,0.19,-0.28 R_foot -0.59,0.32,0.12 L_hand 0.13,0.38,-0.30 R_hand -0.05,0.55,0.11
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.21,0.73,0.18 head 0.43,0.46,0.41 L_foot -0.30,0.19,-0.40 R_foot -0.58,0.32,-0.07 L_hand 0.23,0.40,-0.26 R_hand -0.03,0.53,0.07
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.17,0.72,0.21 head 0.34,0.44,0.47 L_foot -0.23,0.19,-0.46 R_foot -0.58,0.34,-0.18 L_hand 0.27,0.38,-0.22 R_hand -0.04,0.52,0.06
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.16,0.73,0.22 head 0.30,0.45,0.51 L_foot -0.19,0.19,-0.47 R_foot -0.56,0.34,-0.22 L_hand 0.28,0.38,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.15,0.73,0.22 head 0.30,0.44,0.51 L_foot -0.18,0.19,-0.48 R_foot -0.55,0.33,-0.23 L_hand 0.29,0.39,-0.19 R_hand -0.04,0.53,0.06
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.15,0.73,0.22 head 0.30,0.44,0.51 L_foot -0.19,0.19,-0.47 R_foot -0.56,0.34,-0.22 L_hand 0.28,0.38,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.16,0.73,0.22 head 0.32,0.44,0.49 L_foot -0.20,0.19,-0.47 R_foot -0.56,0.33,-0.20 L_hand 0.27,0.39,-0.21 R_hand -0.04,0.53,0.06
+[UI] Mode -> Walking
+[Pose] Walk mode: 6 limb joints springs OFF (PD drives)
+[Walk] phase=0.31 pelvis_y=0.93 L_foot_y=0.12 R_foot_y=0.20
+[Limbs] pelvis -0.11,0.93,-0.05 spine -0.21,1.13,0.22 head -0.53,1.48,0.39 L_foot -0.53,0.12,-0.01 R_foot 0.21,0.20,-0.15 L_hand -0.71,0.57,0.70 R_hand -0.53,0.64,0.33
+[Walk] phase=4.84 angle_err=0.770 torque=140 pelvis_y=0.94 L_foot_y=0.20 R_foot_y=0.20
+[Walk] phase=5.34 pelvis_y=1.00 L_foot_y=0.19 R_foot_y=0.30
+[Limbs] pelvis 0.02,1.00,-0.06 spine -0.07,1.22,0.12 head -0.39,1.59,0.15 L_foot -0.25,0.19,0.22 R_foot 0.07,0.30,-0.55 L_hand -0.42,0.66,0.55 R_hand -0.11,0.74,0.01
+[Walk] phase=3.58 angle_err=1.867 torque=140 pelvis_y=0.95 L_foot_y=0.37 R_foot_y=0.21
+[Walk] phase=4.08 pelvis_y=0.95 L_foot_y=0.20 R_foot_y=0.20
+[Limbs] pelvis 0.06,0.95,-0.04 spine 0.07,1.22,0.11 head 0.23,1.67,0.25 L_foot -0.19,0.20,-0.25 R_foot 0.45,0.20,0.22 L_hand -0.24,0.79,0.14 R_hand 0.61,1.01,0.39
+[Walk] phase=2.32 angle_err=0.357 torque=140 pelvis_y=0.92 L_foot_y=0.22 R_foot_y=0.19
+[Walk] phase=2.83 pelvis_y=1.05 L_foot_y=0.27 R_foot_y=0.30
+[Limbs] pelvis -0.05,1.05,0.01 spine -0.12,1.27,0.20 head -0.29,1.70,0.14 L_foot -0.42,0.27,-0.04 R_foot 0.44,0.30,0.07 L_hand -0.42,0.53,0.47 R_hand -0.15,0.78,0.45
+[Walk] phase=1.07 angle_err=0.452 torque=140 pelvis_y=1.01 L_foot_y=0.25 R_foot_y=0.26
+[Walk] phase=1.57 pelvis_y=1.11 L_foot_y=0.28 R_foot_y=0.35
+[Limbs] pelvis -0.02,1.11,0.02 spine -0.13,1.32,0.20 head -0.43,1.73,0.18 L_foot -0.41,0.28,-0.05 R_foot 0.09,0.35,-0.34 L_hand -0.45,0.68,0.55 R_hand -0.18,0.95,0.29
+[Walk] phase=6.09 angle_err=1.720 torque=140 pelvis_y=0.98 L_foot_y=0.21 R_foot_y=0.20
+[Walk] phase=0.31 pelvis_y=0.95 L_foot_y=0.18 R_foot_y=0.19
+[Limbs] pelvis 0.02,0.95,0.02 spine 0.09,1.19,0.21 head -0.00,1.62,0.25 L_foot -0.32,0.18,-0.02 R_foot 0.42,0.19,-0.13 L_hand -0.43,0.74,0.51 R_hand 0.59,0.77,0.13
+[Walk] phase=4.84 angle_err=0.705 torque=140 pelvis_y=0.92 L_foot_y=0.25 R_foot_y=0.26
+[Walk] phase=5.34 pelvis_y=0.95 L_foot_y=0.17 R_foot_y=0.31
+[Limbs] pelvis -0.05,0.95,-0.04 spine -0.14,1.18,0.18 head -0.42,1.52,0.44 L_foot -0.36,0.17,0.25 R_foot 0.33,0.31,-0.39 L_hand -0.48,0.56,0.63 R_hand -0.33,0.67,0.30
+[Walk] phase=3.58 angle_err=0.645 torque=140 pelvis_y=0.89 L_foot_y=0.19 R_foot_y=0.21
+[Walk] phase=4.08 pelvis_y=0.97 L_foot_y=0.28 R_foot_y=0.19
+[Limbs] pelvis -0.02,0.97,0.02 spine -0.08,1.23,0.16 head -0.30,1.65,-0.00 L_foot -0.58,0.28,0.11 R_foot 0.43,0.19,-0.01 L_hand -0.47,0.64,0.53 R_hand -0.24,0.35,0.17
+[Walk] phase=2.32 angle_err=0.571 torque=140 pelvis_y=1.05 L_foot_y=0.29 R_foot_y=0.21
+[Walk] phase=2.83 pelvis_y=1.08 L_foot_y=0.30 R_foot_y=0.25
+[Limbs] pelvis -0.12,1.08,0.07 spine -0.15,1.31,0.21 head -0.25,1.76,0.06 L_foot -0.48,0.30,-0.01 R_foot 0.19,0.25,-0.05 L_hand -0.38,0.70,0.57 R_hand -0.08,0.60,0.20
+[Walk] phase=1.07 angle_err=0.641 torque=140 pelvis_y=1.00 L_foot_y=0.19 R_foot_y=0.29
+[Walk] phase=1.57 pelvis_y=0.99 L_foot_y=0.19 R_foot_y=0.23
+[Limbs] pelvis 0.01,0.99,-0.00 spine -0.03,1.22,0.18 head -0.27,1.61,0.24 L_foot -0.33,0.19,0.06 R_foot 0.42,0.23,-0.10 L_hand -0.39,0.55,0.58 R_hand -0.20,0.43,0.20
+[Walk] phase=6.09 angle_err=0.557 torque=140 pelvis_y=0.95 L_foot_y=0.20 R_foot_y=0.27
+[Walk] phase=0.31 pelvis_y=1.03 L_foot_y=0.23 R_foot_y=0.34
+[Limbs] pelvis -0.05,1.03,-0.09 spine -0.13,1.24,0.15 head -0.38,1.60,0.38 L_foot -0.30,0.23,0.16 R_foot 0.26,0.34,-0.41 L_hand -0.53,0.63,0.61 R_hand -0.43,0.58,0.15
+[UI] Mode -> Standing
+[Pose] Stand mode: all 10 joints springs ON -> 150
+[Limbs] pelvis 0.02,0.79,-0.04 spine 0.09,0.77,-0.33 head 0.15,0.62,-0.74 L_foot -0.26,0.17,0.40 R_foot -0.33,0.95,0.65 L_hand 0.02,0.16,-0.20 R_hand 0.05,1.02,-0.08
+[Limbs] pelvis -0.00,0.78,0.05 spine -0.05,0.76,0.33 head -0.10,0.53,0.70 L_foot 0.50,0.36,-0.42 R_foot -0.21,0.29,-0.50 L_hand 0.49,0.65,0.22 R_hand -0.21,0.54,0.02
+[Limbs] pelvis -0.05,0.76,0.02 spine 0.13,0.68,-0.18 head 0.34,0.37,-0.38 L_foot -0.56,0.31,0.37 R_foot -0.19,0.40,0.66 L_hand -0.37,0.40,-0.27 R_hand 0.21,0.56,0.27
+[Limbs] pelvis 0.00,0.76,-0.02 spine -0.27,0.71,0.05 head -0.61,0.46,0.12 L_foot 0.59,0.29,0.01 R_foot 0.45,0.33,-0.45 L_hand 0.03,0.40,0.43 R_hand -0.22,0.48,-0.46
+[Limbs] pelvis 0.02,0.77,0.00 spine 0.27,0.71,0.12 head 0.58,0.43,0.24 L_foot -0.38,0.36,-0.50 R_foot -0.58,0.30,-0.05 L_hand 0.32,0.48,-0.41 R_hand -0.09,0.40,0.46
+[Limbs] pelvis -0.01,0.76,0.01 spine -0.07,0.68,-0.25 head -0.14,0.37,-0.54 L_foot -0.11,0.38,0.65 R_foot 0.35,0.34,0.54 L_hand -0.47,0.46,0.08 R_hand 0.45,0.44,-0.14
+[Limbs] pelvis -0.00,0.76,-0.01 spine -0.19,0.70,0.19 head -0.42,0.42,0.41 L_foot 0.53,0.32,-0.28 R_foot 0.18,0.31,-0.59 L_hand 0.28,0.44,0.35 R_hand -0.41,0.46,-0.29
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.28,0.71,0.04 head 0.60,0.42,0.08 L_foot -0.52,0.34,-0.32 R_foot -0.57,0.28,0.14 L_hand 0.14,0.48,-0.46 R_hand 0.01,0.42,0.47
+[Limbs] pelvis -0.00,0.77,0.01 spine -0.10,0.69,-0.25 head -0.21,0.40,-0.53 L_foot 0.00,0.35,0.63 R_foot 0.42,0.31,0.45 L_hand -0.45,0.47,0.12 R_hand 0.41,0.43,-0.22
+[UI] Mode -> Ragdoll
+[Limbs] pelvis -0.02,0.19,-0.00 spine -0.28,0.20,0.08 head -0.66,0.10,0.09 L_foot 0.75,0.06,0.12 R_foot 0.53,0.07,-0.49 L_hand 0.01,0.04,0.48 R_hand -0.34,0.04,-0.50
+[Limbs] pelvis -0.01,0.18,0.03 spine -0.29,0.19,0.11 head -0.68,0.10,0.08 L_foot 0.76,0.06,0.14 R_foot 0.55,0.06,-0.48 L_hand 0.00,0.05,0.47 R_hand -0.34,0.04,-0.49
+[Limbs] pelvis -0.01,0.17,0.06 spine -0.29,0.17,0.13 head -0.68,0.10,0.07 L_foot 0.77,0.06,0.14 R_foot 0.56,0.06,-0.48 L_hand -0.00,0.05,0.47 R_hand -0.33,0.05,-0.48
+[R-drag] Picked by proximity (dist=0.84) at 0.56, 0.06, -0.47
+[Limbs] pelvis 0.17,0.15,-0.39 spine -0.09,0.15,-0.25 head -0.35,0.11,0.07 L_foot 0.77,0.09,0.17 R_foot 0.62,0.69,-0.78 L_hand 0.21,0.05,0.32 R_hand -0.25,0.04,-0.64
+[Limbs] pelvis 0.53,0.15,-0.50 spine 0.25,0.15,-0.51 head -0.11,0.11,-0.30 L_foot 0.71,0.07,0.30 R_foot 1.07,0.67,-0.63 L_hand 0.30,0.05,0.13 R_hand -0.10,0.04,-0.68
+[Limbs] pelvis 0.50,0.22,-0.89 spine 0.26,0.17,-0.71 head -0.05,0.11,-0.41 L_foot 1.30,0.06,-0.71 R_foot 0.51,0.94,-1.26 L_hand 0.49,0.04,-0.11 R_hand -0.12,0.05,-0.75
+[Limbs] pelvis 0.05,0.15,-1.47 spine 0.07,0.15,-1.17 head 0.11,0.11,-0.75 L_foot 0.70,0.06,-1.96 R_foot -0.42,0.38,-2.11 L_hand 0.72,0.04,-1.16 R_hand -0.15,0.04,-0.84
+[Limbs] pelvis -0.14,0.15,-1.82 spine -0.15,0.15,-1.54 head 0.05,0.11,-1.19 L_foot 0.68,0.07,-1.95 R_foot -0.51,0.23,-2.46 L_hand 0.49,0.05,-1.58 R_hand -0.30,0.05,-1.19
+[Limbs] pelvis -0.14,0.15,-1.82 spine -0.15,0.15,-1.54 head 0.05,0.11,-1.18 L_foot 0.68,0.07,-1.96 R_foot -0.33,0.24,-2.34 L_hand 0.49,0.05,-1.58 R_hand -0.30,0.05,-1.19
+[Limbs] pelvis -0.14,0.15,-1.82 spine -0.15,0.15,-1.53 head 0.05,0.11,-1.18 L_foot 0.67,0.07,-1.96 R_foot -0.32,0.23,-2.34 L_hand 0.49,0.05,-1.58 R_hand -0.30,0.05,-1.18
+[Limbs] pelvis -0.14,0.15,-1.81 spine -0.15,0.15,-1.53 head 0.06,0.11,-1.18 L_foot 0.67,0.07,-1.96 R_foot -0.31,0.23,-2.34 L_hand 0.49,0.05,-1.58 R_hand -0.31,0.05,-1.18
+[Limbs] pelvis -0.14,0.15,-1.81 spine -0.15,0.15,-1.53 head 0.06,0.11,-1.18 L_foot 0.67,0.07,-1.96 R_foot -0.30,0.23,-2.33 L_hand 0.49,0.05,-1.59 R_hand -0.31,0.05,-1.18
+Test: applying upward force 2s - character should RISE
+[Limbs] pelvis -0.14,0.18,-1.81 spine -0.15,0.17,-1.53 head 0.06,0.11,-1.17 L_foot 0.67,0.06,-1.97 R_foot -0.29,0.24,-2.34 L_hand 0.49,0.05,-1.59 R_hand -0.31,0.05,-1.18
+[Limbs] pelvis 0.09,3.09,-1.52 spine 0.09,2.99,-1.36 head 0.16,2.59,-1.26 L_foot 0.40,2.54,-1.88 R_foot -0.21,2.41,-1.77 L_hand 0.53,2.78,-1.69 R_hand -0.36,2.53,-1.59
+[Limbs] pelvis 0.24,9.32,-1.40 spine 0.20,9.22,-1.26 head 0.12,8.88,-1.39 L_foot 0.55,8.76,-1.74 R_foot -0.13,8.68,-1.68 L_hand 0.32,8.67,-1.51 R_hand -0.17,8.76,-1.55
+[Limbs] pelvis 0.27,19.01,-1.42 spine 0.20,18.93,-1.23 head 0.18,18.52,-1.13 L_foot 0.60,18.36,-1.66 R_foot 0.07,18.46,-1.87 L_hand 0.43,18.33,-1.17 R_hand -0.05,18.36,-1.35
+[Limbs] pelvis 0.28,32.09,-1.36 spine 0.23,32.02,-1.19 head 0.22,31.67,-0.98 L_foot 0.68,31.43,-1.42 R_foot 0.16,31.46,-1.69 L_hand 0.56,31.47,-1.18 R_hand 0.11,31.44,-1.34
+[Limbs] pelvis 0.35,48.52,-1.25 spine 0.29,48.45,-1.10 head 0.30,48.02,-1.00 L_foot 0.72,47.91,-1.38 R_foot 0.29,47.82,-1.51 L_hand 0.62,47.91,-1.11 R_hand 0.17,47.87,-1.27
+[Limbs] pelvis 0.46,68.22,-1.12 spine 0.38,68.13,-0.97 head 0.32,67.73,-1.01 L_foot 0.85,67.64,-1.34 R_foot 0.34,67.53,-1.46 L_hand 0.64,67.55,-1.02 R_hand 0.19,67.58,-1.20
+[Limbs] pelvis 0.56,91.12,-1.06 spine 0.48,91.04,-0.91 head 0.38,90.63,-0.80 L_foot 0.79,90.44,-1.23 R_foot 0.45,90.48,-1.40 L_hand 0.69,90.46,-0.94 R_hand 0.25,90.50,-1.17
+[Limbs] pelvis 0.59,116.07,-1.00 spine 0.51,116.00,-0.84 head 0.52,115.58,-0.77 L_foot 0.86,115.40,-1.14 R_foot 0.54,115.41,-1.32 L_hand 0.76,115.43,-0.83 R_hand 0.33,115.43,-1.06
+[Limbs] pelvis 0.64,134.87,-0.93 spine 0.56,134.81,-0.77 head 0.58,134.48,-0.77 L_foot 0.93,134.21,-1.10 R_foot 0.61,134.24,-1.31 L_hand 0.94,134.29,-0.64 R_hand 0.28,134.25,-0.99
+[Limbs] pelvis 0.69,143.39,-0.87 spine 0.61,143.34,-0.69 head 0.62,143.01,-0.66 L_foot 1.01,142.73,-1.06 R_foot 0.67,142.79,-1.31 L_hand 1.11,142.93,-0.50 R_hand 0.24,142.83,-0.93
+[Limbs] pelvis 0.76,141.83,-0.81 spine 0.66,141.79,-0.61 head 0.65,141.47,-0.53 L_foot 1.09,141.19,-1.01 R_foot 0.72,141.26,-1.31 L_hand 1.23,141.53,-0.42 R_hand 0.23,141.35,-0.87
+[Limbs] pelvis 0.81,130.40,-0.75 spine 0.70,130.38,-0.54 head 0.72,130.07,-0.38 L_foot 1.16,129.78,-0.97 R_foot 0.78,129.87,-1.31 L_hand 1.29,130.19,-0.36 R_hand 0.27,129.98,-0.80
+[Limbs] pelvis 0.85,109.34,-0.68 spine 0.75,109.35,-0.48 head 0.79,109.05,-0.25 L_foot 1.23,108.73,-0.91 R_foot 0.83,108.84,-1.30 L_hand 1.35,109.17,-0.29 R_hand 0.32,108.93,-0.71
+[Limbs] pelvis 0.89,84.18,-0.64 spine 0.80,84.19,-0.43 head 0.82,83.89,-0.15 L_foot 1.28,83.57,-0.86 R_foot 0.87,83.68,-1.25 L_hand 1.39,84.01,-0.25 R_hand 0.36,83.77,-0.65
+[Limbs] pelvis 0.92,59.03,-0.61 spine 0.83,59.03,-0.40 head 0.83,58.74,-0.09 L_foot 1.31,58.41,-0.83 R_foot 0.90,58.52,-1.22 L_hand 1.43,58.85,-0.23 R_hand 0.39,58.61,-0.62
+[Limbs] pelvis 0.94,33.87,-0.58 spine 0.85,33.87,-0.38 head 0.83,33.58,-0.06 L_foot 1.34,33.25,-0.80 R_foot 0.92,33.36,-1.19 L_hand 1.45,33.69,-0.22 R_hand 0.41,33.46,-0.59
+[Limbs] pelvis 0.95,8.71,-0.57 spine 0.87,8.72,-0.36 head 0.83,8.42,-0.04 L_foot 1.35,8.10,-0.79 R_foot 0.93,8.21,-1.17 L_hand 1.47,8.54,-0.21 R_hand 0.43,8.30,-0.57
+[Limbs] pelvis 0.77,0.28,-0.24 spine 0.63,0.29,-0.13 head 0.34,0.11,-0.01 L_foot 1.37,0.06,-0.58 R_foot 1.12,0.07,-0.84 L_hand 1.07,0.06,0.14 R_hand 0.37,0.07,-0.67
+[Limbs] pelvis 0.80,0.26,-0.22 spine 0.66,0.29,-0.11 head 0.36,0.11,0.01 L_foot 1.40,0.06,-0.56 R_foot 1.13,0.06,-0.83 L_hand 1.03,0.04,0.12 R_hand 0.40,0.07,-0.66
+[Limbs] pelvis 0.80,0.26,-0.22 spine 0.66,0.28,-0.12 head 0.36,0.11,0.02 L_foot 1.40,0.06,-0.57 R_foot 1.13,0.06,-0.83 L_hand 0.94,0.04,0.10 R_hand 0.40,0.07,-0.65
+[Limbs] pelvis 0.80,0.25,-0.22 spine 0.66,0.28,-0.11 head 0.36,0.11,0.02 L_foot 1.40,0.06,-0.56 R_foot 1.13,0.06,-0.83 L_hand 0.94,0.04,0.10 R_hand 0.39,0.07,-0.65
+[Limbs] pelvis 0.80,0.26,-0.22 spine 0.66,0.28,-0.11 head 0.36,0.11,0.03 L_foot 1.40,0.06,-0.56 R_foot 1.13,0.06,-0.83 L_hand 0.94,0.04,0.10 R_hand 0.39,0.07,-0.65
+[Limbs] pelvis 0.80,0.26,-0.21 spine 0.65,0.28,-0.11 head 0.36,0.11,0.03 L_foot 1.40,0.06,-0.55 R_foot 1.13,0.06,-0.83 L_hand 0.94,0.04,0.10 R_hand 0.39,0.07,-0.64
+[Limbs] pelvis 0.79,0.26,-0.21 spine 0.65,0.28,-0.11 head 0.35,0.11,0.03 L_foot 1.40,0.06,-0.55 R_foot 1.13,0.06,-0.83 L_hand 0.93,0.04,0.11 R_hand 0.39,0.07,-0.64
+[Limbs] pelvis 0.79,0.26,-0.21 spine 0.65,0.28,-0.10 head 0.35,0.11,0.04 L_foot 1.40,0.06,-0.54 R_foot 1.13,0.06,-0.82 L_hand 0.93,0.04,0.11 R_hand 0.39,0.07,-0.64
+[Limbs] pelvis 0.79,0.26,-0.20 spine 0.65,0.28,-0.10 head 0.35,0.11,0.04 L_foot 1.40,0.06,-0.54 R_foot 1.13,0.06,-0.82 L_hand 0.93,0.04,0.11 R_hand 0.39,0.07,-0.63
+[Limbs] pelvis 0.79,0.26,-0.20 spine 0.65,0.28,-0.10 head 0.35,0.11,0.04 L_foot 1.40,0.06,-0.53 R_foot 1.13,0.06,-0.82 L_hand 0.93,0.04,0.12 R_hand 0.39,0.07,-0.63
+[Limbs] pelvis 0.79,0.26,-0.20 spine 0.65,0.28,-0.09 head 0.35,0.11,0.05 L_foot 1.40,0.06,-0.53 R_foot 1.13,0.06,-0.81 L_hand 0.93,0.04,0.12 R_hand 0.39,0.07,-0.63
+[Pose] Jump applied (rise then Ragdoll)
+[Limbs] pelvis 0.80,0.58,-0.22 spine 0.66,0.53,-0.10 head 0.45,0.15,0.01 L_foot 1.35,0.12,-0.45 R_foot 1.06,0.10,-0.75 L_hand 0.93,0.11,0.06 R_hand 0.40,0.12,-0.57
+[Pose] Jump hold done -> Ragdoll
+[Limbs] pelvis 0.83,0.38,0.11 spine 0.68,0.28,0.15 head 0.65,0.11,-0.13 L_foot 1.38,0.06,-0.26 R_foot 0.81,0.06,-0.58 L_hand 0.87,0.05,-0.32 R_hand 0.59,0.08,-0.38
+[Limbs] pelvis 0.82,0.38,0.11 spine 0.67,0.28,0.15 head 0.64,0.11,-0.13 L_foot 1.37,0.06,-0.25 R_foot 0.81,0.06,-0.57 L_hand 0.88,0.05,-0.31 R_hand 0.59,0.08,-0.38
+[Limbs] pelvis 0.81,0.38,0.12 spine 0.66,0.28,0.15 head 0.63,0.11,-0.13 L_foot 1.37,0.06,-0.25 R_foot 0.81,0.06,-0.57 L_hand 0.90,0.05,-0.29 R_hand 0.58,0.08,-0.38
+[Limbs] pelvis 0.81,0.37,0.13 spine 0.65,0.29,0.15 head 0.62,0.11,-0.12 L_foot 1.37,0.06,-0.25 R_foot 0.82,0.06,-0.57 L_hand 0.91,0.05,-0.26 R_hand 0.59,0.08,-0.37
+[Limbs] pelvis 0.82,0.36,0.13 spine 0.65,0.29,0.15 head 0.62,0.10,-0.11 L_foot 1.38,0.06,-0.25 R_foot 0.83,0.06,-0.58 L_hand 0.95,0.05,-0.21 R_hand 0.60,0.08,-0.37
+[Limbs] pelvis 0.84,0.34,0.13 spine 0.66,0.30,0.16 head 0.61,0.10,-0.10 L_foot 1.41,0.06,-0.25 R_foot 0.84,0.06,-0.59 L_hand 1.03,0.04,-0.10 R_hand 0.60,0.08,-0.36
+[Pose] Jump applied (rise then Ragdoll)
+[Limbs] pelvis 0.74,0.66,-0.30 spine 0.67,0.68,-0.11 head 0.73,0.57,0.30 L_foot 1.31,0.21,-0.02 R_foot 0.90,0.06,-0.59 L_hand 0.95,0.31,0.11 R_hand 0.66,0.10,-0.25
+[Pose] Jump hold done -> Ragdoll
+[Pose] Jump applied (rise then Ragdoll)
+[Pose] Jump hold done -> Ragdoll
+[Limbs] pelvis 0.64,0.35,0.36 spine 0.40,0.28,0.41 head 0.15,0.10,0.19 L_foot 1.19,0.11,0.02 R_foot 0.82,0.20,-0.33 L_hand 0.77,0.03,0.26 R_hand 0.29,0.30,-0.16
+[Pose] Jump applied (rise then Ragdoll)
+[Pose] Jump hold done -> Ragdoll
+[Pose] Jump applied (rise then Ragdoll)
+[Limbs] pelvis 0.50,0.64,0.43 spine 0.27,0.67,0.47 head -0.12,0.57,0.44 L_foot 0.72,0.06,0.58 R_foot 0.40,0.26,-0.27 L_hand 0.31,0.14,0.45 R_hand -0.05,0.32,0.00
+[Pose] Jump hold done -> Ragdoll
+[Limbs] pelvis -0.11,0.25,0.57 spine -0.32,0.26,0.52 head -0.51,0.11,0.18 L_foot 0.64,0.06,0.55 R_foot 0.26,0.06,-0.02 L_hand -0.18,0.07,0.58 R_hand -0.20,0.07,0.23
+[Limbs] pelvis -0.08,0.24,0.56 spine -0.31,0.26,0.51 head -0.49,0.11,0.17 L_foot 0.65,0.06,0.56 R_foot 0.27,0.06,-0.03 L_hand -0.20,0.08,0.59 R_hand -0.20,0.06,0.22
+[UI] Mode -> Walking
+[Pose] Walk mode: 6 limb joints springs OFF (PD drives)
+[Walk] phase=4.65 pelvis_y=0.61 L_foot_y=0.01 R_foot_y=0.24
+[Limbs] pelvis -0.09,0.61,0.43 spine -0.27,0.71,0.28 head -0.43,0.47,0.03 L_foot 0.41,0.01,0.71 R_foot 0.42,0.24,0.03 L_hand -0.44,0.63,0.55 R_hand -0.18,0.26,-0.22
+[Walk] phase=4.84 angle_err=0.864 torque=140 pelvis_y=0.75 L_foot_y=0.05 R_foot_y=0.21
+[Walk] phase=3.39 pelvis_y=0.93 L_foot_y=0.39 R_foot_y=0.17
+[Limbs] pelvis 0.04,0.93,-0.01 spine 0.09,1.12,-0.14 head 0.12,1.04,-0.51 L_foot -0.39,0.39,-0.35 R_foot 0.17,0.17,0.34 L_hand -0.29,1.25,-0.09 R_hand 0.36,0.70,0.11
+[Walk] phase=3.58 angle_err=1.259 torque=140 pelvis_y=0.94 L_foot_y=0.35 R_foot_y=0.18
+[Walk] phase=2.14 pelvis_y=0.97 L_foot_y=0.23 R_foot_y=0.19
+[Limbs] pelvis -0.01,0.97,-0.03 spine -0.02,1.16,-0.13 head 0.01,1.09,-0.54 L_foot -0.45,0.23,-0.20 R_foot 0.24,0.19,0.13 L_hand -0.12,1.21,0.16 R_hand 0.43,0.80,-0.03
+[Walk] phase=2.32 angle_err=0.789 torque=140 pelvis_y=0.97 L_foot_y=0.27 R_foot_y=0.19
+[Walk] phase=0.88 pelvis_y=0.94 L_foot_y=0.20 R_foot_y=0.32
+[Limbs] pelvis -0.01,0.94,0.03 spine -0.15,0.90,-0.07 head 0.03,0.57,0.17 L_foot -0.19,0.20,0.44 R_foot 0.53,0.32,-0.03 L_hand -0.27,0.24,-0.25 R_hand 0.11,0.47,0.51
+[Walk] phase=1.07 angle_err=0.907 torque=140 pelvis_y=0.92 L_foot_y=0.20 R_foot_y=0.30
+[Walk] phase=5.91 pelvis_y=0.87 L_foot_y=0.19 R_foot_y=0.18
+[Limbs] pelvis -0.03,0.87,0.03 spine -0.22,0.82,-0.02 head -0.07,0.50,0.22 L_foot -0.12,0.19,0.56 R_foot 0.43,0.18,-0.02 L_hand -0.45,0.21,-0.25 R_hand 0.24,0.18,-0.03
+[Walk] phase=6.09 angle_err=0.629 torque=140 pelvis_y=0.85 L_foot_y=0.20 R_foot_y=0.19
+[Walk] phase=4.65 pelvis_y=0.89 L_foot_y=0.20 R_foot_y=0.26
+[Limbs] pelvis -0.02,0.89,0.04 spine -0.20,0.83,-0.03 head -0.01,0.51,0.16 L_foot -0.18,0.20,0.56 R_foot 0.42,0.26,0.16 L_hand -0.40,0.23,-0.27 R_hand 0.16,0.23,0.03
+[Walk] phase=4.84 angle_err=0.367 torque=140 pelvis_y=0.86 L_foot_y=0.22 R_foot_y=0.26
+[Walk] phase=3.39 pelvis_y=0.88 L_foot_y=0.20 R_foot_y=0.24
+[Limbs] pelvis 0.00,0.88,0.00 spine -0.15,0.83,-0.08 head -0.04,0.51,0.15 L_foot -0.23,0.20,0.50 R_foot 0.42,0.24,0.30 L_hand -0.40,0.24,-0.33 R_hand 0.19,0.21,0.08
+[Walk] phase=3.58 angle_err=0.563 torque=140 pelvis_y=0.86 L_foot_y=0.21 R_foot_y=0.26
+[UI] Mode -> Standing
+[Pose] Stand mode: all 10 joints springs ON -> 150
+[Limbs] pelvis 0.04,0.74,-0.03 spine -0.13,0.73,-0.05 head -0.16,0.39,0.10 L_foot 0.05,0.23,0.63 R_foot 0.47,0.12,-0.01 L_hand -0.56,0.58,-0.13 R_hand 0.16,0.30,-0.05
+[Limbs] pelvis 0.04,0.74,-0.02 spine 0.07,0.60,0.21 head 0.05,0.22,0.40 L_foot 0.08,0.47,-0.72 R_foot -0.33,0.46,-0.61 L_hand 0.63,0.53,0.01 R_hand -0.33,0.57,-0.09
+[Limbs] pelvis 0.03,0.77,0.02 spine 0.20,0.73,-0.19 head 0.45,0.47,-0.44 L_foot -0.43,0.25,0.33 R_foot -0.08,0.34,0.62 L_hand -0.23,0.42,-0.22 R_hand 0.40,0.57,0.26
+[Limbs] pelvis -0.01,0.76,0.01 spine -0.29,0.72,0.00 head -0.61,0.43,0.01 L_foot 0.52,0.31,0.30 R_foot 0.53,0.27,-0.16 L_hand -0.09,0.49,0.48 R_hand -0.09,0.41,-0.46
+[Limbs] pelvis -0.00,0.77,-0.01 spine 0.10,0.69,0.23 head 0.23,0.38,0.51 L_foot -0.03,0.36,-0.65 R_foot -0.44,0.34,-0.46 L_hand 0.42,0.45,-0.17 R_hand -0.42,0.43,0.24
+[Limbs] pelvis 0.01,0.77,0.00 spine 0.19,0.72,-0.20 head 0.42,0.44,-0.44 L_foot -0.52,0.30,0.27 R_foot -0.17,0.28,0.56 L_hand -0.28,0.45,-0.34 R_hand 0.41,0.46,0.27
+[Limbs] pelvis -0.00,0.76,0.01 spine -0.26,0.71,-0.08 head -0.56,0.41,-0.18 L_foot 0.45,0.33,0.41 R_foot 0.58,0.27,-0.01 L_hand -0.20,0.49,0.42 R_hand 0.09,0.41,-0.44
+[Limbs] pelvis -0.00,0.76,-0.01 spine -0.01,0.70,0.26 head -0.02,0.40,0.58 L_foot 0.23,0.33,-0.57 R_foot -0.22,0.29,-0.56 L_hand 0.44,0.46,0.05 R_hand -0.47,0.44,0.04
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.27,0.72,-0.07 head 0.58,0.43,-0.15 L_foot -0.58,0.31,-0.07 R_foot -0.44,0.26,0.36 L_hand -0.06,0.47,-0.44 R_hand 0.18,0.44,0.43
+[Limbs] pelvis -0.00,0.77,0.00 spine -0.13,0.71,-0.24 head -0.29,0.41,-0.51 L_foot 0.06,0.33,0.60 R_foot 0.44,0.27,0.37 L_hand -0.41,0.48,0.18 R_hand 0.37,0.42,-0.26
+[Limbs] pelvis -0.00,0.77,-0.00 spine -0.21,0.71,0.17 head -0.46,0.42,0.36 L_foot 0.56,0.31,-0.18 R_foot 0.27,0.27,-0.51 L_hand 0.24,0.47,0.36 R_hand -0.33,0.44,-0.32
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.20,0.71,0.19 head 0.44,0.43,0.40 L_foot -0.24,0.31,-0.53 R_foot -0.53,0.26,-0.20 L_hand 0.32,0.48,-0.29 R_hand -0.26,0.43,0.37
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.16,0.71,-0.21 head 0.35,0.42,-0.47 L_foot -0.51,0.31,0.30 R_foot -0.15,0.26,0.55 L_hand -0.32,0.48,-0.28 R_hand 0.39,0.43,0.23
+[Limbs] pelvis -0.00,0.77,-0.00 spine -0.22,0.72,-0.15 head -0.49,0.43,-0.33 L_foot 0.32,0.30,0.48 R_foot 0.55,0.25,0.11 L_hand -0.26,0.48,0.33 R_hand 0.21,0.43,-0.40
+[Limbs] pelvis 0.00,0.77,0.00 spine -0.15,0.72,0.23 head -0.32,0.43,0.50 L_foot 0.49,0.30,-0.32 R_foot 0.11,0.25,-0.55 L_hand 0.33,0.49,0.25 R_hand -0.40,0.43,-0.20
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.22,0.72,0.16 head 0.49,0.43,0.33 L_foot -0.31,0.30,-0.49 R_foot -0.54,0.25,-0.12 L_hand 0.25,0.49,-0.32 R_hand -0.21,0.43,0.39
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.17,0.72,-0.21 head 0.36,0.43,-0.47 L_foot -0.51,0.30,0.27 R_foot -0.16,0.24,0.53 L_hand -0.30,0.50,-0.26 R_hand 0.38,0.43,0.23
+[Limbs] pelvis -0.00,0.77,-0.00 spine -0.19,0.72,-0.19 head -0.43,0.43,-0.41 L_foot 0.21,0.30,0.54 R_foot 0.51,0.24,0.21 L_hand -0.27,0.50,0.27 R_hand 0.27,0.43,-0.35
+[Limbs] pelvis -0.00,0.77,0.00 spine -0.22,0.72,0.17 head -0.46,0.44,0.37 L_foot 0.56,0.30,-0.13 R_foot 0.27,0.23,-0.47 L_hand 0.22,0.51,0.29 R_hand -0.31,0.42,-0.31
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.13,0.72,0.24 head 0.30,0.44,0.52 L_foot -0.02,0.30,-0.58 R_foot -0.41,0.22,-0.34 L_hand 0.28,0.53,-0.17 R_hand -0.35,0.41,0.25
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.26,0.73,-0.09 head 0.56,0.45,-0.22 L_foot -0.59,0.32,-0.10 R_foot -0.40,0.20,0.33 L_hand -0.10,0.55,-0.22 R_hand 0.18,0.39,0.37
+[Limbs] pelvis -0.00,0.77,-0.00 spine -0.04,0.72,-0.27 head -0.14,0.45,-0.59 L_foot -0.25,0.37,0.58 R_foot 0.23,0.19,0.47 L_hand -0.14,0.53,0.02 R_hand 0.36,0.36,-0.09
+[Limbs] pelvis 0.00,0.77,0.00 spine -0.27,0.72,-0.04 head -0.60,0.44,-0.05 L_foot 0.49,0.38,0.41 R_foot 0.52,0.19,-0.09 L_hand -0.03,0.51,0.11 R_hand 0.04,0.37,-0.35
+[Limbs] pelvis 0.00,0.77,0.00 spine -0.15,0.72,0.23 head -0.30,0.44,0.52 L_foot 0.58,0.38,-0.25 R_foot 0.15,0.19,-0.50 L_hand 0.08,0.52,0.07 R_hand -0.30,0.37,-0.18
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.10,0.72,0.25 head 0.25,0.44,0.54 L_foot 0.12,0.38,-0.62 R_foot -0.32,0.19,-0.41 L_hand 0.10,0.52,-0.03 R_hand -0.33,0.37,0.14
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.25,0.72,0.11 head 0.56,0.44,0.20 L_foot -0.35,0.37,-0.52 R_foot -0.51,0.19,-0.07 L_hand 0.05,0.52,-0.09 R_hand -0.13,0.37,0.33
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.27,0.72,-0.05 head 0.57,0.44,-0.16 L_foot -0.58,0.37,-0.22 R_foot -0.46,0.19,0.24 L_hand -0.01,0.52,-0.10 R_hand 0.08,0.37,0.34
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.22,0.72,-0.16 head 0.45,0.44,-0.39 L_foot -0.62,0.36,0.05 R_foot -0.32,0.19,0.41 L_hand -0.06,0.52,-0.09 R_hand 0.22,0.37,0.27
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.16,0.72,-0.21 head 0.32,0.44,-0.50 L_foot -0.58,0.36,0.21 R_foot -0.19,0.19,0.48 L_hand -0.08,0.52,-0.07 R_hand 0.29,0.37,0.20
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.14,0.72,-0.23 head 0.27,0.44,-0.53 L_foot -0.55,0.36,0.27 R_foot -0.14,0.19,0.49 L_hand -0.08,0.52,-0.06 R_hand 0.31,0.37,0.17
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.14,0.72,-0.23 head 0.28,0.44,-0.52 L_foot -0.55,0.36,0.27 R_foot -0.13,0.19,0.50 L_hand -0.08,0.52,-0.06 R_hand 0.31,0.38,0.18
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.14,0.72,-0.23 head 0.27,0.44,-0.53 L_foot -0.55,0.36,0.28 R_foot -0.11,0.19,0.51 L_hand -0.08,0.52,-0.06 R_hand 0.31,0.37,0.17
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.13,0.72,-0.24 head 0.24,0.44,-0.54 L_foot -0.54,0.36,0.31 R_foot -0.10,0.19,0.51 L_hand -0.09,0.52,-0.05 R_hand 0.32,0.37,0.16
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.12,0.72,-0.24 head 0.23,0.44,-0.55 L_foot -0.53,0.36,0.32 R_foot -0.09,0.19,0.51 L_hand -0.09,0.52,-0.05 R_hand 0.32,0.37,0.15
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.12,0.72,-0.24 head 0.23,0.44,-0.55 L_foot -0.52,0.36,0.32 R_foot -0.08,0.19,0.51 L_hand -0.09,0.52,-0.05 R_hand 0.32,0.38,0.15
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.11,0.72,-0.25 head 0.21,0.44,-0.56 L_foot -0.52,0.36,0.34 R_foot -0.06,0.19,0.51 L_hand -0.09,0.52,-0.05 R_hand 0.33,0.37,0.14
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.11,0.72,-0.25 head 0.19,0.44,-0.56 L_foot -0.50,0.36,0.35 R_foot -0.05,0.19,0.51 L_hand -0.09,0.52,-0.05 R_hand 0.33,0.37,0.13
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.10,0.72,-0.25 head 0.18,0.44,-0.56 L_foot -0.50,0.36,0.36 R_foot -0.04,0.19,0.52 L_hand -0.09,0.52,-0.04 R_hand 0.33,0.37,0.12
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.10,0.72,-0.25 head 0.17,0.44,-0.57 L_foot -0.49,0.36,0.37 R_foot -0.03,0.19,0.52 L_hand -0.09,0.52,-0.04 R_hand 0.34,0.37,0.11
+[Limbs] pelvis -0.00,0.97,-0.00 spine -0.00,1.26,-0.00 head -0.01,1.70,-0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.96,0.00 R_hand 0.27,0.96,-0.00
+[Limbs] pelvis -0.00,0.97,-0.00 spine -0.01,1.26,-0.00 head -0.02,1.70,-0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.95,0.01 R_hand 0.27,0.97,-0.01
+[Limbs] pelvis 0.01,0.95,-0.00 spine -0.00,1.24,-0.00 head -0.06,1.67,-0.02 L_foot -0.20,0.23,0.01 R_foot 0.18,0.22,0.02 L_hand -0.23,0.92,0.16 R_hand 0.23,0.96,-0.13
+[Limbs] pelvis 0.00,0.91,-0.01 spine -0.12,1.13,-0.10 head -0.46,1.31,-0.29 L_foot -0.27,0.23,0.06 R_foot 0.27,0.21,0.06 L_hand -0.14,0.87,0.24 R_hand 0.15,0.87,-0.23
+[Limbs] pelvis -0.00,0.77,-0.01 spine -0.05,0.75,-0.28 head -0.11,0.51,-0.63 L_foot -0.12,0.24,0.50 R_foot 0.31,0.21,0.42 L_hand -0.28,0.58,0.06 R_hand 0.31,0.47,-0.06
+[Limbs] pelvis -0.01,0.77,0.01 spine 0.10,0.74,-0.24 head 0.23,0.47,-0.54 L_foot -0.40,0.27,0.39 R_foot -0.05,0.23,0.52 L_hand -0.36,0.50,-0.19 R_hand 0.21,0.51,0.14
+[Limbs] pelvis 0.01,0.77,0.01 spine 0.24,0.74,-0.13 head 0.55,0.47,-0.26 L_foot -0.45,0.19,0.17 R_foot -0.24,0.28,0.51 L_hand -0.14,0.41,-0.27 R_hand 0.11,0.57,0.23
+[Limbs] pelvis -0.01,0.76,-0.01 spine 0.27,0.73,-0.03 head 0.59,0.46,-0.04 L_foot -0.50,0.20,-0.15 R_foot -0.47,0.27,0.28 L_hand -0.02,0.44,-0.39 R_hand -0.00,0.53,0.14
+[Limbs] pelvis -0.00,0.77,0.01 spine 0.25,0.73,0.11 head 0.53,0.45,0.27 L_foot -0.42,0.19,-0.27 R_foot -0.58,0.32,0.13 L_hand 0.13,0.38,-0.30 R_hand -0.05,0.55,0.12
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.21,0.73,0.17 head 0.44,0.46,0.41 L_foot -0.30,0.19,-0.40 R_foot -0.58,0.32,-0.07 L_hand 0.23,0.40,-0.26 R_hand -0.03,0.53,0.07
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.17,0.72,0.21 head 0.34,0.44,0.47 L_foot -0.23,0.19,-0.45 R_foot -0.58,0.34,-0.17 L_hand 0.26,0.38,-0.22 R_hand -0.04,0.53,0.06
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.16,0.73,0.22 head 0.31,0.45,0.51 L_foot -0.19,0.19,-0.47 R_foot -0.56,0.34,-0.21 L_hand 0.28,0.39,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.15,0.73,0.23 head 0.30,0.44,0.51 L_foot -0.18,0.19,-0.47 R_foot -0.55,0.33,-0.23 L_hand 0.29,0.39,-0.19 R_hand -0.04,0.53,0.06
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.15,0.73,0.22 head 0.30,0.44,0.51 L_foot -0.19,0.19,-0.47 R_foot -0.56,0.34,-0.22 L_hand 0.28,0.38,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis -0.00,0.77,-0.00 spine 0.16,0.73,0.22 head 0.32,0.44,0.49 L_foot -0.20,0.19,-0.47 R_foot -0.56,0.33,-0.20 L_hand 0.28,0.39,-0.20 R_hand -0.04,0.53,0.06
+[Limbs] pelvis 0.00,0.97,0.00 spine -0.00,1.26,0.00 head -0.00,1.70,0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.96,0.00 R_hand 0.27,0.96,-0.00
+[Limbs] pelvis -0.00,0.97,-0.00 spine -0.00,1.26,-0.00 head -0.01,1.70,-0.00 L_foot -0.18,0.23,-0.00 R_foot 0.18,0.23,0.00 L_hand -0.28,0.95,0.00 R_hand 0.27,0.96,-0.00
+[Limbs] pelvis 0.00,0.96,-0.00 spine -0.01,1.26,0.00 head -0.04,1.69,-0.00 L_foot -0.18,0.23,0.00 R_foot 0.17,0.23,0.01 L_hand -0.27,0.94,0.07 R_hand 0.26,0.97,-0.06
+[Limbs] pelvis 0.01,0.92,0.00 spine -0.03,1.20,-0.03 head -0.22,1.58,-0.13 L_foot -0.25,0.23,0.02 R_foot 0.24,0.21,0.03 L_hand -0.15,0.89,0.23 R_hand 0.18,0.92,-0.18
+[Limbs] pelvis -0.01,0.87,-0.03 spine -0.14,0.92,-0.22 head -0.40,0.69,-0.49 L_foot -0.25,0.23,0.18 R_foot 0.33,0.20,0.18 L_hand -0.22,0.81,0.21 R_hand 0.23,0.62,-0.17
+[Limbs] pelvis 0.01,0.76,0.02 spine 0.08,0.69,-0.23 head 0.18,0.37,-0.50 L_foot -0.26,0.33,0.56 R_foot 0.15,0.33,0.62 L_hand -0.30,0.41,-0.03 R_hand 0.32,0.50,0.15
+[Limbs] pelvis 0.01,0.77,-0.01 spine 0.20,0.76,-0.20 head 0.47,0.51,-0.43 L_foot -0.43,0.20,0.19 R_foot -0.15,0.22,0.46 L_hand -0.21,0.47,-0.28 R_hand 0.17,0.54,0.17
+[Limbs] pelvis -0.01,0.76,-0.00 spine 0.26,0.72,-0.07 head 0.57,0.44,-0.13 L_foot -0.54,0.22,-0.03 R_foot -0.42,0.29,0.39 L_hand -0.09,0.42,-0.36 R_hand 0.01,0.55,0.18
+[Limbs] pelvis 0.00,0.77,0.01 spine 0.27,0.74,0.07 head 0.58,0.48,0.19 L_foot -0.44,0.19,-0.20 R_foot -0.54,0.30,0.20 L_hand 0.10,0.40,-0.31 R_hand -0.03,0.55,0.15
+[Limbs] pelvis 0.00,0.77,-0.00 spine 0.23,0.73,0.14 head 0.47,0.44,0.34 L_foot -0.34,0.19,-0.39 R_foot -0.59,0.31,-0.01 L_hand 0.20,0.40,-0.30 R_hand -0.04,0.52,0.07
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.18,0.73,0.20 head 0.36,0.44,0.47 L_foot -0.27,0.19,-0.42 R_foot -0.59,0.34,-0.13 L_hand 0.24,0.37,-0.22 R_hand -0.05,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.16,0.73,0.22 head 0.32,0.45,0.49 L_foot -0.20,0.19,-0.46 R_foot -0.56,0.33,-0.20 L_hand 0.28,0.39,-0.20 R_hand -0.04,0.52,0.06
+[Limbs] pelvis -0.00,0.77,0.00 spine 0.15,0.73,0.22 head 0.29,0.44,0.51 L_foot -0.18,0.19,-0.47 R_foot -0.56,0.34,-0.23 L_hand 0.28,0.38,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.15,0.73,0.22 head 0.29,0.44,0.51 L_foot -0.18,0.19,-0.47 R_foot -0.55,0.33,-0.23 L_hand 0.28,0.39,-0.19 R_hand -0.05,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.16,0.73,0.22 head 0.31,0.44,0.50 L_foot -0.20,0.19,-0.47 R_foot -0.56,0.33,-0.21 L_hand 0.28,0.38,-0.20 R_hand -0.04,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.17,0.73,0.21 head 0.34,0.44,0.48 L_foot -0.21,0.19,-0.46 R_foot -0.57,0.33,-0.18 L_hand 0.27,0.39,-0.21 R_hand -0.04,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.18,0.73,0.21 head 0.35,0.44,0.47 L_foot -0.23,0.19,-0.45 R_foot -0.58,0.33,-0.17 L_hand 0.26,0.39,-0.22 R_hand -0.04,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.18,0.73,0.20 head 0.37,0.44,0.46 L_foot -0.25,0.19,-0.44 R_foot -0.58,0.33,-0.15 L_hand 0.25,0.39,-0.23 R_hand -0.04,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.19,0.73,0.19 head 0.39,0.44,0.44 L_foot -0.26,0.19,-0.43 R_foot -0.59,0.33,-0.12 L_hand 0.24,0.39,-0.24 R_hand -0.03,0.53,0.06
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.20,0.73,0.19 head 0.40,0.44,0.43 L_foot -0.28,0.19,-0.42 R_foot -0.59,0.33,-0.10 L_hand 0.24,0.39,-0.25 R_hand -0.03,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.20,0.73,0.18 head 0.42,0.44,0.41 L_foot -0.29,0.19,-0.41 R_foot -0.59,0.33,-0.08 L_hand 0.23,0.39,-0.26 R_hand -0.03,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.21,0.73,0.17 head 0.43,0.44,0.40 L_foot -0.31,0.19,-0.40 R_foot -0.60,0.33,-0.06 L_hand 0.22,0.39,-0.26 R_hand -0.03,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.22,0.73,0.16 head 0.45,0.44,0.38 L_foot -0.32,0.19,-0.39 R_foot -0.60,0.33,-0.04 L_hand 0.21,0.39,-0.27 R_hand -0.02,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.22,0.73,0.15 head 0.46,0.44,0.37 L_foot -0.34,0.19,-0.38 R_foot -0.60,0.33,-0.01 L_hand 0.20,0.39,-0.28 R_hand -0.02,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.23,0.73,0.15 head 0.47,0.44,0.35 L_foot -0.35,0.19,-0.37 R_foot -0.60,0.33,0.01 L_hand 0.19,0.39,-0.29 R_hand -0.02,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.23,0.73,0.14 head 0.49,0.44,0.33 L_foot -0.37,0.19,-0.35 R_foot -0.60,0.33,0.03 L_hand 0.18,0.39,-0.29 R_hand -0.02,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.24,0.73,0.13 head 0.50,0.44,0.31 L_foot -0.38,0.19,-0.34 R_foot -0.60,0.33,0.05 L_hand 0.16,0.39,-0.30 R_hand -0.01,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.24,0.73,0.12 head 0.51,0.44,0.29 L_foot -0.39,0.19,-0.32 R_foot -0.59,0.33,0.07 L_hand 0.15,0.39,-0.31 R_hand -0.01,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.25,0.73,0.11 head 0.52,0.44,0.28 L_foot -0.40,0.19,-0.31 R_foot -0.59,0.33,0.10 L_hand 0.14,0.39,-0.31 R_hand -0.01,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.25,0.73,0.10 head 0.53,0.44,0.26 L_foot -0.41,0.19,-0.30 R_foot -0.59,0.33,0.12 L_hand 0.13,0.39,-0.32 R_hand -0.01,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.26,0.73,0.09 head 0.54,0.44,0.24 L_foot -0.42,0.19,-0.28 R_foot -0.58,0.33,0.14 L_hand 0.12,0.39,-0.32 R_hand -0.00,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.26,0.73,0.08 head 0.55,0.44,0.22 L_foot -0.43,0.19,-0.26 R_foot -0.58,0.33,0.16 L_hand 0.11,0.39,-0.32 R_hand -0.00,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.26,0.73,0.07 head 0.55,0.44,0.20 L_foot -0.44,0.19,-0.25 R_foot -0.57,0.33,0.18 L_hand 0.09,0.39,-0.33 R_hand 0.00,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.26,0.73,0.06 head 0.56,0.44,0.18 L_foot -0.45,0.19,-0.23 R_foot -0.56,0.33,0.20 L_hand 0.08,0.39,-0.33 R_hand 0.00,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.27,0.73,0.05 head 0.57,0.44,0.15 L_foot -0.46,0.19,-0.21 R_foot -0.56,0.33,0.22 L_hand 0.07,0.39,-0.33 R_hand 0.01,0.53,0.07
+[Limbs] pelvis 0.00,0.77,0.00 spine 0.27,0.73,0.04 head 0.57,0.44,0.13 L_foot -0.47,0.19,-0.20 R_foot -0.55,0.33,0.24 L_hand 0.06,0.39,-0.34 R_hand 0.01,0.53,0.07
+[UI] Mode -> Walking
+[Pose] Walk mode: 6 limb joints springs OFF (PD drives)
+[Walk] phase=1.13 angle_err=1.498 torque=140 pelvis_y=0.67 L_foot_y=0.19 R_foot_y=0.88
+[Walk] phase=2.76 pelvis_y=0.87 L_foot_y=0.24 R_foot_y=0.16
+[Limbs] pelvis 0.03,0.87,-0.05 spine 0.05,1.14,0.14 head 0.01,1.60,0.15 L_foot -0.49,0.24,-0.15 R_foot 0.55,0.16,0.04 L_hand -0.38,0.58,0.35 R_hand 0.19,0.40,0.63
+[Walk] phase=6.16 angle_err=0.517 torque=140 pelvis_y=1.01 L_foot_y=0.20 R_foot_y=0.31
+[Walk] phase=1.51 pelvis_y=0.97 L_foot_y=0.25 R_foot_y=0.23
+[Limbs] pelvis 0.08,0.97,-0.11 spine 0.09,1.23,0.09 head -0.14,1.64,0.21 L_foot -0.34,0.25,-0.15 R_foot 0.53,0.23,-0.22 L_hand -0.34,0.62,0.48 R_hand -0.16,0.48,0.37
+[Walk] phase=4.90 angle_err=0.921 torque=140 pelvis_y=0.86 L_foot_y=0.12 R_foot_y=0.21
+[Walk] phase=0.25 pelvis_y=1.01 L_foot_y=0.17 R_foot_y=0.30
+[Limbs] pelvis -0.01,1.01,-0.03 spine -0.11,1.25,0.17 head -0.43,1.61,0.37 L_foot -0.19,0.17,0.04 R_foot 0.23,0.30,-0.34 L_hand -0.50,0.64,0.63 R_hand -0.39,0.63,0.41
+[Walk] phase=3.64 angle_err=1.041 torque=140 pelvis_y=1.04 L_foot_y=0.31 R_foot_y=0.24
+[Walk] phase=5.28 pelvis_y=0.98 L_foot_y=0.30 R_foot_y=0.22
+[Limbs] pelvis -0.06,0.98,-0.02 spine -0.09,1.24,0.15 head -0.23,1.67,0.14 L_foot -0.55,0.30,0.26 R_foot 0.25,0.22,-0.22 L_hand -0.51,0.70,0.48 R_hand -0.17,0.44,0.04
+[Walk] phase=2.39 angle_err=0.538 torque=140 pelvis_y=0.89 L_foot_y=0.18 R_foot_y=0.18
+[Walk] phase=4.02 pelvis_y=0.96 L_foot_y=0.21 R_foot_y=0.17
+[Limbs] pelvis -0.05,0.96,-0.01 spine -0.08,1.19,0.14 head -0.26,1.61,0.09 L_foot -0.54,0.21,0.08 R_foot 0.31,0.17,-0.12 L_hand -0.47,0.63,0.61 R_hand -0.09,0.54,-0.04
+[Walk] phase=1.13 angle_err=0.809 torque=140 pelvis_y=1.00 L_foot_y=0.26 R_foot_y=0.26
+[Walk] phase=2.76 pelvis_y=1.02 L_foot_y=0.28 R_foot_y=0.24
+[Limbs] pelvis 0.12,1.02,-0.08 spine 0.08,1.22,0.17 head -0.07,1.62,0.27 L_foot -0.29,0.28,-0.18 R_foot 0.51,0.24,-0.18 L_hand -0.37,0.60,0.53 R_hand 0.26,0.85,0.54
+[Walk] phase=6.16 angle_err=0.565 torque=140 pelvis_y=0.95 L_foot_y=0.18 R_foot_y=0.19
+[Walk] phase=1.51 pelvis_y=0.97 L_foot_y=0.21 R_foot_y=0.18
+[Limbs] pelvis 0.11,0.97,-0.08 spine 0.10,1.22,0.08 head -0.23,1.62,0.11 L_foot -0.30,0.21,-0.08 R_foot 0.55,0.18,-0.12 L_hand -0.29,0.58,0.54 R_hand -0.05,0.70,0.18
+[Walk] phase=4.90 angle_err=0.550 torque=140 pelvis_y=0.81 L_foot_y=0.11 R_foot_y=0.25
+[Walk] phase=0.25 pelvis_y=0.82 L_foot_y=0.16 R_foot_y=0.21
+[Limbs] pelvis 0.06,0.82,-0.12 spine 0.10,1.07,0.03 head -0.03,1.50,0.10 L_foot -0.32,0.16,0.23 R_foot 0.39,0.21,-0.44 L_hand -0.26,0.56,0.58 R_hand -0.01,0.34,-0.23
+[Walk] phase=3.64 angle_err=0.895 torque=140 pelvis_y=1.00 L_foot_y=0.28 R_foot_y=0.30
+[Walk] phase=5.28 pelvis_y=0.87 L_foot_y=0.16 R_foot_y=0.27
+[Limbs] pelvis -0.01,0.87,-0.07 spine -0.02,1.11,0.15 head -0.21,1.50,0.34 L_foot -0.41,0.16,0.23 R_foot 0.41,0.27,-0.41 L_hand -0.45,0.52,0.56 R_hand -0.21,0.58,0.46
+[Walk] phase=2.39 angle_err=0.452 torque=140 pelvis_y=0.92 L_foot_y=0.22 R_foot_y=0.24
+[Walk] phase=4.02 pelvis_y=1.00 L_foot_y=0.27 R_foot_y=0.25
+[Limbs] pelvis 0.12,1.00,-0.10 spine 0.03,1.25,0.11 head -0.27,1.64,0.25 L_foot -0.37,0.27,0.00 R_foot 0.50,0.25,-0.19 L_hand -0.49,0.71,0.45 R_hand -0.26,0.54,0.40
+[Walk] phase=1.13 angle_err=0.498 torque=140 pelvis_y=1.05 L_foot_y=0.31 R_foot_y=0.25
+[Walk] phase=2.76 pelvis_y=0.95 L_foot_y=0.22 R_foot_y=0.27
+[Limbs] pelvis 0.01,0.95,0.02 spine -0.04,1.21,0.18 head -0.16,1.64,0.23 L_foot -0.44,0.22,0.02 R_foot 0.54,0.27,0.21 L_hand -0.51,0.66,0.45 R_hand 0.10,0.44,0.46
+[Walk] phase=6.16 angle_err=0.572 torque=140 pelvis_y=0.98 L_foot_y=0.20 R_foot_y=0.22
+[Walk] phase=1.51 pelvis_y=0.96 L_foot_y=0.21 R_foot_y=0.16
+[Limbs] pelvis 0.09,0.96,-0.06 spine 0.05,1.21,0.15 head -0.18,1.56,0.43 L_foot -0.31,0.21,-0.00 R_foot 0.52,0.16,-0.03 L_hand -0.44,0.60,0.57 R_hand 0.05,0.80,0.27
+[Walk] phase=4.90 angle_err=0.655 torque=140 pelvis_y=0.97 L_foot_y=0.30 R_foot_y=0.19
+[Walk] phase=0.25 pelvis_y=1.01 L_foot_y=0.23 R_foot_y=0.33
+[Limbs] pelvis 0.04,1.01,-0.01 spine -0.11,1.24,0.19 head -0.47,1.60,0.36 L_foot -0.15,0.23,0.43 R_foot 0.28,0.33,-0.37 L_hand -0.45,0.64,0.62 R_hand -0.45,0.76,0.06
+[Walk] phase=3.64 angle_err=0.699 torque=140 pelvis_y=0.98 L_foot_y=0.24 R_foot_y=0.16
+[Walk] phase=5.28 pelvis_y=0.87 L_foot_y=0.18 R_foot_y=0.21
+[Limbs] pelvis 0.03,0.87,-0.05 spine 0.03,1.12,0.13 head -0.03,1.55,0.20 L_foot -0.40,0.18,0.19 R_foot 0.42,0.21,-0.32 L_hand -0.35,0.65,0.49 R_hand 0.25,0.31,0.28
+[Walk] phase=2.39 angle_err=0.355 torque=140 pelvis_y=1.02 L_foot_y=0.28 R_foot_y=0.34
+[Walk] phase=4.02 pelvis_y=0.97 L_foot_y=0.22 R_foot_y=0.25
+[Limbs] pelvis -0.09,0.97,0.04 spine -0.10,1.22,0.19 head -0.19,1.66,0.09 L_foot -0.54,0.22,0.20 R_foot 0.37,0.25,0.03 L_hand -0.45,0.52,0.55 R_hand -0.00,0.54,0.26
+[Walk] phase=1.13 angle_err=0.549 torque=140 pelvis_y=0.88 L_foot_y=0.15 R_foot_y=0.17
+[Walk] phase=2.76 pelvis_y=0.91 L_foot_y=0.22 R_foot_y=0.17
+[Limbs] pelvis 0.04,0.91,-0.02 spine 0.03,1.17,0.13 head -0.12,1.59,0.17 L_foot -0.48,0.22,0.06 R_foot 0.44,0.17,0.06 L_hand -0.49,0.60,0.67 R_hand -0.04,0.62,-0.23
+[Walk] phase=6.16 angle_err=0.721 torque=140 pelvis_y=0.87 L_foot_y=0.14 R_foot_y=0.30
+[Walk] phase=1.51 pelvis_y=0.99 L_foot_y=0.23 R_foot_y=0.22
+[Limbs] pelvis 0.03,0.99,-0.09 spine -0.00,1.23,0.13 head -0.19,1.63,0.31 L_foot -0.38,0.23,-0.10 R_foot 0.40,0.22,-0.13 L_hand -0.53,0.67,0.50 R_hand -0.15,0.59,0.30
+[Walk] phase=4.90 angle_err=0.486 torque=140 pelvis_y=0.87 L_foot_y=0.17 R_foot_y=0.19
+[Walk] phase=0.25 pelvis_y=0.93 L_foot_y=0.23 R_foot_y=0.31
+[Limbs] pelvis 0.00,0.93,-0.08 spine 0.01,1.19,0.03 head -0.15,1.63,0.03 L_foot -0.36,0.23,0.21 R_foot 0.39,0.31,-0.32 L_hand -0.28,0.70,0.58 R_hand -0.04,0.44,-0.07
+[Walk] phase=3.64 angle_err=0.791 torque=140 pelvis_y=0.83 L_foot_y=0.10 R_foot_y=0.17
+[Walk] phase=5.28 pelvis_y=0.95 L_foot_y=0.26 R_foot_y=0.21
+[Limbs] pelvis -0.02,0.95,-0.10 spine 0.01,1.21,0.06 head -0.10,1.66,0.05 L_foot -0.53,0.26,0.18 R_foot 0.43,0.21,-0.24 L_hand -0.34,0.53,0.51 R_hand 0.08,0.61,0.23
+[Walk] phase=2.39 angle_err=0.397 torque=140 pelvis_y=1.03 L_foot_y=0.24 R_foot_y=0.27
+[Walk] phase=4.02 pelvis_y=0.91 L_foot_y=0.24 R_foot_y=0.14
+[Limbs] pelvis 0.02,0.91,-0.04 spine -0.03,1.18,0.09 head -0.21,1.60,0.07 L_foot -0.55,0.24,0.17 R_foot 0.36,0.14,-0.02 L_hand -0.52,0.66,0.48 R_hand -0.09,0.45,-0.17
+[Walk] phase=1.13 angle_err=0.571 torque=140 pelvis_y=1.06 L_foot_y=0.27 R_foot_y=0.31
+[Walk] phase=2.76 pelvis_y=1.02 L_foot_y=0.28 R_foot_y=0.32
+[Limbs] pelvis 0.02,1.02,-0.05 spine -0.04,1.27,0.14 head -0.21,1.69,0.21 L_foot -0.45,0.28,-0.04 R_foot 0.47,0.32,0.01 L_hand -0.58,0.73,0.49 R_hand -0.05,0.53,-0.07
+[Walk] phase=6.16 angle_err=0.355 torque=140 pelvis_y=0.89 L_foot_y=0.14 R_foot_y=0.17
+[Walk] phase=1.51 pelvis_y=1.01 L_foot_y=0.22 R_foot_y=0.20
+[Limbs] pelvis -0.01,1.01,-0.01 spine -0.02,1.23,0.17 head -0.21,1.66,0.16 L_foot -0.32,0.22,-0.05 R_foot -0.00,0.20,-0.36 L_hand -0.40,0.64,0.50 R_hand 0.21,0.85,0.46
+[Walk] phase=4.90 angle_err=1.513 torque=140 pelvis_y=1.04 L_foot_y=0.24 R_foot_y=0.25
+[Walk] phase=0.25 pelvis_y=0.98 L_foot_y=0.28 R_foot_y=0.23
+[Limbs] pelvis 0.00,0.98,-0.09 spine -0.04,1.19,-0.04 head -0.24,1.57,-0.36 L_foot -0.35,0.28,-0.34 R_foot -0.05,0.23,-0.50 L_hand -0.23,0.72,0.31 R_hand 0.09,0.62,0.19
+[Walk] phase=3.64 angle_err=1.974 torque=140 pelvis_y=1.04 L_foot_y=0.40 R_foot_y=0.23
+[Walk] phase=5.28 pelvis_y=0.93 L_foot_y=0.19 R_foot_y=0.25
+[Limbs] pelvis 0.06,0.93,-0.09 spine 0.00,1.19,0.06 head -0.17,1.62,0.06 L_foot -0.40,0.19,-0.04 R_foot 0.40,0.25,-0.22 L_hand -0.47,0.70,0.52 R_hand 0.03,0.50,-0.08
+[Walk] phase=2.39 angle_err=1.224 torque=140 pelvis_y=0.91 L_foot_y=0.26 R_foot_y=0.27
+[Walk] phase=4.02 pelvis_y=0.92 L_foot_y=0.21 R_foot_y=0.22
+[Limbs] pelvis 0.09,0.92,-0.01 spine 0.07,1.17,0.18 head -0.12,1.59,0.22 L_foot -0.38,0.21,0.18 R_foot 0.50,0.22,-0.12 L_hand -0.47,0.65,0.62 R_hand 0.03,0.34,0.07
+[Walk] phase=1.13 angle_err=0.634 torque=140 pelvis_y=0.90 L_foot_y=0.20 R_foot_y=0.17
+[Walk] phase=2.76 pelvis_y=0.99 L_foot_y=0.21 R_foot_y=0.21
+[Limbs] pelvis -0.01,0.99,0.02 spine -0.06,1.23,0.20 head -0.27,1.67,0.21 L_foot -0.44,0.21,-0.06 R_foot 0.43,0.21,0.09 L_hand -0.51,0.56,0.44 R_hand -0.16,0.73,0.37
+[Walk] phase=6.16 angle_err=0.449 torque=140 pelvis_y=0.88 L_foot_y=0.16 R_foot_y=0.24
+[Walk] phase=1.51 pelvis_y=0.99 L_foot_y=0.24 R_foot_y=0.22
+[Limbs] pelvis 0.06,0.99,-0.03 spine 0.02,1.25,0.16 head -0.26,1.66,0.29 L_foot -0.33,0.24,-0.05 R_foot 0.41,0.22,0.02 L_hand -0.42,0.63,0.56 R_hand -0.18,0.54,0.16
+[Walk] phase=4.90 angle_err=0.594 torque=140 pelvis_y=0.93 L_foot_y=0.24 R_foot_y=0.19
+[Walk] phase=0.25 pelvis_y=0.86 L_foot_y=0.12 R_foot_y=0.20
+[Limbs] pelvis 0.00,0.86,-0.02 spine -0.01,1.11,0.15 head -0.20,1.53,0.21 L_foot -0.35,0.12,0.22 R_foot 0.42,0.20,-0.23 L_hand -0.33,0.51,0.54 R_hand -0.22,0.38,0.14
+[Walk] phase=3.64 angle_err=0.698 torque=140 pelvis_y=0.97 L_foot_y=0.28 R_foot_y=0.21
+[Walk] phase=5.28 pelvis_y=0.97 L_foot_y=0.18 R_foot_y=0.33
+[Limbs] pelvis 0.10,0.97,-0.15 spine 0.10,1.18,0.09 head -0.14,1.56,0.27 L_foot -0.13,0.18,0.07 R_foot 0.30,0.33,-0.68 L_hand -0.24,0.52,0.47 R_hand -0.14,0.70,0.35
+[Walk] phase=2.39 angle_err=0.597 torque=140 pelvis_y=1.06 L_foot_y=0.26 R_foot_y=0.25
+[Walk] phase=4.02 pelvis_y=0.97 L_foot_y=0.19 R_foot_y=0.23
+[Limbs] pelvis 0.02,0.97,-0.01 spine -0.03,1.19,0.17 head -0.21,1.61,0.21 L_foot -0.33,0.19,-0.00 R_foot 0.37,0.23,-0.17 L_hand -0.48,0.54,0.43 R_hand -0.20,0.65,0.38
+[Walk] phase=1.13 angle_err=0.467 torque=140 pelvis_y=1.00 L_foot_y=0.19 R_foot_y=0.26
+[Walk] phase=2.76 pelvis_y=0.98 L_foot_y=0.28 R_foot_y=0.25
+[Limbs] pelvis 0.00,0.98,0.06 spine -0.10,1.16,0.24 head -0.48,1.52,0.12 L_foot -0.38,0.28,-0.30 R_foot 0.04,0.25,-0.44 L_hand -0.44,0.55,0.56 R_hand -0.17,0.79,0.25
+[Walk] phase=6.16 angle_err=1.421 torque=140 pelvis_y=1.01 L_foot_y=0.18 R_foot_y=0.28
+[Walk] phase=1.51 pelvis_y=1.05 L_foot_y=0.28 R_foot_y=0.19
+[Limbs] pelvis -0.00,1.05,-0.05 spine 0.07,1.27,0.13 head 0.23,1.73,0.14 L_foot -0.22,0.28,-0.36 R_foot 0.19,0.19,-0.23 L_hand -0.32,0.74,0.22 R_hand 0.81,0.98,0.28
+[Walk] phase=4.90 angle_err=1.393 torque=140 pelvis_y=0.94 L_foot_y=0.26 R_foot_y=0.21
+[Walk] phase=0.25 pelvis_y=0.99 L_foot_y=0.20 R_foot_y=0.20
+[Limbs] pelvis 0.03,0.99,-0.07 spine -0.04,1.18,0.18 head -0.15,1.50,0.54 L_foot -0.19,0.20,0.23 R_foot 0.30,0.20,-0.39 L_hand -0.48,0.67,0.51 R_hand 0.05,0.69,0.44
+[Walk] phase=3.64 angle_err=0.521 torque=140 pelvis_y=0.98 L_foot_y=0.23 R_foot_y=0.19
+[Walk] phase=5.28 pelvis_y=0.97 L_foot_y=0.19 R_foot_y=0.28
+[Limbs] pelvis -0.01,0.97,-0.04 spine -0.02,1.20,0.13 head -0.13,1.64,0.18 L_foot -0.34,0.19,0.20 R_foot 0.28,0.28,-0.39 L_hand -0.44,0.64,0.48 R_hand -0.12,0.58,0.08
+[Walk] phase=2.39 angle_err=0.514 torque=140 pelvis_y=0.98 L_foot_y=0.21 R_foot_y=0.19
+[Walk] phase=4.02 pelvis_y=0.94 L_foot_y=0.22 R_foot_y=0.18
+[Limbs] pelvis 0.04,0.94,-0.10 spine 0.00,1.19,0.13 head -0.25,1.59,0.29 L_foot -0.43,0.22,-0.03 R_foot 0.41,0.18,-0.17 L_hand -0.57,0.64,0.50 R_hand -0.18,0.61,0.49
+[Walk] phase=1.13 angle_err=0.499 torque=140 pelvis_y=1.10 L_foot_y=0.29 R_foot_y=0.32
+[Walk] phase=2.76 pelvis_y=1.09 L_foot_y=0.33 R_foot_y=0.25
+[Limbs] pelvis -0.02,1.09,-0.01 spine -0.02,1.32,0.14 head -0.10,1.77,0.10 L_foot -0.40,0.33,-0.06 R_foot 0.23,0.25,-0.11 L_hand -0.44,0.73,0.57 R_hand 0.04,0.49,0.20
+[Walk] phase=6.16 angle_err=0.671 torque=140 pelvis_y=1.01 L_foot_y=0.24 R_foot_y=0.26
+[Walk] phase=1.51 pelvis_y=1.03 L_foot_y=0.27 R_foot_y=0.24
+[Limbs] pelvis 0.01,1.03,-0.03 spine 0.06,1.29,0.11 head -0.14,1.71,0.17 L_foot -0.36,0.27,0.11 R_foot 0.47,0.24,-0.13 L_hand -0.35,0.73,0.65 R_hand 0.03,0.60,-0.04
+[Walk] phase=4.90 angle_err=0.628 torque=140 pelvis_y=0.82 L_foot_y=0.10 R_foot_y=0.15
+[Walk] phase=0.25 pelvis_y=0.80 L_foot_y=0.09 R_foot_y=0.16
+[Limbs] pelvis -0.00,0.80,-0.09 spine 0.07,1.08,0.02 head -0.02,1.52,0.05 L_foot -0.35,0.09,0.26 R_foot 0.38,0.16,-0.35 L_hand -0.22,0.53,0.61 R_hand 0.00,0.36,-0.05
+[Walk] phase=3.64 angle_err=0.584 torque=140 pelvis_y=0.99 L_foot_y=0.25 R_foot_y=0.27
+[Walk] phase=5.28 pelvis_y=0.89 L_foot_y=0.21 R_foot_y=0.19
+[Limbs] pelvis -0.02,0.89,-0.05 spine 0.03,1.15,0.08 head -0.09,1.58,0.03 L_foot -0.47,0.21,0.32 R_foot 0.37,0.19,-0.34 L_hand -0.30,0.53,0.69 R_hand -0.07,0.30,-0.14
+[Walk] phase=2.39 angle_err=0.311 torque=140 pelvis_y=1.04 L_foot_y=0.33 R_foot_y=0.40
+[UI] Mode -> Standing
+[Pose] Stand mode: all 10 joints springs ON -> 150
+[Limbs] pelvis -0.02,0.82,-0.01 spine -0.17,1.09,0.03 head -0.35,1.46,0.17 L_foot -0.10,0.41,-0.63 R_foot 0.21,0.28,0.60 L_hand -0.20,1.11,-0.53 R_hand -0.12,0.76,0.16
+[Limbs] pelvis 0.01,0.74,0.08 spine 0.24,0.65,0.23 head 0.50,0.38,0.46 L_foot -0.73,0.92,-0.05 R_foot -0.55,0.21,0.09 L_hand -0.03,0.52,0.36 R_hand -0.03,0.17,-0.00
+[Limbs] pelvis 0.04,0.76,-0.01 spine -0.16,0.60,-0.13 head -0.32,0.24,-0.32 L_foot 0.73,0.51,-0.11 R_foot 0.58,0.44,0.44 L_hand 0.19,0.41,-0.12 R_hand -0.04,0.40,0.35
+[Limbs] pelvis -0.02,0.76,-0.03 spine 0.23,0.65,-0.00 head 0.50,0.31,0.07 L_foot -0.60,0.39,0.21 R_foot -0.56,0.33,-0.38 L_hand -0.02,0.41,-0.02 R_hand 0.04,0.42,-0.50
+[Limbs] pelvis -0.00,0.77,0.02 spine -0.27,0.69,0.08 head -0.59,0.40,0.09 L_foot 0.38,0.35,-0.44 R_foot 0.55,0.24,0.11 L_hand -0.08,0.43,0.04 R_hand 0.03,0.37,0.48
+[Limbs] pelvis 0.01,0.77,0.00 spine 0.23,0.68,-0.14 head 0.54,0.39,-0.24 L_foot -0.18,0.42,0.61 R_foot -0.52,0.23,0.17 L_hand 0.08,0.42,-0.03 R_hand -0.17,0.32,-0.38
+[Limbs] pelvis 0.00,0.77,-0.01 spine -0.14,0.66,0.21 head -0.37,0.36,0.42 L_foot -0.07,0.43,-0.65 R_foot 0.43,0.26,-0.40 L_hand -0.04,0.41,0.04 R_hand 0.33,0.32,0.24
+[Limbs] pelvis -0.01,0.77,0.00 spine 0.00,0.67,-0.26 head 0.09,0.36,-0.55 L_foot 0.37,0.40,0.51 R_foot -0.20,0.25,0.54 L_hand -0.01,0.41,-0.06 R_hand -0.43,0.33,-0.05
+[Limbs] pelvis 0.00,0.76,0.00 spine 0.14,0.67,0.23 head 0.21,0.37,0.53 L_foot -0.59,0.40,-0.22 R_foot -0.12,0.23,-0.54 L_hand 0.03,0.42,0.06 R_hand 0.39,0.33,-0.17
+[UI] Mode -> Ragdoll
+[Limbs] pelvis -0.02,0.20,0.08 spine -0.29,0.20,0.18 head -0.70,0.10,0.27 L_foot 0.37,0.10,-0.62 R_foot 0.72,0.06,0.06 L_hand -0.10,0.08,-0.05 R_hand 0.09,0.05,0.50
+[Limbs] pelvis -0.02,0.17,0.08 spine -0.30,0.17,0.17 head -0.72,0.10,0.25 L_foot 0.37,0.08,-0.64 R_foot 0.76,0.06,0.16 L_hand -0.08,0.07,-0.09 R_hand 0.07,0.05,0.49
+[Limbs] pelvis -0.02,0.15,0.08 spine -0.30,0.15,0.18 head -0.72,0.11,0.25 L_foot 0.36,0.08,-0.64 R_foot 0.77,0.06,0.15 L_hand -0.09,0.07,-0.10 R_hand 0.06,0.05,0.49
+[Limbs] pelvis -0.02,0.15,0.08 spine -0.30,0.15,0.18 head -0.72,0.11,0.25 L_foot 0.36,0.08,-0.64 R_foot 0.77,0.06,0.15 L_hand -0.09,0.07,-0.10 R_hand 0.06,0.05,0.49

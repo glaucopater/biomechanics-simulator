@@ -1,0 +1,6 @@
+{
+  "name": "biomechanics-simulator",
+  "version": "0.1.0",
+  "description": "C++ biomechanics simulator with ragdoll physics (Bullet)",
+  "dependencies": ["bullet3"]
+}
