@@ -13,12 +13,13 @@
 
 namespace biomechanics {
 
-/** Motion mode for the ragdoll: stance or gait. */
+/** Motion mode for the ragdoll: stance or gait. Values used by HTTP/config. */
 enum class MotionMode : int {
-  Standing,
-  Walking,
-  /** No pose control; pure ragdoll (e.g. after jump or for debugging). */
-  Ragdoll
+  Standing = 0,
+  Walking = 1,
+  Ragdoll = 2,
+  /** Static stance: stand still with one leg raised (same root pinning as Standing). */
+  StandingRaiseLeg = 3
 };
 
 /** Per-frame state for the pose controller (mode, phase, jump trigger). */
@@ -64,5 +65,17 @@ void reset_ragdoll_to_standing(JPH::Ragdoll* ragdoll,
                                const JPH::RagdollSettings* ragdoll_settings,
                                JPH::RVec3 root_offset,
                                JPH::BodyInterface* body_interface = nullptr);
+
+/**
+ * Reset ragdoll to the initial standing pose (same limb positions in space as at start).
+ * Uses pose stored in scene (captured after settling or at creation). If no stored pose, falls back to reset_ragdoll_to_standing.
+ */
+void reset_ragdoll_to_initial_standing(SimulatorScene& scene,
+                                     JPH::BodyInterface* body_interface = nullptr);
+
+/**
+ * Store the ragdoll's current pose as the initial standing pose (for reset). Call after the character has settled in Standing.
+ */
+void capture_standing_pose_as_initial(SimulatorScene& scene);
 
 }  // namespace biomechanics

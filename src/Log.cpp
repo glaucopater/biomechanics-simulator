@@ -193,9 +193,42 @@ void debug_instrument(const char* location, const char* message, const char* hyp
   std::ofstream f(s_log_path, std::ios::app);
   if (!f) return;
   f << "{\"timestamp\":" << t << ",\"location\":\"" << location << "\",\"message\":\"" << message
-    << "\",\"hypothesisId\":\"" << hypothesis_id << "\",\"sessionId\":\"debug-session\",\"runId\":\"run1\"";
+    << "\",\"hypothesisId\":\"" << hypothesis_id << "\",\"runId\":\"run1\"";
   if (data_val != -999) f << ",\"data\":{\"val\":" << data_val << "}";
   f << "}\n";
+  f.flush();
+}
+
+void debug_instrument_walk(const char* location, const char* hypothesis_id, const char* phase,
+  float vx, float vy, float vz, float tx, float ty, float tz, float dt_used) {
+  resolve_log_path();
+  std::error_code ec;
+  std::filesystem::path p(s_log_path);
+  std::filesystem::create_directories(p.parent_path(), ec);
+  auto t = std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::steady_clock::now().time_since_epoch()).count();
+  std::ofstream f(s_log_path, std::ios::app);
+  if (!f) return;
+  f << "{\"timestamp\":" << t << ",\"location\":\"" << location << "\",\"hypothesisId\":\"" << hypothesis_id
+    << "\",\"runId\":\"run1\",\"data\":{\"phase\":\"" << phase << "\",\"root_vx\":" << vx << ",\"root_vy\":" << vy
+    << ",\"root_vz\":" << vz << ",\"target_x\":" << tx << ",\"target_y\":" << ty << ",\"target_z\":" << tz
+    << ",\"dt_used\":" << dt_used << "}}\n";
+  f.flush();
+}
+
+void debug_instrument_limbs(const char* location, const char* hypothesis_id, int body_idx,
+  float px, float py, float pz, float vx, float vy, float vz) {
+  resolve_log_path();
+  std::error_code ec;
+  std::filesystem::path p(s_log_path);
+  std::filesystem::create_directories(p.parent_path(), ec);
+  auto t = std::chrono::duration_cast<std::chrono::milliseconds>(
+               std::chrono::steady_clock::now().time_since_epoch()).count();
+  std::ofstream f(s_log_path, std::ios::app);
+  if (!f) return;
+  f << "{\"timestamp\":" << t << ",\"location\":\"" << location << "\",\"hypothesisId\":\"" << hypothesis_id
+    << "\",\"runId\":\"run1\",\"data\":{\"body_idx\":" << body_idx << ",\"px\":" << px << ",\"py\":" << py
+    << ",\"pz\":" << pz << ",\"vx\":" << vx << ",\"vy\":" << vy << ",\"vz\":" << vz << "}}\n";
   f.flush();
 }
 // #endregion

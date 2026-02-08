@@ -17,6 +17,7 @@ struct HttpStatusSnapshot {
   double root_wx = 0.0, root_wy = 0.0, root_wz = 0.0;  // root angular velocity (spin)
   int body_count = 0;
   float walk_time = 0.f;
+  float walk_phase = 0.f;  // procedural walk phase [0, 2*PI)
   std::vector<std::string> log_tail;
 };
 
@@ -43,6 +44,12 @@ void http_control_apply_pending_stance(ControllerState& ctrl_state);
 bool http_control_consume_pending_jump();
 bool http_control_consume_pending_test_float();
 bool http_control_consume_pending_reset();
+
+/**
+ * If a position was requested via PATCH /position, fills x,y,z and returns true (clears pending).
+ * Main thread only. Use to snap root to the given position and zero velocities.
+ */
+bool http_control_consume_pending_position(double& x, double& y, double& z);
 
 /**
  * Update the status snapshot from current scene and ctrl_state (main thread only).

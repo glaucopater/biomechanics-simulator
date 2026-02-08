@@ -49,6 +49,15 @@ From the project root, after building:
 ./build/biomechanics_simulator
 ```
 
+**With HTTP control** – enable the REST API on a local port (e.g. for automation or external clients):
+
+```bash
+.\build\Release\biomechanics_simulator.exe --http-port 8765   # Windows
+./build/biomechanics_simulator --http-port 8765              # Linux/macOS
+```
+
+Then use `GET http://127.0.0.1:8765/status`, `PATCH http://127.0.0.1:8765/stance`, `POST http://127.0.0.1:8765/stance/standing_raise_leg`, etc. OpenAPI spec: `GET http://127.0.0.1:8765/openapi.yaml` (when run from repo root or build dir). See [docs/openapi.yaml](docs/openapi.yaml) for the full API.
+
 **Headless** – no window; runs a fixed number of steps and prints pelvis position (for CI/automation):
 
 ```bash
@@ -58,13 +67,15 @@ From the project root, after building:
 
 ## Stance and movement (visualizer)
 
-The model has default **standing**, **walking**, and **jumping**:
+The model supports **standing**, **raise leg**, **walking**, and **ragdoll**:
 
-- **Standing** – PD control holds the ragdoll in an upright rest pose (default when the window opens).
+- **Standing** – Pose control holds the ragdoll upright (default when the window opens). Root is pinned.
+- **Raise leg** – Static stance with one leg raised; root pinned, other limbs driven by motors.
 - **Walking** – Cyclic gait: hip/knee/arm targets drive a walking motion.
+- **Ragdoll** – No pose control; full physics.
 - **Jump** – One-shot upward impulse on the pelvis.
 
-**Stance panel (top-left):** Use **Standing**, **Walk**, **Ragdoll**, **Jump**, and **Reset** to change mode or reset the simulation to the default standing pose.
+**Stance panel (top-left):** **Standing**, **Raise leg**, **Walk**, **Ragdoll**, **Jump**, **Reset**, **Test (float 2s)**, **Freeze/Unfreeze**.
 
 **Keys (with window focused):**
 
@@ -72,33 +83,35 @@ The model has default **standing**, **walking**, and **jumping**:
 |-------|----------|
 | **1** | Standing |
 | **2** | Walking  |
-| **3** | Ragdoll (no pose control) |
+| **3** | Ragdoll  |
+| **4** | Raise leg |
 | **Space** | Jump     |
 
-**Camera:** Drag with the **left mouse button** to orbit; **scroll** to zoom in/out.
+**Camera:** Left mouse drag to orbit; scroll to zoom.
 
 ## What it does
 
 - Creates a Jolt `PhysicsSystem` with gravity.
-- Adds a ground plane and a single ragdoll (pelvis, spine, head, arms, legs) built from capsule shapes and `SixDOFConstraint` joints.
-- **Default**: runs with a visualizer window; simulation steps in real time and the body is drawn as a wireframe. Starts in **Standing**. Use the on-screen **Stance** panel (Standing / Walk / Ragdoll / Jump / Reset) or keys **1** / **2** / **3** / **Space**. **Reset** restores the scene to the initial standing pose. **Camera**: left-drag to orbit, scroll to zoom. Close the window to exit.
-- **`--headless`**: steps the simulation 300 times at 60 Hz with pose control (standing by default; set `default_motion_mode` in config for walking/ragdoll), prints the pelvis position and "Done.", then exits.
+- Adds a ground plane and a single ragdoll (pelvis, spine, head, arms, legs) from capsule shapes and constraints (Human.tof when available, else procedural).
+- **Default**: runs with a visualizer window; simulation in real time, wireframe rendering. Starts in **Standing**. Stance panel and keys **1**–**4** / **Space** switch mode; **Reset** restores initial standing. **Camera**: left-drag to orbit, scroll to zoom.
+- **`--http-port PORT`**: starts an HTTP server on `127.0.0.1:PORT` with REST endpoints for stance, status, log, position, and actions. OpenAPI 3.0 spec at `GET /openapi.yaml` (and in [docs/openapi.yaml](docs/openapi.yaml)) for client integration.
+- **`--headless`**: runs a fixed number of steps with pose control (standing by default), prints pelvis position and exits.
 
 ## Project layout
 
-- `CMakeLists.txt` – root build; Jolt and GLFW (FetchContent), `biomechanics_simulator`, optional tests.
-- `vcpkg.json` – vcpkg manifest (optional; Jolt is fetched from source).
-- `include/biomechanics/` – public API: `Config.hpp`, `JoltLayers.hpp`, `Ragdoll.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, `PoseController.hpp`.
-- `src/main.cpp` – entry point; parses `--headless`, calls `run_demo_visual()` (default) or `run_demo()`.
-- `src/Ragdoll.cpp` – ragdoll creation (Jolt capsules + SixDOF constraints).
-- `src/Simulator.cpp` – headless demo: physics, ground, pose control, step loop, cleanup (uses `SimulatorScene`).
-- `src/SimulatorScene.cpp` – shared scene setup: `create_simulator_scene()`, `destroy_simulator_scene()`.
-- `src/PoseController.cpp` – stance/walking/jump: PD control toward rest pose or cyclic gait; jump impulse.
-- `src/Visualizer.cpp` – visual mode: GLFW window, orbit/zoom camera (mouse drag + scroll), ImGui stance panel (Stand/Walk/Ragdoll/Jump), OpenGL debug drawer, key bindings (1/2/3/Space), step-and-draw loop.
-- `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies (capsules, box).
-- `tests/` – optional smoke test; build with `-DBUILD_TESTS=ON`.
-- `docs/PROJECT_STRUCTURE.md` – folder layout and roles.
-- `docs/MILESTONES.md` – project milestones (e.g. standing stable).
+- `CMakeLists.txt` – root build; Jolt, GLFW, ImGui (FetchContent); `biomechanics_simulator`, optional tests.
+- `vcpkg.json` – vcpkg manifest (optional).
+- `include/biomechanics/` – public API: `Config.hpp`, `HttpControl.hpp`, `JoltLayers.hpp`, `Log.hpp`, `PoseController.hpp`, `Ragdoll.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, etc.
+- `src/main.cpp` – entry point; parses `--headless`, `--http-port`, calls `run_demo_visual()` (default) or `run_demo()`.
+- `src/PoseController.cpp` – stance logic: standing, standing raise-leg, walking, ragdoll; jump impulse.
+- `src/Visualizer.cpp` – GLFW window, orbit camera, ImGui stance panel, key bindings (1–4, Space), step-and-draw loop.
+- `src/HttpControl.cpp` – HTTP server: `/status`, `/log`, `/stance`, `/stance/standing`, `/stance/standing_raise_leg`, `/stance/walking`, `/stance/ragdoll`, `/jump`, `/reset`, `/position`, `/openapi.yaml`.
+- `src/SimulatorScene.cpp` – scene setup (ground, ragdoll from Human.tof or procedural).
+- `src/HumanRagdoll.cpp` – Human.tof loading, procedural human rig.
+- `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies.
+- `docs/openapi.yaml` – OpenAPI 3.0 spec for the HTTP API.
+- `docs/PROJECT_STRUCTURE.md`, `docs/MILESTONES.md` – layout and milestones.
+- `tests/` – optional tests; build with `-DBUILD_TESTS=ON`.
 
 ## License
 

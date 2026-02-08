@@ -1,0 +1,290 @@
+openapi: 3.0.3
+info:
+  title: Biomechanics Simulator HTTP API
+  description: |
+    Control API for the biomechanics simulator. The server runs on 127.0.0.1 when started with `--http-port PORT`.
+    Stance changes and actions are queued and applied on the next simulation frame.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:{port}
+    description: Local simulator (replace {port} with the port passed to --http-port, e.g. 8080)
+    variables:
+      port:
+        default: "8080"
+
+paths:
+  /status:
+    get:
+      summary: Get current simulator state
+      operationId: getStatus
+      responses:
+        "200":
+          description: Current snapshot
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusSnapshot"
+
+  /log:
+    get:
+      summary: Get log entries (optionally filtered by time range)
+      operationId: getLog
+      parameters:
+        - name: from
+          in: query
+          description: Minimum timestamp (ms) for log entries
+          schema:
+            type: integer
+            format: int64
+        - name: to
+          in: query
+          description: Maximum timestamp (ms) for log entries
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Log entries
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogResponse"
+
+  /stance:
+    patch:
+      summary: Set stance by JSON body (any supported stance)
+      operationId: patchStance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StanceBody"
+      responses:
+        "200":
+          description: Stance accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StanceOk"
+        "400":
+          description: Invalid body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /stance/standing:
+    post:
+      summary: Set stance to standing
+      operationId: postStanceStanding
+      responses:
+        "200":
+          description: Stance set to standing
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StanceOk"
+
+  /stance/standing_raise_leg:
+    post:
+      summary: Set stance to standing with one leg raised
+      operationId: postStanceStandingRaiseLeg
+      responses:
+        "200":
+          description: Stance set to standing_raise_leg
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StanceOk"
+
+  /stance/walking:
+    post:
+      summary: Set stance to walking
+      operationId: postStanceWalking
+      responses:
+        "200":
+          description: Stance set to walking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StanceOk"
+
+  /stance/ragdoll:
+    post:
+      summary: Set stance to ragdoll (no pose control)
+      operationId: postStanceRagdoll
+      responses:
+        "200":
+          description: Stance set to ragdoll
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StanceOk"
+
+  /jump:
+    post:
+      summary: Queue a jump action
+      operationId: postJump
+      responses:
+        "200":
+          description: Action queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionOk"
+
+  /test-float:
+    post:
+      summary: Queue test-float action (e.g. brief ungravity)
+      operationId: postTestFloat
+      responses:
+        "200":
+          description: Action queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionOk"
+
+  /reset:
+    post:
+      summary: Queue reset (e.g. back to initial pose/position)
+      operationId: postReset
+      responses:
+        "200":
+          description: Action queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionOk"
+
+  /position:
+    patch:
+      summary: Set target root position (queued; applied next frame)
+      operationId: patchPosition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PositionBody"
+      responses:
+        "200":
+          description: Position accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PositionOk"
+
+  /openapi.yaml:
+    get:
+      summary: OpenAPI 3.0 spec (this document)
+      operationId: getOpenApi
+      responses:
+        "200":
+          description: OpenAPI YAML
+          content:
+            application/x-yaml:
+              schema:
+                type: string
+                description: OpenAPI 3.0 YAML document
+
+components:
+  schemas:
+    StatusSnapshot:
+      type: object
+      properties:
+        stance:
+          type: string
+          enum: [standing, standing_raise_leg, walking, ragdoll]
+        root_x:
+          type: number
+        root_y:
+          type: number
+        root_z:
+          type: number
+        root_vx:
+          type: number
+        root_vy:
+          type: number
+        root_vz:
+          type: number
+        root_wx:
+          type: number
+        root_wy:
+          type: number
+        root_wz:
+          type: number
+        body_count:
+          type: integer
+        walk_time:
+          type: number
+        walk_phase:
+          type: number
+        log_tail:
+          type: array
+          items:
+            type: string
+
+    LogResponse:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            type: object
+            properties:
+              ts:
+                type: integer
+                format: int64
+              message:
+                type: string
+
+    StanceBody:
+      type: object
+      required:
+        - stance
+      properties:
+        stance:
+          type: string
+          enum: [standing, standing_raise_leg, walking, ragdoll]
+
+    StanceOk:
+      type: object
+      properties:
+        stance:
+          type: string
+          enum: [standing, standing_raise_leg, walking, ragdoll]
+
+    ActionOk:
+      type: object
+      properties:
+        action:
+          type: string
+
+    PositionBody:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        z:
+          type: number
+
+    PositionOk:
+      type: object
+      properties:
+        position:
+          type: array
+          items:
+            type: number
+          minItems: 3
+          maxItems: 3
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string

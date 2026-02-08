@@ -66,11 +66,22 @@ void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out) 
   if (out.ragdoll) {
     out.ragdoll->AddToPhysicsSystem(JPH::EActivation::Activate);
     JPH::SkeletonPose pose;
-    pose.SetSkeleton(out.ragdoll_settings->GetSkeleton());
+    const JPH::Skeleton* skel = out.ragdoll_settings->GetSkeleton();
+    pose.SetSkeleton(skel);
     out.ragdoll->GetPose(pose);
     pose.SetRootOffset(pose.GetRootOffset() + JPH::RVec3(0.f, config.ragdoll_height, 0.f));
     out.ragdoll->SetPose(pose);
     out.ragdoll->ResetWarmStart();
+    // Store initial standing pose so reset (Ragdoll->Standing) restores same limb positions in space
+    out.initial_standing_root_offset = pose.GetRootOffset();
+    const JPH::uint num_joints = skel ? skel->GetJointCount() : 0;
+    out.initial_standing_joint_rotations.resize(num_joints);
+    out.initial_standing_joint_translations.resize(num_joints);
+    for (JPH::uint i = 0; i < num_joints; ++i) {
+      const JPH::SkeletonPose::JointState& j = pose.GetJoint(i);
+      out.initial_standing_joint_rotations[i] = j.mRotation;
+      out.initial_standing_joint_translations[i] = j.mTranslation;
+    }
   }
 }
 
@@ -89,6 +100,8 @@ void destroy_simulator_scene(SimulatorScene& scene) {
   }
   scene.standing_anim = nullptr;
   scene.walking_anim = nullptr;
+  scene.initial_standing_joint_rotations.clear();
+  scene.initial_standing_joint_translations.clear();
   if (!scene.ground_id.IsInvalid()) {
     bi.RemoveBody(scene.ground_id);
     bi.DestroyBody(scene.ground_id);

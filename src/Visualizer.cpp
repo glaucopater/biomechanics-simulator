@@ -24,6 +24,7 @@
 #include <cmath>
 #include <cstdio>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 namespace biomechanics {
@@ -208,7 +209,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
   log("App started. Stance: Standing / Walk / Ragdoll. Log file: .cursor/debug.log");
   if (http_port > 0) {
     http_control_start(http_port);
-    log("HTTP control: GET http://127.0.0.1:%d/status  PATCH http://127.0.0.1:%d/stance", http_port, http_port);
+    log("HTTP control: GET http://127.0.0.1:%d/status  PATCH http://127.0.0.1:%d/stance  PATCH http://127.0.0.1:%d/position", http_port, http_port, http_port);
   }
 
   int frame_count = 0;
@@ -220,7 +221,13 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
   float standing_anchor_x = 0.f, standing_anchor_z = 0.f;
   JPH::Quat standing_anchor_rot = JPH::Quat::sIdentity();
   bool standing_anchor_valid = false;
+  float walk_anchor_x = 0.f, walk_anchor_z = 0.f;
+  bool walk_anchor_valid = false;
   bool simulation_frozen = false;
+  MotionMode last_frame_mode = ctrl_state.mode;
+  int standing_settle_frames = 0;
+  constexpr int STANDING_SETTLE_FRAMES_BEFORE_CAPTURE = 90;  // ~1.5 s at 60 fps
+  bool initial_standing_captured = false;
 
   glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int /*scancode*/, int action, int /*mods*/) {
     if (action != GLFW_PRESS)
@@ -234,6 +241,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       app->ctrl->mode = MotionMode::Walking;
     else if (key == GLFW_KEY_3)
       app->ctrl->mode = MotionMode::Ragdoll;
+    else if (key == GLFW_KEY_4)
+      app->ctrl->mode = MotionMode::StandingRaiseLeg;
     else if (key == GLFW_KEY_SPACE)
       app->ctrl->jump_triggered = true;
   });
@@ -257,6 +266,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     ImGui::Begin("Stance");
     if (ImGui::Button("Standing", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::Standing;
+    if (ImGui::Button("Raise leg", ImVec2(160, 0)))
+      ctrl_state.mode = MotionMode::StandingRaiseLeg;
     if (ImGui::Button("Walk", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::Walking;
     if (ImGui::Button("Ragdoll", ImVec2(160, 0)))
@@ -273,13 +284,13 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       drag_body = JPH::BodyID();
       if (scene.physics && scene.ragdoll && scene.ragdoll_settings) {
         JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
-        reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings,
-                                 JPH::RVec3(0.f, config.ragdoll_height, 0.f), &bi);
+        reset_ragdoll_to_initial_standing(scene, &bi);
         ctrl_state.mode = MotionMode::Standing;
         ctrl_state.walk_phase = 0.f;
         ctrl_state.walk_time = 0.f;
         ctrl_state.jump_triggered = false;
         ctrl_state.jump_frames_hold = 0;
+        standing_anchor_valid = false;
       }
     }
     if (ImGui::Button(simulation_frozen ? "Unfreeze" : "Freeze", ImVec2(160, 0))) {
@@ -354,6 +365,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       last_logged_mode = ctrl_state.mode;
       if (ctrl_state.mode == MotionMode::Standing)
         log("[UI] Mode -> Standing");
+      else if (ctrl_state.mode == MotionMode::StandingRaiseLeg)
+        log("[UI] Mode -> Raise leg");
       else if (ctrl_state.mode == MotionMode::Walking)
         log("[UI] Mode -> Walking");
       else
@@ -361,15 +374,33 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     }
     // Human ragdoll body indices: 0=LowerBody, 1=MidBody, 2=UpperBody, 3=Head, 4-7=arms, 8-11=legs
     const size_t num_bodies = scene.ragdoll ? scene.ragdoll->GetBodyIDs().size() : 0;
-    if (ctrl_state.mode == MotionMode::Walking && frame_count % 60 == 0 && num_bodies >= 12) {
+    bool using_walk_anim = (scene.walking_anim.GetPtr() != nullptr);
+    if (ctrl_state.mode == MotionMode::Walking && last_frame_mode != MotionMode::Walking && num_bodies >= 1) {
+      JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+      if (!root_id.IsInvalid()) {
+        JPH::RVec3 rp = bi.GetPosition(root_id);
+        JPH::Vec3 rv = bi.GetLinearVelocity(root_id);
+        log("[Walk] Entered: root (x,z)=(%.3f,%.3f) y=%.3f vel=(%.3f,%.3f,%.3f) walk_forward_speed=%.2f walk_speed=%.2f using_anim=%d",
+            static_cast<double>(rp.GetX()), static_cast<double>(rp.GetZ()), static_cast<double>(rp.GetY()),
+            static_cast<double>(rv.GetX()), static_cast<double>(rv.GetY()), static_cast<double>(rv.GetZ()),
+            config.walk_forward_speed, config.walk_speed, using_walk_anim ? 1 : 0);
+      }
+    }
+    if (ctrl_state.mode == MotionMode::Walking && frame_count % 30 == 0 && num_bodies >= 12) {
       JPH::BodyID pid = scene.ragdoll->GetBodyID(0);
       JPH::BodyID lid = scene.ragdoll->GetBodyID(10);
       JPH::BodyID rid = scene.ragdoll->GetBodyID(11);
       if (!pid.IsInvalid() && !lid.IsInvalid() && !rid.IsInvalid()) {
+        float px = float(bi.GetPosition(pid).GetX());
         float py = float(bi.GetPosition(pid).GetY());
+        float pz = float(bi.GetPosition(pid).GetZ());
+        JPH::Vec3 rv = bi.GetLinearVelocity(pid);
         float ly = float(bi.GetPosition(lid).GetY());
         float ry = float(bi.GetPosition(rid).GetY());
-        log("[Walk] phase=%.2f pelvis_y=%.2f L_foot_y=%.2f R_foot_y=%.2f", ctrl_state.walk_phase, py, ly, ry);
+        log("[Walk] phase=%.2f time=%.2f root(%.2f,%.2f,%.2f) v(%.2f,%.2f,%.2f) pelvis_y=%.2f L_foot_y=%.2f R_foot_y=%.2f %s",
+            ctrl_state.walk_phase, ctrl_state.walk_time, px, py, pz,
+            static_cast<double>(rv.GetX()), static_cast<double>(rv.GetY()), static_cast<double>(rv.GetZ()),
+            py, ly, ry, using_walk_anim ? "anim" : "proc");
       }
     }
     if (frame_count % 60 == 0 && num_bodies >= 12) {
@@ -382,6 +413,16 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
           float(h.GetX()), float(h.GetY()), float(h.GetZ()), float(lf.GetX()), float(lf.GetY()), float(lf.GetZ()),
           float(rf.GetX()), float(rf.GetY()), float(rf.GetZ()), float(lhand.GetX()), float(lhand.GetY()), float(lhand.GetZ()),
           float(rhand.GetX()), float(rhand.GetY()), float(rhand.GetZ()));
+    }
+    if (ctrl_state.mode == MotionMode::Standing && num_bodies >= 2 && frame_count % 30 == 0) {
+      JPH::BodyID mid_id = scene.ragdoll->GetBodyID(1);
+      if (!mid_id.IsInvalid()) {
+        JPH::RVec3 mid_pos = bi.GetPosition(mid_id);
+        JPH::Vec3 mid_vel = bi.GetLinearVelocity(mid_id);
+        log("[Standing] MidBody pos %.4f,%.4f,%.4f vel %.4f,%.4f,%.4f (only root is pinned; MidBody can wobble)",
+            static_cast<double>(mid_pos.GetX()), static_cast<double>(mid_pos.GetY()), static_cast<double>(mid_pos.GetZ()),
+            static_cast<double>(mid_vel.GetX()), static_cast<double>(mid_vel.GetY()), static_cast<double>(mid_vel.GetZ()));
+      }
     }
 
     ImGui::SetNextWindowPos(ImVec2(220, 10), ImGuiCond_FirstUseEver);
@@ -406,12 +447,20 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
                               "L upper leg", "L lower leg", "R upper leg", "R lower leg",
                               "L upper arm", "L lower arm", "R upper arm", "R lower arm"};
       int indices[] = {0, 1, 3, 8, 10, 9, 11, 4, 6, 5, 7};
+      std::ostringstream copy_buf;
       for (int i = 0; i < 11; ++i) {
         JPH::BodyID id = scene.ragdoll->GetBodyID(indices[i]);
         if (!id.IsInvalid()) {
           JPH::RVec3 pos = bi.GetPosition(id);
-          ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], static_cast<double>(pos.GetX()), static_cast<double>(pos.GetY()), static_cast<double>(pos.GetZ()));
+          double px = static_cast<double>(pos.GetX()), py = static_cast<double>(pos.GetY()), pz = static_cast<double>(pos.GetZ());
+          ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], px, py, pz);
+          copy_buf << labels[i] << ": " << px << ", " << py << ", " << pz << "\n";
         }
+      }
+      if (ImGui::Button("Copy")) {
+        std::string text = copy_buf.str();
+        if (!text.empty())
+          glfwSetClipboardString(window, text.c_str());
       }
       if (!drag_body.IsInvalid()) ImGui::TextColored(ImVec4(0, 1, 0, 1), "R-drag active");
     }
@@ -429,6 +478,33 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     if (!simulation_frozen) {
       if (http_port > 0) {
         http_control_apply_pending_stance(ctrl_state);
+        // Ragdoll -> Standing (UI or HTTP): reset to initial standing pose and set anchor from stored pose
+        if (last_frame_mode == MotionMode::Ragdoll && ctrl_state.mode == MotionMode::Standing &&
+            scene.physics && scene.ragdoll && scene.ragdoll_settings) {
+          reset_ragdoll_to_initial_standing(scene, &bi);
+          ctrl_state.walk_phase = 0.f;
+          ctrl_state.walk_time = 0.f;
+          standing_anchor_x = static_cast<float>(scene.initial_standing_root_offset.GetX());
+          standing_anchor_z = static_cast<float>(scene.initial_standing_root_offset.GetZ());
+          standing_anchor_rot = scene.initial_standing_root_rotation;
+          standing_anchor_valid = true;
+          log("Ragdoll -> Standing: reset to initial pose (same limb positions as start)");
+        }
+        double patch_x, patch_y, patch_z;
+        if (http_control_consume_pending_position(patch_x, patch_y, patch_z) && scene.ragdoll) {
+          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+          if (!root_id.IsInvalid()) {
+            JPH::Quat rot = bi.GetRotation(root_id);
+            bi.SetPositionAndRotation(root_id, JPH::RVec3(patch_x, patch_y, patch_z), rot, JPH::EActivation::Activate);
+            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+            standing_anchor_x = static_cast<float>(patch_x);
+            standing_anchor_z = static_cast<float>(patch_z);
+            standing_anchor_rot = rot;
+            standing_anchor_valid = true;
+            log("Position patched: root %.3f, %.3f, %.3f", patch_x, patch_y, patch_z);
+          }
+        }
         if (http_control_consume_pending_jump())
           ctrl_state.jump_triggered = true;
         if (http_control_consume_pending_test_float()) {
@@ -440,18 +516,49 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
           test_float_until = 0.0;
           drag_body = JPH::BodyID();
           if (scene.physics && scene.ragdoll && scene.ragdoll_settings) {
-            reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings,
-                                     JPH::RVec3(0.f, config.ragdoll_height, 0.f), &bi);
+            reset_ragdoll_to_initial_standing(scene, &bi);
             ctrl_state.mode = MotionMode::Standing;
             ctrl_state.walk_phase = 0.f;
             ctrl_state.walk_time = 0.f;
             ctrl_state.jump_triggered = false;
             ctrl_state.jump_frames_hold = 0;
+            standing_anchor_valid = false;
           }
         }
       }
       for (int s = 0; s < sub_steps; ++s) {
         apply_pose_control(scene, ctrl_state, config, sub_dt);
+        // #region agent log
+        if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll && s == 0 && frame_count % 15 == 0) {
+          JPH::BodyID rid = scene.ragdoll->GetBodyID(0);
+          if (!rid.IsInvalid()) {
+            JPH::RVec3 rp = bi.GetPosition(rid);
+            JPH::Vec3 rv = bi.GetLinearVelocity(rid);
+            debug_instrument_walk("Visualizer.cpp:after_drive", "A,E", "after_drive",
+              float(rv.GetX()), float(rv.GetY()), float(rv.GetZ()),
+              float(rp.GetX()), float(rp.GetY()), float(rp.GetZ()), sub_dt);
+          }
+        }
+        // #endregion
+        // Walking: set root velocity BEFORE physics so the step integrates intended motion (not MoveKinematic’s delta/sub_dt)
+        if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll) {
+          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+          if (!root_id.IsInvalid()) {
+            JPH::RVec3 pos = bi.GetPosition(root_id);
+            JPH::Quat rot = bi.GetRotation(root_id);
+            if (!walk_anchor_valid) {
+              walk_anchor_x = static_cast<float>(pos.GetX());
+              walk_anchor_z = static_cast<float>(pos.GetZ());
+              walk_anchor_valid = true;
+            }
+            JPH::Vec3 forward = rot * JPH::Vec3(0.f, 0.f, -1.f);
+            float speed = config.walk_forward_speed;
+            walk_anchor_x += forward.GetX() * speed * sub_dt;
+            walk_anchor_z += forward.GetZ() * speed * sub_dt;
+            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+            bi.SetLinearVelocity(root_id, JPH::Vec3(forward.GetX() * speed, 0.f, forward.GetZ() * speed));
+          }
+        }
         if (test_float_until > 0 && glfwGetTime() < test_float_until && scene.ragdoll) {
           JPH::BodyID pid = scene.ragdoll->GetBodyID(0);
           if (!pid.IsInvalid())
@@ -479,10 +586,23 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
           }
         }
         scene.physics->Update(sub_dt, 1, scene.temp_allocator, scene.job_system);
-        // Anchor root XZ and rotation, zero root linear/angular velocity after every sub-step in standing (stops drift and spin)
-        if (ctrl_state.mode == MotionMode::Standing && scene.ragdoll) {
+        // #region agent log
+        if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll && s == 0 && frame_count % 15 == 0) {
+          JPH::BodyID rid = scene.ragdoll->GetBodyID(0);
+          if (!rid.IsInvalid()) {
+            JPH::RVec3 rp = bi.GetPosition(rid);
+            JPH::Vec3 rv = bi.GetLinearVelocity(rid);
+            debug_instrument_walk("Visualizer.cpp:after_physics", "A,E", "after_physics",
+              float(rv.GetX()), float(rv.GetY()), float(rv.GetZ()),
+              float(rp.GetX()), float(rp.GetY()), float(rp.GetZ()), sub_dt);
+          }
+        }
+        // #endregion
+        // Anchor root XZ and rotation, zero root linear/angular velocity (Standing and Raise leg: same pinning)
+        if ((ctrl_state.mode == MotionMode::Standing || ctrl_state.mode == MotionMode::StandingRaiseLeg) && scene.ragdoll) {
           JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
           if (!root_id.IsInvalid()) {
+            bi.SetMotionType(root_id, JPH::EMotionType::Kinematic, JPH::EActivation::DontActivate);
             JPH::RVec3 pos = bi.GetPosition(root_id);
             JPH::Quat rot = bi.GetRotation(root_id);
             if (!standing_anchor_valid) {
@@ -490,20 +610,51 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
               standing_anchor_z = static_cast<float>(pos.GetZ());
               standing_anchor_rot = rot;
               standing_anchor_valid = true;
+              log("[Standing] Anchor set root_x=%.3f root_z=%.3f root_y=%.3f (entering/re-entering Standing)", standing_anchor_x, standing_anchor_z, static_cast<double>(pos.GetY()));
             }
             JPH::RVec3 anchored_pos(standing_anchor_x, pos.GetY(), standing_anchor_z);
-            bi.SetPositionAndRotation(root_id, anchored_pos, standing_anchor_rot, JPH::EActivation::Activate);
-            JPH::Vec3 v = bi.GetLinearVelocity(root_id);
-            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, v.GetY(), 0.f));
+            bi.SetPositionAndRotation(root_id, anchored_pos, standing_anchor_rot, JPH::EActivation::DontActivate);
+            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+          }
+          standing_anchor_valid = true;
+          walk_anchor_valid = false;
+        } else if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll) {
+          // Walking: after physics, pin root XZ to walk anchor and zero velocities (solver cannot drift root)
+          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+          if (!root_id.IsInvalid()) {
+            bi.SetMotionType(root_id, JPH::EMotionType::Dynamic, JPH::EActivation::Activate);
+            JPH::RVec3 pos = bi.GetPosition(root_id);
+            JPH::Quat rot = bi.GetRotation(root_id);
+            JPH::RVec3 pinned_pos(walk_anchor_x, pos.GetY(), walk_anchor_z);
+            bi.SetPositionAndRotation(root_id, pinned_pos, rot, JPH::EActivation::Activate);
+            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
             bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
           }
         } else {
+          if (scene.ragdoll) {
+            JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+            if (!root_id.IsInvalid())
+              bi.SetMotionType(root_id, JPH::EMotionType::Dynamic, JPH::EActivation::Activate);
+          }
           standing_anchor_valid = false;
+          walk_anchor_valid = false;
         }
       }
       clamp_ragdoll_velocities(scene.ragdoll, bi);
+      if (ctrl_state.mode == MotionMode::Standing && !simulation_frozen) {
+        standing_settle_frames++;
+        if (!initial_standing_captured && standing_settle_frames >= STANDING_SETTLE_FRAMES_BEFORE_CAPTURE) {
+          capture_standing_pose_as_initial(scene);
+          initial_standing_captured = true;
+          log("Initial standing pose captured (settled) for reset");
+        }
+      } else {
+        standing_settle_frames = 0;
+      }
       if (http_port > 0)
         http_control_update_snapshot(scene, ctrl_state);
+      last_frame_mode = ctrl_state.mode;
     }
 
     frame_count++;

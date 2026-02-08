@@ -90,6 +90,45 @@ void build_walk_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
   pose.CalculateJointMatrices();
 }
 
+void build_standing_raise_leg_pose(const Ragdoll* ragdoll, const RagdollSettings* settings, SkeletonPose& pose) {
+  const Skeleton* skel = settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() < 12) return;
+  pose.SetSkeleton(skel);
+  RVec3 root_pos;
+  Quat root_rot;
+  ragdoll->GetRootTransform(root_pos, root_rot, true);
+  pose.SetRootOffset(root_pos);
+  for (uint i = 0; i < skel->GetJointCount(); ++i) {
+    pose.GetJoint(i).mRotation = (i == 0) ? root_rot : Quat::sIdentity();
+    pose.GetJoint(i).mTranslation = Vec3::sZero();
+  }
+  // Raise right leg: hip flexion (forward) ~0.85 rad, knee flexion ~0.9 rad. Left leg straight.
+  const float hip_raise = 0.85f;
+  const float knee_raise = 0.9f;
+  pose.GetJoint(UpperLegL).mRotation = Quat::sIdentity();
+  pose.GetJoint(UpperLegR).mRotation = rotation_axis(-Vec3::sAxisY(), hip_raise);
+  pose.GetJoint(LowerLegL).mRotation = Quat::sIdentity();
+  pose.GetJoint(LowerLegR).mRotation = rotation_axis(Vec3::sAxisX(), knee_raise);
+  // Lean torso slightly toward support leg (left) so COM stays over standing foot and balance is stable.
+  const float lean_support_rad = -0.12f;  // rotation around Z: lean left
+  pose.GetJoint(MidBody).mRotation = rotation_axis(Vec3::sAxisZ(), lean_support_rad);
+  pose.GetJoint(UpperBody).mRotation = rotation_axis(Vec3::sAxisZ(), lean_support_rad);
+  pose.CalculateJointMatrices();
+}
+
+void apply_standing_raise_leg_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
+                                   const SimulatorConfig& config) {
+  const Skeleton* skel = settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() < 12) return;
+  SkeletonPose pose;
+  build_standing_raise_leg_pose(ragdoll, settings, pose);
+  RVec3 root_off = pose.GetRootOffset();
+  root_off = RVec3(root_off.GetX(), (JPH::Real)config.standing_min_height, root_off.GetZ());
+  pose.SetRootOffset(root_off);
+  pose.CalculateJointMatrices();
+  ragdoll->DriveToPoseUsingMotors(pose);
+}
+
 void apply_standing_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
                         const SkeletalAnimation* standing_anim, float dt,
                         const SimulatorConfig& config) {
@@ -134,6 +173,10 @@ void apply_walking_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
     }
     pose.SetRootOffset(root_offset);
     pose.CalculateJointMatrices();
+    // #region agent log
+    debug_instrument_walk("PoseController.cpp:apply_walking_pose", "D,E", "target",
+      0.f, 0.f, 0.f, static_cast<float>(root_offset.GetX()), static_cast<float>(root_offset.GetY()), static_cast<float>(root_offset.GetZ()), dt);
+    // #endregion
     ragdoll->DriveToPoseUsingKinematics(pose, dt);  // file rig often has no motors; Kinematics holds pose
   } else {
     // Procedural walk uses 12-joint indices (UpperLegL=8, etc.); use only when skeleton matches.
@@ -223,6 +266,49 @@ void reset_ragdoll_to_standing(JPH::Ragdoll* ragdoll,
     zero_ragdoll_velocities(ragdoll, *body_interface);
 }
 
+void reset_ragdoll_to_initial_standing(SimulatorScene& scene,
+                                      JPH::BodyInterface* body_interface) {
+  if (!scene.ragdoll || !scene.ragdoll_settings) return;
+  const JPH::Skeleton* skel = scene.ragdoll_settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() == 0) return;
+  const size_t num_joints = scene.initial_standing_joint_rotations.size();
+  if (num_joints != skel->GetJointCount() || num_joints != scene.initial_standing_joint_translations.size()) {
+    reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings, scene.initial_standing_root_offset, body_interface);
+    return;
+  }
+  JPH::SkeletonPose pose;
+  pose.SetSkeleton(skel);
+  pose.SetRootOffset(scene.initial_standing_root_offset);
+  for (size_t i = 0; i < num_joints; ++i) {
+    pose.GetJoint(static_cast<JPH::uint>(i)).mRotation = scene.initial_standing_joint_rotations[i];
+    pose.GetJoint(static_cast<JPH::uint>(i)).mTranslation = scene.initial_standing_joint_translations[i];
+  }
+  pose.CalculateJointMatrices();
+  scene.ragdoll->SetPose(pose);
+  scene.ragdoll->ResetWarmStart();
+  if (body_interface)
+    zero_ragdoll_velocities(scene.ragdoll, *body_interface);
+}
+
+void capture_standing_pose_as_initial(SimulatorScene& scene) {
+  if (!scene.ragdoll || !scene.ragdoll_settings) return;
+  const JPH::Skeleton* skel = scene.ragdoll_settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() == 0) return;
+  JPH::SkeletonPose pose;
+  pose.SetSkeleton(skel);
+  scene.ragdoll->GetPose(pose);
+  scene.initial_standing_root_offset = pose.GetRootOffset();
+  scene.initial_standing_root_rotation = pose.GetJoint(0).mRotation;
+  const JPH::uint num_joints = skel->GetJointCount();
+  scene.initial_standing_joint_rotations.resize(num_joints);
+  scene.initial_standing_joint_translations.resize(num_joints);
+  for (JPH::uint i = 0; i < num_joints; ++i) {
+    const JPH::SkeletonPose::JointState& j = pose.GetJoint(i);
+    scene.initial_standing_joint_rotations[i] = j.mRotation;
+    scene.initial_standing_joint_translations[i] = j.mTranslation;
+  }
+}
+
 void apply_pose_control(SimulatorScene& scene,
                         ControllerState& state,
                         const SimulatorConfig& config,
@@ -236,9 +322,12 @@ void apply_pose_control(SimulatorScene& scene,
 
   switch (state.mode) {
     case MotionMode::Standing:
-      state.walk_time = 0.f;  // optional reset when switching to standing
+      state.walk_time = 0.f;
       apply_standing_pose(scene.ragdoll, scene.ragdoll_settings,
                           scene.standing_anim.GetPtr(), dt, config);
+      break;
+    case MotionMode::StandingRaiseLeg:
+      apply_standing_raise_leg_pose(scene.ragdoll, scene.ragdoll_settings, config);
       break;
     case MotionMode::Walking:
       apply_walking_pose(scene.ragdoll, scene.ragdoll_settings, state, config, dt,
