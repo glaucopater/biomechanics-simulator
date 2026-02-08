@@ -98,6 +98,7 @@ The model has default **standing**, **walking**, and **jumping**:
 - `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies (capsules, box).
 - `tests/` – optional smoke test; build with `-DBUILD_TESTS=ON`.
 - `docs/PROJECT_STRUCTURE.md` – folder layout and roles.
+- `docs/MILESTONES.md` – project milestones (e.g. standing stable).
 
 ## License
 
