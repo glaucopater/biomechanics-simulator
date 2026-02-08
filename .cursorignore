@@ -1,0 +1,2 @@
+# Do not clone or track plan files from Cursor plans directory
+.cursor/plans/

@@ -1,0 +1,17 @@
+# Run at build time: read build_number.txt, increment, write back, generate build_number.h
+# Invoke with: cmake -DBUILD_NUMBER_FILE=<path> -DBUILD_NUMBER_HEADER=<path> -P BumpBuildNumber.cmake
+if(NOT DEFINED BUILD_NUMBER_FILE OR NOT DEFINED BUILD_NUMBER_HEADER)
+  message(FATAL_ERROR "BumpBuildNumber.cmake requires BUILD_NUMBER_FILE and BUILD_NUMBER_HEADER")
+endif()
+if(EXISTS "${BUILD_NUMBER_FILE}")
+  file(STRINGS "${BUILD_NUMBER_FILE}" BN)
+  if(BN)
+    math(EXPR N "${BN}+1")
+  else()
+    set(N 1)
+  endif()
+else()
+  set(N 1)
+endif()
+file(WRITE "${BUILD_NUMBER_FILE}" "${N}")
+file(WRITE "${BUILD_NUMBER_HEADER}" "#define BIOMECHANICS_BUILD_NUMBER ${N}\n")

@@ -1,8 +1,9 @@
+#include "build_number.h"
 #include "biomechanics/Config.hpp"
+#include "biomechanics/HttpControl.hpp"
 #include "biomechanics/Log.hpp"
 #include "biomechanics/OpenGLDebugDrawer.hpp"
 #include "biomechanics/PoseController.hpp"
-#include "biomechanics/Ragdoll.hpp"
 #include "biomechanics/SimulatorScene.hpp"
 #include "biomechanics/Visualizer.hpp"
 #ifdef _WIN32
@@ -134,7 +135,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 }  // namespace
 
-void run_demo_visual(const SimulatorConfig& config) {
+void run_demo_visual(const SimulatorConfig& config, int http_port) {
   if (!glfwInit()) {
     std::fprintf(stderr, "GLFW init failed\n");
     return;
@@ -143,8 +144,16 @@ void run_demo_visual(const SimulatorConfig& config) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
+  char window_title[80];
+  std::snprintf(window_title, sizeof(window_title), "Biomechanics Simulator (build %d)",
+#ifdef BIOMECHANICS_BUILD_NUMBER
+                BIOMECHANICS_BUILD_NUMBER
+#else
+                0
+#endif
+  );
   GLFWwindow* window = glfwCreateWindow(config.window_width, config.window_height,
-                                        "Biomechanics Simulator", nullptr, nullptr);
+                                        window_title, nullptr, nullptr);
   if (!window) {
     std::fprintf(stderr, "GLFW CreateWindow failed\n");
     glfwTerminate();
@@ -185,7 +194,6 @@ void run_demo_visual(const SimulatorConfig& config) {
   ControllerState ctrl_state;
   int dm = config.default_motion_mode;
   ctrl_state.mode = (dm >= 0 && dm <= 2) ? static_cast<MotionMode>(dm) : MotionMode::Standing;
-  capture_rest_pose(scene.ragdoll, scene.physics->GetBodyInterface(), ctrl_state);
 
   OrbitCamera camera;
 
@@ -198,6 +206,10 @@ void run_demo_visual(const SimulatorConfig& config) {
 
   clear_log(true);
   log("App started. Stance: Standing / Walk / Ragdoll. Log file: .cursor/debug.log");
+  if (http_port > 0) {
+    http_control_start(http_port);
+    log("HTTP control: GET http://127.0.0.1:%d/status  PATCH http://127.0.0.1:%d/stance", http_port, http_port);
+  }
 
   int frame_count = 0;
   MotionMode last_logged_mode = ctrl_state.mode;
@@ -205,6 +217,10 @@ void run_demo_visual(const SimulatorConfig& config) {
   JPH::BodyID drag_body;
   JPH::Vec3 drag_hit_world(0.f, 0.f, 0.f);
   int middle_was_down = 0;
+  float standing_anchor_x = 0.f, standing_anchor_z = 0.f;
+  JPH::Quat standing_anchor_rot = JPH::Quat::sIdentity();
+  bool standing_anchor_valid = false;
+  bool simulation_frozen = false;
 
   glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int /*scancode*/, int action, int /*mods*/) {
     if (action != GLFW_PRESS)
@@ -255,19 +271,25 @@ void run_demo_visual(const SimulatorConfig& config) {
     if (ImGui::Button("Reset", ImVec2(160, 0))) {
       test_float_until = 0.0;
       drag_body = JPH::BodyID();
-      if (scene.physics) {
+      if (scene.physics && scene.ragdoll && scene.ragdoll_settings) {
         JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
-        JPH::RVec3 offset(0.f, config.ragdoll_height, 0.f);
-        reset_ragdoll_pose(bi, scene.ragdoll, offset, config.ragdoll_scale);
+        reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings,
+                                 JPH::RVec3(0.f, config.ragdoll_height, 0.f), &bi);
         ctrl_state.mode = MotionMode::Standing;
         ctrl_state.walk_phase = 0.f;
+        ctrl_state.walk_time = 0.f;
         ctrl_state.jump_triggered = false;
         ctrl_state.jump_frames_hold = 0;
-        capture_rest_pose(scene.ragdoll, bi, ctrl_state);
       }
+    }
+    if (ImGui::Button(simulation_frozen ? "Unfreeze" : "Freeze", ImVec2(160, 0))) {
+      simulation_frozen = !simulation_frozen;
+      log(simulation_frozen ? "[UI] Simulation frozen" : "[UI] Simulation unfrozen");
     }
     ImGui::Text("Camera: L-drag orbit, scroll zoom");
     ImGui::Text("Ragdoll: R-drag to pull body");
+    if (http_port > 0)
+      ImGui::TextColored(ImVec4(0.4f, 1.f, 0.4f, 1.f), "HTTP: 127.0.0.1:%d", http_port);
     ImGui::End();
 
     int right_down = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
@@ -286,9 +308,9 @@ void run_demo_visual(const SimulatorConfig& config) {
         result.mFraction = 1.f;
         JPH::IgnoreSingleBodyFilter skip_ground(scene.ground_id);
         bool hit = scene.physics->GetNarrowPhaseQuery().CastRay(ray, result, {}, {}, skip_ground);
-        if (hit && !result.mBodyID.IsInvalid()) {
+        if (hit && !result.mBodyID.IsInvalid() && scene.ragdoll) {
           bool is_ragdoll = false;
-          for (JPH::BodyID id : scene.ragdoll.bodies) {
+          for (JPH::BodyID id : scene.ragdoll->GetBodyIDs()) {
             if (id == result.mBodyID) {
               is_ragdoll = true;
               break;
@@ -300,9 +322,9 @@ void run_demo_visual(const SimulatorConfig& config) {
             log("[R-drag] Picked body at %.2f, %.2f, %.2f", drag_hit_world.GetX(), drag_hit_world.GetY(), drag_hit_world.GetZ());
           }
         }
-        if (drag_body.IsInvalid() && !scene.ragdoll.bodies.empty()) {
+        if (drag_body.IsInvalid() && scene.ragdoll && !scene.ragdoll->GetBodyIDs().empty()) {
           float best_dist = 2.5f;
-          for (JPH::BodyID id : scene.ragdoll.bodies) {
+          for (JPH::BodyID id : scene.ragdoll->GetBodyIDs()) {
             if (id.IsInvalid()) continue;
             JPH::Vec3 c = JPH::Vec3(bi.GetPosition(id));
             float t = (c - ray_origin).Dot(ray_dir);
@@ -337,10 +359,12 @@ void run_demo_visual(const SimulatorConfig& config) {
       else
         log("[UI] Mode -> Ragdoll");
     }
-    if (ctrl_state.mode == MotionMode::Walking && frame_count % 60 == 0 && scene.ragdoll.bodies.size() >= static_cast<size_t>(BodyPart::RightLowerLeg) + 1u) {
-      JPH::BodyID pid = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)];
-      JPH::BodyID lid = scene.ragdoll.bodies[static_cast<int>(BodyPart::LeftLowerLeg)];
-      JPH::BodyID rid = scene.ragdoll.bodies[static_cast<int>(BodyPart::RightLowerLeg)];
+    // Human ragdoll body indices: 0=LowerBody, 1=MidBody, 2=UpperBody, 3=Head, 4-7=arms, 8-11=legs
+    const size_t num_bodies = scene.ragdoll ? scene.ragdoll->GetBodyIDs().size() : 0;
+    if (ctrl_state.mode == MotionMode::Walking && frame_count % 60 == 0 && num_bodies >= 12) {
+      JPH::BodyID pid = scene.ragdoll->GetBodyID(0);
+      JPH::BodyID lid = scene.ragdoll->GetBodyID(10);
+      JPH::BodyID rid = scene.ragdoll->GetBodyID(11);
       if (!pid.IsInvalid() && !lid.IsInvalid() && !rid.IsInvalid()) {
         float py = float(bi.GetPosition(pid).GetY());
         float ly = float(bi.GetPosition(lid).GetY());
@@ -348,11 +372,11 @@ void run_demo_visual(const SimulatorConfig& config) {
         log("[Walk] phase=%.2f pelvis_y=%.2f L_foot_y=%.2f R_foot_y=%.2f", ctrl_state.walk_phase, py, ly, ry);
       }
     }
-    if (frame_count % 60 == 0 && scene.ragdoll.bodies.size() >= static_cast<size_t>(BodyPart::RightLowerArm) + 1u) {
-      auto pos = [&](BodyPart part) { return bi.GetPosition(scene.ragdoll.bodies[static_cast<int>(part)]); };
-      JPH::RVec3 p = pos(BodyPart::Pelvis), s = pos(BodyPart::Spine), h = pos(BodyPart::Head);
-      JPH::RVec3 lf = pos(BodyPart::LeftLowerLeg), rf = pos(BodyPart::RightLowerLeg);
-      JPH::RVec3 lhand = pos(BodyPart::LeftLowerArm), rhand = pos(BodyPart::RightLowerArm);
+    if (frame_count % 60 == 0 && num_bodies >= 12) {
+      auto pos = [&](int idx) { return bi.GetPosition(scene.ragdoll->GetBodyID(idx)); };
+      JPH::RVec3 p = pos(0), s = pos(1), h = pos(3);
+      JPH::RVec3 lf = pos(10), rf = pos(11);
+      JPH::RVec3 lhand = pos(6), rhand = pos(7);
       log("[Limbs] pelvis %.2f,%.2f,%.2f spine %.2f,%.2f,%.2f head %.2f,%.2f,%.2f L_foot %.2f,%.2f,%.2f R_foot %.2f,%.2f,%.2f L_hand %.2f,%.2f,%.2f R_hand %.2f,%.2f,%.2f",
           float(p.GetX()), float(p.GetY()), float(p.GetZ()), float(s.GetX()), float(s.GetY()), float(s.GetZ()),
           float(h.GetX()), float(h.GetY()), float(h.GetZ()), float(lf.GetX()), float(lf.GetY()), float(lf.GetZ()),
@@ -377,23 +401,16 @@ void run_demo_visual(const SimulatorConfig& config) {
     ImGui::SetNextWindowPos(ImVec2(220, 240), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(340, 320), ImGuiCond_FirstUseEver);
     ImGui::Begin("Limb positions");
-    if (!scene.ragdoll.bodies.empty()) {
-      const char* labels[] = {"Pelvis", "Spine", "Head",
+    if (scene.ragdoll && scene.ragdoll->GetBodyIDs().size() >= 12) {
+      const char* labels[] = {"LowerBody", "MidBody", "Head",
                               "L upper leg", "L lower leg", "R upper leg", "R lower leg",
                               "L upper arm", "L lower arm", "R upper arm", "R lower arm"};
-      int parts[] = {static_cast<int>(BodyPart::Pelvis), static_cast<int>(BodyPart::Spine),
-                     static_cast<int>(BodyPart::Head),
-                     static_cast<int>(BodyPart::LeftUpperLeg), static_cast<int>(BodyPart::LeftLowerLeg),
-                     static_cast<int>(BodyPart::RightUpperLeg), static_cast<int>(BodyPart::RightLowerLeg),
-                     static_cast<int>(BodyPart::LeftUpperArm), static_cast<int>(BodyPart::LeftLowerArm),
-                     static_cast<int>(BodyPart::RightUpperArm), static_cast<int>(BodyPart::RightLowerArm)};
+      int indices[] = {0, 1, 3, 8, 10, 9, 11, 4, 6, 5, 7};
       for (int i = 0; i < 11; ++i) {
-        if (parts[i] < static_cast<int>(scene.ragdoll.bodies.size())) {
-          JPH::BodyID id = scene.ragdoll.bodies[parts[i]];
-          if (!id.IsInvalid()) {
-            JPH::RVec3 pos = bi.GetPosition(id);
-            ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], static_cast<double>(pos.GetX()), static_cast<double>(pos.GetY()), static_cast<double>(pos.GetZ()));
-          }
+        JPH::BodyID id = scene.ragdoll->GetBodyID(indices[i]);
+        if (!id.IsInvalid()) {
+          JPH::RVec3 pos = bi.GetPosition(id);
+          ImGui::Text("%s: %.2f, %.2f, %.2f", labels[i], static_cast<double>(pos.GetX()), static_cast<double>(pos.GetY()), static_cast<double>(pos.GetZ()));
         }
       }
       if (!drag_body.IsInvalid()) ImGui::TextColored(ImVec4(0, 1, 0, 1), "R-drag active");
@@ -407,35 +424,87 @@ void run_demo_visual(const SimulatorConfig& config) {
     setup_projection(fb_width, fb_height);
     setup_camera(camera);
 
-    apply_pose_control(scene.physics, scene.ragdoll, ctrl_state, config);
-    if (test_float_until > 0 && glfwGetTime() < test_float_until && !scene.ragdoll.bodies.empty()) {
-      JPH::BodyID pid = scene.ragdoll.bodies[static_cast<int>(BodyPart::Pelvis)];
-      if (!pid.IsInvalid())
-        bi.AddForce(pid, JPH::Vec3(0, 450, 0));  // upward force so character rises
-    }
-    if (!drag_body.IsInvalid()) {
-      double mx, my;
-      glfwGetCursorPos(window, &mx, &my);
-      int win_w, win_h;
-      glfwGetWindowSize(window, &win_w, &win_h);
-      double fb_mx = (win_w > 0) ? (mx * static_cast<double>(fb_width) / static_cast<double>(win_w)) : mx;
-      double fb_my = (win_h > 0) ? (my * static_cast<double>(fb_height) / static_cast<double>(win_h)) : my;
-      JPH::Vec3 ray_origin, ray_dir;
-      get_ray_from_pixel(camera, fb_mx, fb_my, fb_width, fb_height, ray_origin, ray_dir);
-      float t = (drag_hit_world - ray_origin).Dot(ray_dir);
-      if (t > 0.01f) {
-        JPH::Vec3 target = ray_origin + ray_dir * t;
-        JPH::Vec3 body_pos = JPH::Vec3(bi.GetPosition(drag_body));
-        JPH::Vec3 to_target = target - body_pos;
-        JPH::Vec3 vel = bi.GetLinearVelocity(drag_body);
-        JPH::Vec3 force = to_target * 200.f - vel * 20.f;
-        float mag = force.Length();
-        if (mag > 500.f && mag > 1e-5f) force *= 500.f / mag;
-        bi.AddForce(drag_body, force);
+    const int sub_steps = 4;  // more steps per frame = more PD corrections, stabler standing
+    const float sub_dt = static_cast<float>(config.time_step) / static_cast<float>(sub_steps);
+    if (!simulation_frozen) {
+      if (http_port > 0) {
+        http_control_apply_pending_stance(ctrl_state);
+        if (http_control_consume_pending_jump())
+          ctrl_state.jump_triggered = true;
+        if (http_control_consume_pending_test_float()) {
+          test_float_until = glfwGetTime() + 2.0;
+          ctrl_state.mode = MotionMode::Ragdoll;
+          log("Test: applying upward force 2s - character should RISE");
+        }
+        if (http_control_consume_pending_reset()) {
+          test_float_until = 0.0;
+          drag_body = JPH::BodyID();
+          if (scene.physics && scene.ragdoll && scene.ragdoll_settings) {
+            reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings,
+                                     JPH::RVec3(0.f, config.ragdoll_height, 0.f), &bi);
+            ctrl_state.mode = MotionMode::Standing;
+            ctrl_state.walk_phase = 0.f;
+            ctrl_state.walk_time = 0.f;
+            ctrl_state.jump_triggered = false;
+            ctrl_state.jump_frames_hold = 0;
+          }
+        }
       }
+      for (int s = 0; s < sub_steps; ++s) {
+        apply_pose_control(scene, ctrl_state, config, sub_dt);
+        if (test_float_until > 0 && glfwGetTime() < test_float_until && scene.ragdoll) {
+          JPH::BodyID pid = scene.ragdoll->GetBodyID(0);
+          if (!pid.IsInvalid())
+            bi.AddForce(pid, JPH::Vec3(0, 450, 0));  // upward force so character rises
+        }
+        if (!drag_body.IsInvalid()) {
+          double mx, my;
+          glfwGetCursorPos(window, &mx, &my);
+          int win_w, win_h;
+          glfwGetWindowSize(window, &win_w, &win_h);
+          double fb_mx = (win_w > 0) ? (mx * static_cast<double>(fb_width) / static_cast<double>(win_w)) : mx;
+          double fb_my = (win_h > 0) ? (my * static_cast<double>(fb_height) / static_cast<double>(win_h)) : my;
+          JPH::Vec3 ray_origin, ray_dir;
+          get_ray_from_pixel(camera, fb_mx, fb_my, fb_width, fb_height, ray_origin, ray_dir);
+          float t = (drag_hit_world - ray_origin).Dot(ray_dir);
+          if (t > 0.01f) {
+            JPH::Vec3 target = ray_origin + ray_dir * t;
+            JPH::Vec3 body_pos = JPH::Vec3(bi.GetPosition(drag_body));
+            JPH::Vec3 to_target = target - body_pos;
+            JPH::Vec3 vel = bi.GetLinearVelocity(drag_body);
+            JPH::Vec3 force = to_target * 200.f - vel * 20.f;
+            float mag = force.Length();
+            if (mag > 500.f && mag > 1e-5f) force *= 500.f / mag;
+            bi.AddForce(drag_body, force);
+          }
+        }
+        scene.physics->Update(sub_dt, 1, scene.temp_allocator, scene.job_system);
+        // Anchor root XZ and rotation, zero root linear/angular velocity after every sub-step in standing (stops drift and spin)
+        if (ctrl_state.mode == MotionMode::Standing && scene.ragdoll) {
+          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+          if (!root_id.IsInvalid()) {
+            JPH::RVec3 pos = bi.GetPosition(root_id);
+            JPH::Quat rot = bi.GetRotation(root_id);
+            if (!standing_anchor_valid) {
+              standing_anchor_x = static_cast<float>(pos.GetX());
+              standing_anchor_z = static_cast<float>(pos.GetZ());
+              standing_anchor_rot = rot;
+              standing_anchor_valid = true;
+            }
+            JPH::RVec3 anchored_pos(standing_anchor_x, pos.GetY(), standing_anchor_z);
+            bi.SetPositionAndRotation(root_id, anchored_pos, standing_anchor_rot, JPH::EActivation::Activate);
+            JPH::Vec3 v = bi.GetLinearVelocity(root_id);
+            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, v.GetY(), 0.f));
+            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
+          }
+        } else {
+          standing_anchor_valid = false;
+        }
+      }
+      clamp_ragdoll_velocities(scene.ragdoll, bi);
+      if (http_port > 0)
+        http_control_update_snapshot(scene, ctrl_state);
     }
-    scene.physics->Update(static_cast<float>(config.time_step), 1, scene.temp_allocator, scene.job_system);
-    clamp_ragdoll_velocities(scene.ragdoll, bi);
 
     frame_count++;
 
@@ -455,6 +524,8 @@ void run_demo_visual(const SimulatorConfig& config) {
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 
+  if (http_port > 0)
+    http_control_stop();
   destroy_simulator_scene(scene);
   glfwDestroyWindow(window);
   glfwTerminate();

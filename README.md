@@ -32,23 +32,31 @@ cmake --build build
 
 Replace `[vcpkg]` with your vcpkg root (e.g. `C:/vcpkg` or `$HOME/vcpkg`).
 
-**Run**
+## Run
 
-- **With window (default)** – opens a GLFW/OpenGL window showing the ragdoll simulation in real time; close the window to exit:
+From the project root, after building:
 
-  ```bash
-  build/Release/biomechanics_simulator.exe   # Windows (Release)
-  build/Debug/biomechanics_simulator.exe     # Windows (Debug)
-  build/biomechanics_simulator               # Linux/macOS
-  ```
+**With window (default)** – opens a GLFW/OpenGL window; close the window to exit.
 
-- **Console-only (headless)** – no window; steps the simulation a fixed number of times and prints the pelvis position (for automation/CI). Uses `default_motion_mode` from config (0=standing, 1=walking, 2=ragdoll):
+```bash
+# Windows (PowerShell or cmd)
+.\build\Release\biomechanics_simulator.exe
 
-  ```bash
-  build/Release/biomechanics_simulator.exe --headless
-  ```
+# Windows Debug
+.\build\Debug\biomechanics_simulator.exe
 
-### Stance and movement (visualizer)
+# Linux / macOS
+./build/biomechanics_simulator
+```
+
+**Headless** – no window; runs a fixed number of steps and prints pelvis position (for CI/automation):
+
+```bash
+.\build\Release\biomechanics_simulator.exe --headless   # Windows
+./build/biomechanics_simulator --headless              # Linux/macOS
+```
+
+## Stance and movement (visualizer)
 
 The model has default **standing**, **walking**, and **jumping**:
 

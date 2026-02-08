@@ -8,6 +8,7 @@
 #include "biomechanics/Simulator.hpp"
 #include "biomechanics/SimulatorScene.hpp"
 #include "biomechanics/Visualizer.hpp"
+#include <cstdlib>
 #include <cstring>
 
 int main(int argc, char* argv[]) {
@@ -24,11 +25,16 @@ int main(int argc, char* argv[]) {
   // #endregion
   bool headless = false;
   bool walk_mode = false;
+  int http_port = 0;
   for (int i = 1; i < argc; ++i) {
     if (std::strcmp(argv[i], "--headless") == 0)
       headless = true;
     else if (std::strcmp(argv[i], "--walk") == 0)
       walk_mode = true;
+    else if (std::strcmp(argv[i], "--http-port") == 0 && i + 1 < argc) {
+      http_port = std::atoi(argv[i + 1]);
+      ++i;
+    }
   }
   biomechanics::SimulatorConfig config;
   if (walk_mode) {
@@ -42,7 +48,7 @@ int main(int argc, char* argv[]) {
   if (headless)
     biomechanics::run_demo(config);
   else
-    biomechanics::run_demo_visual(config);
+    biomechanics::run_demo_visual(config, http_port);
   // #region agent log
   biomechanics::debug_instrument("main.cpp:35", "main_exit", "H1");
   // #endregion

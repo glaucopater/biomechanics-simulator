@@ -50,3 +50,6 @@ cmake-build-*/
 # vcpkg
 vcpkg_installed/
 vcpkg_manifest.log
+
+# Cursor plan files (do not clone into repo)
+.cursor/plans/

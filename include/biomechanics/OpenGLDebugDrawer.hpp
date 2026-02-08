@@ -1,9 +1,9 @@
 #pragma once
 
-#include "biomechanics/Ragdoll.hpp"
 #include <Jolt.h>
-#include <Physics/Body/BodyID.h>
-#include <Physics/PhysicsSystem.h>
+#include <Jolt/Physics/Body/BodyID.h>
+#include <Jolt/Physics/PhysicsSystem.h>
+#include <Jolt/Physics/Ragdoll/Ragdoll.h>
 
 namespace biomechanics {
 
@@ -14,7 +14,7 @@ public:
 
   /** Draw all ragdoll bodies and the ground body. Call between glBegin(GL_LINES) and glEnd(). */
   void draw_bodies(JPH::PhysicsSystem* physics,
-                   const RagdollHandles& ragdoll,
+                   JPH::Ragdoll* ragdoll,
                    JPH::BodyID ground_id);
 };
 

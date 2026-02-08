@@ -28,6 +28,8 @@ FetchContent_Declare(
 )
 FetchContent_Populate(JoltPhysics)
 add_subdirectory(${joltphysics_SOURCE_DIR}/Build ${joltphysics_BINARY_DIR})
+# Enable ObjectStream so we can load Human.tof (Jolt Physics human model)
+target_compile_definitions(Jolt PUBLIC JPH_OBJECT_STREAM)
 
 # GLFW: window and OpenGL context
 include(FetchContent)
@@ -67,19 +69,44 @@ target_include_directories(imgui PUBLIC
 )
 target_link_libraries(imgui PUBLIC glfw)
 
+# cpp-httplib: header-only HTTP server for control API (GET /status, PATCH /stance)
+FetchContent_Declare(
+  cpp-httplib
+  GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+  GIT_TAG        v0.14.3
+  GIT_SHALLOW    TRUE
+)
+FetchContent_Populate(cpp-httplib)
+
+# Build number: increment on each build (visible in window title)
+set(BUILD_NUMBER_FILE "${CMAKE_BINARY_DIR}/build_number.txt")
+set(BUILD_NUMBER_HEADER "${CMAKE_BINARY_DIR}/build_number.h")
+add_custom_target(bump_build_number ALL
+  COMMAND ${CMAKE_COMMAND}
+    -DBUILD_NUMBER_FILE="${BUILD_NUMBER_FILE}"
+    -DBUILD_NUMBER_HEADER="${BUILD_NUMBER_HEADER}"
+    -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/BumpBuildNumber.cmake"
+  COMMENT "Bumping build number"
+  BYPRODUCTS "${BUILD_NUMBER_HEADER}"
+)
+
 add_executable(biomechanics_simulator
   src/main.cpp
   src/Log.cpp
-  src/Ragdoll.cpp
+  src/HumanRagdoll.cpp
   src/Simulator.cpp
   src/SimulatorScene.cpp
   src/PoseController.cpp
   src/OpenGLDebugDrawer.cpp
   src/Visualizer.cpp
+  src/HttpControl.cpp
 )
+add_dependencies(biomechanics_simulator bump_build_number)
 target_include_directories(biomechanics_simulator PRIVATE
+  ${CMAKE_BINARY_DIR}
   ${PROJECT_INCLUDE_DIR}
   ${joltphysics_SOURCE_DIR}/Jolt
+  ${cpp-httplib_SOURCE_DIR}
 )
 target_link_libraries(biomechanics_simulator PRIVATE
   Jolt
@@ -97,8 +124,8 @@ if(MSVC)
     $<$<CONFIG:Debug>:/NODEFAULTLIB:LIBCMTd>)
 endif()
 
-# Optional: tests (add_subdirectory(tests) and build with -DBUILD_TESTS=ON)
-option(BUILD_TESTS "Build tests" OFF)
+# Tests: E2E verification and headless exe (enable with -DBUILD_TESTS=ON or set ON by default)
+option(BUILD_TESTS "Build and enable E2E/headless tests" ON)
 if(BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)

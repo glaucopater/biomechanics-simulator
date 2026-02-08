@@ -17,8 +17,8 @@
 namespace {
 class BPLayerImpl : public JPH::BroadPhaseLayerInterface {
 public:
-  uint GetNumBroadPhaseLayers() const override { return 1; }
-  JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override { return 0; }
+  JPH::uint GetNumBroadPhaseLayers() const override { return 1; }
+  JPH::BroadPhaseLayer GetBroadPhaseLayer(JPH::ObjectLayer inLayer) const override { return JPH::BroadPhaseLayer(0); }
 };
 class ObjectVsBPImpl : public JPH::ObjectVsBroadPhaseLayerFilter {
 public:
@@ -32,7 +32,9 @@ public:
 
 int main() {
   JPH::RegisterDefaultAllocator();
-  JPH::Factory::sRegisterAllTypes();
+  if (!JPH::Factory::sInstance)
+    JPH::Factory::sInstance = new JPH::Factory();
+  JPH::RegisterTypes();
 
   BPLayerImpl bp_layer;
   ObjectVsBPImpl object_vs_bp;

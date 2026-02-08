@@ -1,11 +1,15 @@
 #include "biomechanics/SimulatorScene.hpp"
+#include "biomechanics/HumanRagdoll.hpp"
+#include "biomechanics/Log.hpp"
 #include <RegisterTypes.h>
 #include <Core/Memory.h>
 #include <Core/Factory.h>
 #include <Physics/Collision/Shape/BoxShape.h>
 #include <Physics/Body/BodyCreationSettings.h>
 #include <Physics/Body/Body.h>
+#include <Skeleton/SkeletonPose.h>
 #include <thread>
+#include <fstream>
 
 namespace biomechanics {
 
@@ -50,14 +54,41 @@ void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out) 
     if (!out.ground_id.IsInvalid())
       bi.AddBody(out.ground_id, JPH::EActivation::DontActivate);
   }
-  setup_ragdoll(out.physics, bi, JPH::RVec3(0.f, config.ragdoll_height, 0.f), config.ragdoll_scale, out.ragdoll);
+
+  // Prefer JoltPhysics Human.tof model when available (copy from JoltPhysics/Assets/Human.tof to assets/)
+  out.ragdoll_settings = load_human_ragdoll_from_file();
+  bool from_file = (out.ragdoll_settings != nullptr);
+  if (!out.ragdoll_settings)
+    out.ragdoll_settings = create_human_ragdoll_settings();
+  out.ragdoll = out.ragdoll_settings->CreateRagdoll(0, 0, out.physics);
+  if (from_file)
+    load_human_animations(out.standing_anim, out.walking_anim);
+  if (out.ragdoll) {
+    out.ragdoll->AddToPhysicsSystem(JPH::EActivation::Activate);
+    JPH::SkeletonPose pose;
+    pose.SetSkeleton(out.ragdoll_settings->GetSkeleton());
+    out.ragdoll->GetPose(pose);
+    pose.SetRootOffset(pose.GetRootOffset() + JPH::RVec3(0.f, config.ragdoll_height, 0.f));
+    out.ragdoll->SetPose(pose);
+    out.ragdoll->ResetWarmStart();
+  }
 }
 
 void destroy_simulator_scene(SimulatorScene& scene) {
   if (!scene.physics)
     return;
   JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
-  destroy_ragdoll(scene.physics, bi, scene.ragdoll);
+  if (scene.ragdoll) {
+    scene.ragdoll->RemoveFromPhysicsSystem();
+    delete scene.ragdoll;
+    scene.ragdoll = nullptr;
+  }
+  if (scene.ragdoll_settings) {
+    delete scene.ragdoll_settings;
+    scene.ragdoll_settings = nullptr;
+  }
+  scene.standing_anim = nullptr;
+  scene.walking_anim = nullptr;
   if (!scene.ground_id.IsInvalid()) {
     bi.RemoveBody(scene.ground_id);
     bi.DestroyBody(scene.ground_id);
@@ -69,7 +100,6 @@ void destroy_simulator_scene(SimulatorScene& scene) {
   delete scene.job_system;
   scene.job_system = nullptr;
   scene.ground_id = JPH::BodyID();
-  scene.ragdoll = RagdollHandles{};
 }
 
 }  // namespace biomechanics
