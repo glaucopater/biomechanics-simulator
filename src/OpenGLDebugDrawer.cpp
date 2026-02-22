@@ -75,7 +75,8 @@ void OpenGLDebugDrawer::draw_bodies(JPH::PhysicsSystem* physics,
   if (!physics)
     return;
   const BodyLockInterface& lock_iface = physics->GetBodyLockInterface();
-  glColor3f(0.6f, 0.85f, 0.9f);
+  // glColor3f(0.2f, 0.8f, 0.2f); // green
+  glColor3f(0.6f, 0.85f, 0.9f); // light blue
 
   int bodies_drawn = 0;
   int body_index = 0;
