@@ -2,6 +2,10 @@
 
 Minimal C++ biomechanics simulator with ragdoll physics using [Jolt Physics](https://github.com/jrouwe/JoltPhysics): rigid bodies (capsules for limbs), 6-DOF joint constraints, and a dynamics world. Jolt is used in Horizon Forbidden West and Death Stranding 2.
 
+![Preview](docs/preview.png)
+
+![HTTP API](docs/preview2.png)
+
 ## Requirements
 
 - **C++17** compiler (MSVC, GCC, or Clang)
