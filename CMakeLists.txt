@@ -78,6 +78,9 @@ FetchContent_Declare(
 )
 FetchContent_Populate(cpp-httplib)
 
+# Optional agent debug instrumentation (NDJSON writes to .cursor/debug.log)
+option(BIOMECH_AGENT_DEBUG "Enable agent debug instrumentation (writes to .cursor/debug.log)" OFF)
+
 # Build number: increment on each build (visible in window title)
 set(BUILD_NUMBER_FILE "${CMAKE_BINARY_DIR}/build_number.txt")
 set(BUILD_NUMBER_HEADER "${CMAKE_BINARY_DIR}/build_number.h")
@@ -114,6 +117,9 @@ target_link_libraries(biomechanics_simulator PRIVATE
   glfw
   imgui
 )
+if(BIOMECH_AGENT_DEBUG)
+  target_compile_definitions(biomechanics_simulator PRIVATE BIOMECH_AGENT_DEBUG)
+endif()
 if(MSVC)
   set_property(TARGET biomechanics_simulator PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
   target_compile_options(biomechanics_simulator PRIVATE

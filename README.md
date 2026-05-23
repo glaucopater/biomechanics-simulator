@@ -105,7 +105,7 @@ The model supports **standing**, **raise leg**, **walking**, and **ragdoll**:
 
 - `CMakeLists.txt` – root build; Jolt, GLFW, ImGui (FetchContent); `biomechanics_simulator`, optional tests.
 - `vcpkg.json` – vcpkg manifest (optional).
-- `include/biomechanics/` – public API: `Config.hpp`, `HttpControl.hpp`, `JoltLayers.hpp`, `Log.hpp`, `PoseController.hpp`, `Ragdoll.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, etc.
+- `include/biomechanics/` – public API: `Config.hpp`, `HttpControl.hpp`, `JoltLayers.hpp`, `Log.hpp`, `PoseController.hpp`, `ShapeWireframeSupport.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, etc.
 - `src/main.cpp` – entry point; parses `--headless`, `--http-port`, calls `run_demo_visual()` (default) or `run_demo()`.
 - `src/PoseController.cpp` – stance logic: standing, standing raise-leg, walking, ragdoll; jump impulse.
 - `src/Visualizer.cpp` – GLFW window, orbit camera, ImGui stance panel, key bindings (1–4, Space), step-and-draw loop.
@@ -115,7 +115,7 @@ The model supports **standing**, **raise leg**, **walking**, and **ragdoll**:
 - `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies.
 - `docs/openapi.yaml` – OpenAPI 3.0 spec for the HTTP API.
 - `docs/PROJECT_STRUCTURE.md`, `docs/MILESTONES.md` – layout and milestones.
-- `tests/` – optional tests; build with `-DBUILD_TESTS=ON`.
+- `tests/` – optional tests; enabled by default (`BUILD_TESTS=ON`, disable with `-DBUILD_TESTS=OFF`).
 
 ## License
 

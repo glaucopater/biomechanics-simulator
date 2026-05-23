@@ -221,8 +221,6 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
   float standing_anchor_x = 0.f, standing_anchor_z = 0.f;
   JPH::Quat standing_anchor_rot = JPH::Quat::sIdentity();
   bool standing_anchor_valid = false;
-  float walk_anchor_x = 0.f, walk_anchor_z = 0.f;
-  bool walk_anchor_valid = false;
   bool simulation_frozen = false;
   MotionMode last_frame_mode = ctrl_state.mode;
   int standing_settle_frames = 0;
@@ -376,6 +374,9 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     const size_t num_bodies = scene.ragdoll ? scene.ragdoll->GetBodyIDs().size() : 0;
     bool using_walk_anim = (scene.walking_anim.GetPtr() != nullptr);
     if (ctrl_state.mode == MotionMode::Walking && last_frame_mode != MotionMode::Walking && num_bodies >= 1) {
+      ctrl_state.walk_time = 0.f;
+      ctrl_state.walk_phase = 0.f;
+      ctrl_state.walk_root_origin_valid = false;
       JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
       if (!root_id.IsInvalid()) {
         JPH::RVec3 rp = bi.GetPosition(root_id);
@@ -433,9 +434,16 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     ImGui::SameLine();
     ImGui::Text("(saved: %s)", get_log_path());
     ImGui::BeginChild("LogScroll", ImVec2(0, -4), true);
-    for (const std::string& line : get_log_lines())
+    static size_t log_lines_displayed = 0;
+    const auto& log_lines = get_log_lines();
+    if (log_lines.size() < log_lines_displayed)
+      log_lines_displayed = log_lines.size();
+    for (const std::string& line : log_lines)
       ImGui::TextUnformatted(line.c_str());
-    ImGui::SetScrollHereY(1.f);
+    if (log_lines.size() > log_lines_displayed) {
+      ImGui::SetScrollHereY(1.f);
+      log_lines_displayed = log_lines.size();
+    }
     ImGui::EndChild();
     ImGui::End();
 
@@ -528,7 +536,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       }
       for (int s = 0; s < sub_steps; ++s) {
         apply_pose_control(scene, ctrl_state, config, sub_dt);
-        // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
         if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll && s == 0 && frame_count % 15 == 0) {
           JPH::BodyID rid = scene.ragdoll->GetBodyID(0);
           if (!rid.IsInvalid()) {
@@ -539,26 +547,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
               float(rp.GetX()), float(rp.GetY()), float(rp.GetZ()), sub_dt);
           }
         }
-        // #endregion
-        // Walking: set root velocity BEFORE physics so the step integrates intended motion (not MoveKinematic’s delta/sub_dt)
-        if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll) {
-          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
-          if (!root_id.IsInvalid()) {
-            JPH::RVec3 pos = bi.GetPosition(root_id);
-            JPH::Quat rot = bi.GetRotation(root_id);
-            if (!walk_anchor_valid) {
-              walk_anchor_x = static_cast<float>(pos.GetX());
-              walk_anchor_z = static_cast<float>(pos.GetZ());
-              walk_anchor_valid = true;
-            }
-            JPH::Vec3 forward = rot * JPH::Vec3(0.f, 0.f, -1.f);
-            float speed = config.walk_forward_speed;
-            walk_anchor_x += forward.GetX() * speed * sub_dt;
-            walk_anchor_z += forward.GetZ() * speed * sub_dt;
-            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
-            bi.SetLinearVelocity(root_id, JPH::Vec3(forward.GetX() * speed, 0.f, forward.GetZ() * speed));
-          }
-        }
+#endif
         if (test_float_until > 0 && glfwGetTime() < test_float_until && scene.ragdoll) {
           JPH::BodyID pid = scene.ragdoll->GetBodyID(0);
           if (!pid.IsInvalid())
@@ -586,7 +575,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
           }
         }
         scene.physics->Update(sub_dt, 1, scene.temp_allocator, scene.job_system);
-        // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
         if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll && s == 0 && frame_count % 15 == 0) {
           JPH::BodyID rid = scene.ragdoll->GetBodyID(0);
           if (!rid.IsInvalid()) {
@@ -597,7 +586,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
               float(rp.GetX()), float(rp.GetY()), float(rp.GetZ()), sub_dt);
           }
         }
-        // #endregion
+#endif
         // Anchor root XZ and rotation, zero root linear/angular velocity (Standing and Raise leg: same pinning)
         if ((ctrl_state.mode == MotionMode::Standing || ctrl_state.mode == MotionMode::StandingRaiseLeg) && scene.ragdoll) {
           JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
@@ -618,27 +607,14 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
             bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
           }
           standing_anchor_valid = true;
-          walk_anchor_valid = false;
-        } else if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll) {
-          // Walking: after physics, pin root XZ to walk anchor and zero velocities (solver cannot drift root)
-          JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
-          if (!root_id.IsInvalid()) {
-            bi.SetMotionType(root_id, JPH::EMotionType::Dynamic, JPH::EActivation::Activate);
-            JPH::RVec3 pos = bi.GetPosition(root_id);
-            JPH::Quat rot = bi.GetRotation(root_id);
-            JPH::RVec3 pinned_pos(walk_anchor_x, pos.GetY(), walk_anchor_z);
-            bi.SetPositionAndRotation(root_id, pinned_pos, rot, JPH::EActivation::Activate);
-            bi.SetLinearVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
-            bi.SetAngularVelocity(root_id, JPH::Vec3(0.f, 0.f, 0.f));
-          }
-        } else {
+        } else if (ctrl_state.mode != MotionMode::Walking) {
           if (scene.ragdoll) {
-            JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
-            if (!root_id.IsInvalid())
-              bi.SetMotionType(root_id, JPH::EMotionType::Dynamic, JPH::EActivation::Activate);
+            for (JPH::BodyID id : scene.ragdoll->GetBodyIDs()) {
+              if (!id.IsInvalid())
+                bi.SetMotionType(id, JPH::EMotionType::Dynamic, JPH::EActivation::Activate);
+            }
           }
           standing_anchor_valid = false;
-          walk_anchor_valid = false;
         }
       }
       clamp_ragdoll_velocities(scene.ragdoll, bi);

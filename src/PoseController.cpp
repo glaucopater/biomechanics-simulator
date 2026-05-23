@@ -74,19 +74,22 @@ void build_walk_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
     pose.GetJoint(i).mRotation = (i == 0) ? root_rot : Quat::sIdentity();
     pose.GetJoint(i).mTranslation = Vec3::sZero();
   }
-  float hip_l = config.walk_hip_amplitude * std::sin(phase);
-  float hip_r = config.walk_hip_amplitude * std::sin(phase + JPH_PI);
-  float knee_l = config.walk_knee_amplitude * (std::sin(phase) > 0 ? std::sin(phase) : 0.f);
-  float knee_r = config.walk_knee_amplitude * (std::sin(phase + JPH_PI) > 0 ? std::sin(phase + JPH_PI) : 0.f);
-  float arm_l = config.walk_arm_amplitude * std::sin(phase + JPH_PI);
-  float arm_r = config.walk_arm_amplitude * std::sin(phase);
-  // Twist axes from HumanRagdoll: legs -Y, arms left -X right +X
+  const float sin_l = std::sin(phase);
+  const float sin_r = std::sin(phase + JPH_PI);
+  const float hip_l = config.walk_hip_amplitude * sin_l;
+  const float hip_r = config.walk_hip_amplitude * sin_r;
+  const float knee_l = config.walk_knee_amplitude * std::max(0.f, sin_l);
+  const float knee_r = config.walk_knee_amplitude * std::max(0.f, sin_r);
+  const float arm_l = config.walk_arm_amplitude * sin_r;
+  const float arm_r = config.walk_arm_amplitude * sin_l;
+  const float torso_sway = 0.06f * sin_l;
   pose.GetJoint(UpperLegL).mRotation = rotation_axis(-Vec3::sAxisY(), hip_l);
   pose.GetJoint(UpperLegR).mRotation = rotation_axis(-Vec3::sAxisY(), hip_r);
   pose.GetJoint(LowerLegL).mRotation = rotation_axis(Vec3::sAxisX(), knee_l);
   pose.GetJoint(LowerLegR).mRotation = rotation_axis(Vec3::sAxisX(), knee_r);
   pose.GetJoint(UpperArmL).mRotation = rotation_axis(-Vec3::sAxisX(), arm_l);
   pose.GetJoint(UpperArmR).mRotation = rotation_axis(Vec3::sAxisX(), arm_r);
+  pose.GetJoint(MidBody).mRotation = rotation_axis(Vec3::sAxisY(), torso_sway);
   pose.CalculateJointMatrices();
 }
 
@@ -161,25 +164,27 @@ void apply_walking_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
   if (!skel || skel->GetJointCount() == 0) return;
   pose.SetSkeleton(skel);
   if (walking_anim) {
-    state.walk_time += dt;
+    state.walk_time += dt * config.walk_anim_playback;
     walking_anim->Sample(state.walk_time, pose);
-    SkeletonPose::JointState& joint0 = pose.GetJoint(0);
-    joint0.mTranslation = Vec3::sZero();
-    RVec3 root_offset;
-    ragdoll->GetRootTransform(root_offset, joint0.mRotation, true);
+    if (!state.walk_root_origin_valid) {
+      Quat root_rot;
+      ragdoll->GetRootTransform(state.walk_root_origin, root_rot, true);
+      state.walk_anim_root_at_start = pose.GetRootOffset();
+      state.walk_root_origin_valid = true;
+    }
+    RVec3 anim_root = pose.GetRootOffset();
+    RVec3 root_offset = state.walk_root_origin + (anim_root - state.walk_anim_root_at_start);
     if (config.walk_forward_speed > 0.f) {
+      SkeletonPose::JointState& joint0 = pose.GetJoint(0);
       Vec3 forward = joint0.mRotation * Vec3(0.f, 0.f, -1.f);
-      root_offset += RVec3(forward * (config.walk_forward_speed * dt));
+      root_offset += RVec3(forward * (config.walk_forward_speed * state.walk_time));
     }
     pose.SetRootOffset(root_offset);
+    SkeletonPose::JointState& joint0 = pose.GetJoint(0);
+    joint0.mTranslation = Vec3::sZero();
     pose.CalculateJointMatrices();
-    // #region agent log
-    debug_instrument_walk("PoseController.cpp:apply_walking_pose", "D,E", "target",
-      0.f, 0.f, 0.f, static_cast<float>(root_offset.GetX()), static_cast<float>(root_offset.GetY()), static_cast<float>(root_offset.GetZ()), dt);
-    // #endregion
-    ragdoll->DriveToPoseUsingKinematics(pose, dt);  // file rig often has no motors; Kinematics holds pose
+    ragdoll->DriveToPoseUsingKinematics(pose, dt);
   } else {
-    // Procedural walk uses 12-joint indices (UpperLegL=8, etc.); use only when skeleton matches.
     const uint joint_count = skel->GetJointCount();
     if (joint_count == 12) {
       build_walk_pose(ragdoll, settings, state.walk_phase, config, pose);
@@ -189,7 +194,7 @@ void apply_walking_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
     } else {
       build_neutral_pose(ragdoll, settings, pose);
     }
-    ragdoll->DriveToPoseUsingMotors(pose);
+    ragdoll->DriveToPoseUsingKinematics(pose, dt);
   }
 }
 
@@ -323,17 +328,24 @@ void apply_pose_control(SimulatorScene& scene,
   switch (state.mode) {
     case MotionMode::Standing:
       state.walk_time = 0.f;
+      state.walk_root_origin_valid = false;
       apply_standing_pose(scene.ragdoll, scene.ragdoll_settings,
                           scene.standing_anim.GetPtr(), dt, config);
       break;
     case MotionMode::StandingRaiseLeg:
+      state.walk_root_origin_valid = false;
       apply_standing_raise_leg_pose(scene.ragdoll, scene.ragdoll_settings, config);
       break;
     case MotionMode::Walking:
+      for (JPH::BodyID id : scene.ragdoll->GetBodyIDs()) {
+        if (!id.IsInvalid())
+          bi.SetMotionType(id, EMotionType::Kinematic, EActivation::DontActivate);
+      }
       apply_walking_pose(scene.ragdoll, scene.ragdoll_settings, state, config, dt,
                         scene.walking_anim.GetPtr());
       break;
     case MotionMode::Ragdoll:
+      state.walk_root_origin_valid = false;
       break;
   }
   if (state.jump_frames_hold > 0) {

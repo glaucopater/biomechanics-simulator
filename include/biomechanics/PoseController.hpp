@@ -27,14 +27,18 @@ struct ControllerState {
   MotionMode mode = MotionMode::Standing;
   float walk_phase = 0.f;   // used for procedural walk
   float walk_time = 0.f;   // used for animation-driven walk (seconds)
+  /** World root at walk start; animation root delta is added for locomotion. */
+  JPH::RVec3 walk_root_origin{0, 0, 0};
+  JPH::RVec3 walk_anim_root_at_start{0, 0, 0};
+  bool walk_root_origin_valid = false;
   bool jump_triggered = false;
   /** Frames to skip after jump before switching to Ragdoll (0 = inactive). */
   int jump_frames_hold = 0;
 };
 
 /**
- * Apply pose control using Jolt Ragdoll: Standing = DriveToPoseUsingMotors(neutral or animation),
- * Walking = DriveToPoseUsingMotors(walk pose from phase or animation). Call before each PhysicsSystem::Update.
+ * Apply pose control using Jolt Ragdoll: Standing = kinematics/motors to hold upright,
+ * Walking = DriveToPoseUsingKinematics(walk animation or procedural gait). Call before each PhysicsSystem::Update.
  * Uses scene.standing_anim / scene.walking_anim when set; otherwise procedural poses.
  * inDeltaTime is the time step for this call (use sub-step dt when using multiple sub-steps per frame).
  */
