@@ -8,6 +8,7 @@
 #include <Jolt/Skeleton/SkeletonPose.h>
 #include <Jolt/Skeleton/SkeletalAnimation.h>
 #include <cmath>
+#include <algorithm>
 #include <cstdio>
 
 namespace biomechanics {
@@ -214,17 +215,76 @@ void reset_ragdoll_to_standing_impl(Ragdoll* ragdoll, const RagdollSettings* set
   ragdoll->ResetWarmStart();
 }
 
-void apply_jump(Ragdoll* ragdoll, BodyInterface& bi, ControllerState& state,
-               const SimulatorConfig& config) {
-  if (!state.jump_triggered)
+void build_jump_crouch_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                            const SkeletalAnimation* standing_anim, float ease,
+                            const SimulatorConfig& config, SkeletonPose& pose) {
+  const Skeleton* skel = settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() < 12)
     return;
-  state.jump_triggered = false;
+  pose.SetSkeleton(skel);
+  if (standing_anim)
+    standing_anim->Sample(0.0f, pose);
+  else
+    build_neutral_pose(ragdoll, settings, pose);
+
+  RVec3 root_offset;
+  Quat root_rot;
+  ragdoll->GetRootTransform(root_offset, root_rot, true);
+  SkeletonPose::JointState& joint0 = pose.GetJoint(0);
+  joint0.mTranslation = Vec3::sZero();
+  if (!standing_anim)
+    joint0.mRotation = root_rot;
+
+  const float knee = config.jump_crouch_knee * ease;
+  const float hip = config.jump_crouch_hip * ease;
+  const float drop = config.jump_crouch_drop * ease;
+  root_offset = RVec3(root_offset.GetX(), config.standing_min_height - drop, root_offset.GetZ());
+  pose.SetRootOffset(root_offset);
+
+  pose.GetJoint(UpperLegL).mRotation = rotation_axis(-Vec3::sAxisY(), hip);
+  pose.GetJoint(UpperLegR).mRotation = rotation_axis(-Vec3::sAxisY(), hip);
+  pose.GetJoint(LowerLegL).mRotation = rotation_axis(Vec3::sAxisX(), knee);
+  pose.GetJoint(LowerLegR).mRotation = rotation_axis(Vec3::sAxisX(), knee);
+  pose.GetJoint(UpperArmL).mRotation = rotation_axis(-Vec3::sAxisX(), -0.25f * ease);
+  pose.GetJoint(UpperArmR).mRotation = rotation_axis(Vec3::sAxisX(), -0.25f * ease);
+  pose.CalculateJointMatrices();
+}
+
+void apply_jump_crouch_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
+                            const SkeletalAnimation* standing_anim, float dt,
+                            const SimulatorConfig& config, float ease) {
+  SkeletonPose pose;
+  build_jump_crouch_pose(ragdoll, settings, standing_anim, ease, config, pose);
+  ragdoll->DriveToPoseUsingKinematics(pose, dt);
+}
+
+void launch_jump(Ragdoll* ragdoll, BodyInterface& bi, ControllerState& state,
+                 const SimulatorConfig& config) {
   BodyID root_id = ragdoll->GetBodyID(0);
   if (root_id.IsInvalid())
     return;
-  bi.AddImpulse(root_id, Vec3(0, config.jump_impulse_y, 0));
-  state.jump_frames_hold = 30;
-  log("[Pose] Jump applied (rise then Ragdoll)");
+
+  for (BodyID id : ragdoll->GetBodyIDs()) {
+    if (!id.IsInvalid())
+      bi.SetMotionType(id, EMotionType::Dynamic, EActivation::Activate);
+  }
+
+  constexpr float kLimbJumpVelocityRatio = 0.35f;
+  for (BodyID id : ragdoll->GetBodyIDs()) {
+    if (id.IsInvalid())
+      continue;
+    const float vy = (id == root_id) ? config.jump_velocity_y
+                                     : config.jump_velocity_y * kLimbJumpVelocityRatio;
+    bi.SetLinearVelocity(id, Vec3(0.f, vy, 0.f));
+    bi.SetAngularVelocity(id, Vec3::sZero());
+  }
+
+  state.mode = MotionMode::Ragdoll;
+  state.walk_root_origin_valid = false;
+  state.jump_in_air = true;
+  state.jump_was_airborne = false;
+  state.jump_air_steps = 0;
+  log("[Pose] Jump launch vy=%.2f m/s", config.jump_velocity_y);
 }
 
 }  // namespace
@@ -314,6 +374,95 @@ void capture_standing_pose_as_initial(SimulatorScene& scene) {
   }
 }
 
+namespace {
+
+void recover_standing_at(SimulatorScene& scene, JPH::BodyInterface& bi,
+                         JPH::RVec3 root_offset, JPH::Quat root_rotation) {
+  if (!scene.ragdoll || !scene.ragdoll_settings) return;
+  const JPH::Skeleton* skel = scene.ragdoll_settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() == 0) return;
+  const size_t num_joints = scene.initial_standing_joint_rotations.size();
+  if (num_joints != skel->GetJointCount() || num_joints != scene.initial_standing_joint_translations.size()) {
+    reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings, root_offset, &bi);
+    return;
+  }
+  JPH::SkeletonPose pose;
+  pose.SetSkeleton(skel);
+  pose.SetRootOffset(root_offset);
+  for (size_t i = 0; i < num_joints; ++i) {
+    const JPH::uint ji = static_cast<JPH::uint>(i);
+    pose.GetJoint(ji).mRotation = (i == 0) ? root_rotation : scene.initial_standing_joint_rotations[i];
+    pose.GetJoint(ji).mTranslation = scene.initial_standing_joint_translations[i];
+  }
+  pose.CalculateJointMatrices();
+  scene.ragdoll->SetPose(pose);
+  scene.ragdoll->ResetWarmStart();
+  zero_ragdoll_velocities(scene.ragdoll, bi);
+}
+
+}  // namespace
+
+bool try_recover_standing_after_jump(SimulatorScene& scene,
+                                     ControllerState& state,
+                                     const SimulatorConfig& config,
+                                     JumpLandingResult* out) {
+  if (!state.jump_in_air || state.mode != MotionMode::Ragdoll || !scene.physics || !scene.ragdoll)
+    return false;
+
+  ++state.jump_air_steps;
+  JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
+  JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+  if (root_id.IsInvalid())
+    return false;
+
+  JPH::RVec3 root_pos = bi.GetPosition(root_id);
+  JPH::Vec3 root_vel = bi.GetLinearVelocity(root_id);
+  const float root_y = static_cast<float>(root_pos.GetY());
+  const float root_vy = root_vel.GetY();
+
+  if (root_vy > 0.5f || root_y > config.standing_min_height + 0.12f)
+    state.jump_was_airborne = true;
+
+  constexpr int kMinAirSteps = 12;
+  if (!state.jump_was_airborne || state.jump_air_steps < kMinAirSteps)
+    return false;
+
+  const size_t num_bodies = scene.ragdoll->GetBodyIDs().size();
+  float foot_y = root_y;
+  if (num_bodies >= 12) {
+    for (int foot_idx : {10, 11}) {
+      JPH::BodyID foot_id = scene.ragdoll->GetBodyID(foot_idx);
+      if (!foot_id.IsInvalid())
+        foot_y = std::min(foot_y, static_cast<float>(bi.GetPosition(foot_id).GetY()));
+    }
+  }
+
+  const bool feet_on_ground = foot_y < 0.22f;
+  const bool root_low_enough = root_y < config.standing_min_height + 0.18f;
+  const bool settled = root_vy > -2.5f && root_vy < 0.6f;
+  if (!feet_on_ground || !root_low_enough || !settled)
+    return false;
+
+  JPH::RVec3 landing_root(root_pos.GetX(), config.standing_min_height, root_pos.GetZ());
+  recover_standing_at(scene, bi, landing_root, scene.initial_standing_root_rotation);
+  state.mode = MotionMode::Standing;
+  state.jump_in_air = false;
+  state.jump_was_airborne = false;
+  state.jump_air_steps = 0;
+  state.jump_crouching = false;
+  state.jump_crouch_time = 0.f;
+  state.walk_root_origin_valid = false;
+
+  if (out) {
+    out->anchor_x = static_cast<float>(root_pos.GetX());
+    out->anchor_z = static_cast<float>(root_pos.GetZ());
+    out->anchor_rot = scene.initial_standing_root_rotation;
+  }
+  log("[Pose] Jump landed -> Standing at (%.2f, %.2f)", static_cast<double>(root_pos.GetX()),
+      static_cast<double>(root_pos.GetZ()));
+  return true;
+}
+
 void apply_pose_control(SimulatorScene& scene,
                         ControllerState& state,
                         const SimulatorConfig& config,
@@ -323,7 +472,27 @@ void apply_pose_control(SimulatorScene& scene,
   float dt = inDeltaTime >= 0.f ? inDeltaTime : config.time_step;
   JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
 
-  apply_jump(scene.ragdoll, bi, state, config);
+  if (state.jump_triggered && !state.jump_crouching && !state.jump_in_air) {
+    state.jump_triggered = false;
+    state.jump_crouching = true;
+    state.jump_crouch_time = 0.f;
+    state.mode = MotionMode::Standing;
+    state.walk_root_origin_valid = false;
+    log("[Pose] Jump crouch");
+  }
+
+  if (state.jump_crouching) {
+    state.jump_crouch_time += dt;
+    const float t = std::min(1.f, state.jump_crouch_time / config.jump_crouch_duration);
+    const float eased = t * t * (3.f - 2.f * t);  // smoothstep: slow in/out
+    apply_jump_crouch_pose(scene.ragdoll, scene.ragdoll_settings, scene.standing_anim.GetPtr(),
+                           dt, config, eased);
+    if (state.jump_crouch_time >= config.jump_crouch_duration) {
+      launch_jump(scene.ragdoll, bi, state, config);
+      state.jump_crouching = false;
+    }
+    return;
+  }
 
   switch (state.mode) {
     case MotionMode::Standing:
@@ -347,13 +516,6 @@ void apply_pose_control(SimulatorScene& scene,
     case MotionMode::Ragdoll:
       state.walk_root_origin_valid = false;
       break;
-  }
-  if (state.jump_frames_hold > 0) {
-    state.jump_frames_hold--;
-    if (state.jump_frames_hold == 0) {
-      state.mode = MotionMode::Ragdoll;
-      log("[Pose] Jump hold done -> Ragdoll");
-    }
   }
 }
 

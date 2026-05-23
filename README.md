@@ -77,7 +77,7 @@ The model supports **standing**, **raise leg**, **walking**, and **ragdoll**:
 - **Raise leg** – Static stance with one leg raised; root pinned, other limbs driven by motors.
 - **Walking** – Cyclic gait: hip/knee/arm targets drive a walking motion.
 - **Ragdoll** – No pose control; full physics.
-- **Jump** – One-shot upward impulse on the pelvis.
+- **Jump** – Bends knees (crouch ~0.2 s), launches upward, ragdoll in the air, then **auto-recovers to Standing** on landing.
 
 **Stance panel (top-left):** **Standing**, **Raise leg**, **Walk**, **Ragdoll**, **Jump**, **Reset**, **Test (float 2s)**, **Freeze/Unfreeze**.
 

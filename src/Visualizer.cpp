@@ -237,8 +237,11 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       app->ctrl->mode = MotionMode::Standing;
     else if (key == GLFW_KEY_2)
       app->ctrl->mode = MotionMode::Walking;
-    else if (key == GLFW_KEY_3)
+    else if (key == GLFW_KEY_3) {
       app->ctrl->mode = MotionMode::Ragdoll;
+      app->ctrl->jump_in_air = false;
+      app->ctrl->jump_crouching = false;
+    }
     else if (key == GLFW_KEY_4)
       app->ctrl->mode = MotionMode::StandingRaiseLeg;
     else if (key == GLFW_KEY_SPACE)
@@ -268,8 +271,11 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       ctrl_state.mode = MotionMode::StandingRaiseLeg;
     if (ImGui::Button("Walk", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::Walking;
-    if (ImGui::Button("Ragdoll", ImVec2(160, 0)))
+    if (ImGui::Button("Ragdoll", ImVec2(160, 0))) {
       ctrl_state.mode = MotionMode::Ragdoll;
+      ctrl_state.jump_in_air = false;
+      ctrl_state.jump_crouching = false;
+    }
     if (ImGui::Button("Jump", ImVec2(160, 0)))
       ctrl_state.jump_triggered = true;
     if (ImGui::Button("Test (float 2s)", ImVec2(160, 0))) {
@@ -287,7 +293,9 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         ctrl_state.walk_phase = 0.f;
         ctrl_state.walk_time = 0.f;
         ctrl_state.jump_triggered = false;
-        ctrl_state.jump_frames_hold = 0;
+        ctrl_state.jump_in_air = false;
+        ctrl_state.jump_crouching = false;
+        ctrl_state.jump_crouch_time = 0.f;
         standing_anchor_valid = false;
       }
     }
@@ -529,7 +537,6 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
             ctrl_state.walk_phase = 0.f;
             ctrl_state.walk_time = 0.f;
             ctrl_state.jump_triggered = false;
-            ctrl_state.jump_frames_hold = 0;
             standing_anchor_valid = false;
           }
         }
@@ -631,6 +638,16 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       if (http_port > 0)
         http_control_update_snapshot(scene, ctrl_state);
       last_frame_mode = ctrl_state.mode;
+    }
+
+    if (!simulation_frozen) {
+      JumpLandingResult landing;
+      if (try_recover_standing_after_jump(scene, ctrl_state, config, &landing)) {
+        standing_anchor_x = landing.anchor_x;
+        standing_anchor_z = landing.anchor_z;
+        standing_anchor_rot = landing.anchor_rot;
+        standing_anchor_valid = true;
+      }
     }
 
     frame_count++;

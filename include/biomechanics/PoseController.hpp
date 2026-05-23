@@ -32,9 +32,30 @@ struct ControllerState {
   JPH::RVec3 walk_anim_root_at_start{0, 0, 0};
   bool walk_root_origin_valid = false;
   bool jump_triggered = false;
-  /** Frames to skip after jump before switching to Ragdoll (0 = inactive). */
-  int jump_frames_hold = 0;
+  /** Crouch wind-up before launch. */
+  bool jump_crouching = false;
+  float jump_crouch_time = 0.f;
+  /** True after launch until landing recovery or manual Ragdoll. */
+  bool jump_in_air = false;
+  bool jump_was_airborne = false;
+  int jump_air_steps = 0;
 };
+
+/** Landing anchor for Visualizer standing pin after jump recovery. */
+struct JumpLandingResult {
+  float anchor_x = 0.f;
+  float anchor_z = 0.f;
+  JPH::Quat anchor_rot = JPH::Quat::sIdentity();
+};
+
+/**
+ * If a jump is in progress and the ragdoll has landed, reset to Standing at landing XZ.
+ * Returns true when recovery happened. Call once per frame after physics.
+ */
+bool try_recover_standing_after_jump(SimulatorScene& scene,
+                                     ControllerState& state,
+                                     const SimulatorConfig& config,
+                                     JumpLandingResult* out = nullptr);
 
 /**
  * Apply pose control using Jolt Ragdoll: Standing = kinematics/motors to hold upright,

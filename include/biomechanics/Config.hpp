@@ -27,7 +27,11 @@ struct SimulatorConfig {
   float walk_arm_amplitude  = 0.4f;  // rad (counter-swing arms, procedural)
   float walk_joint_spring_stiffness = 25.f;  // soften limb springs so PD can drive walk
   float walk_max_torque  = 140.f;  // max PD torque for limbs during walk (higher than standing)
-  float jump_impulse_y   = 22.f;   // upward impulse on pelvis when jumping
+  float jump_velocity_y  = 5.5f;  // m/s upward on pelvis at jump (limbs get a fraction)
+  float jump_crouch_duration = 0.40f;  // seconds to bend knees before launch
+  float jump_crouch_knee = 0.95f;     // rad knee flexion at full crouch (both legs)
+  float jump_crouch_hip = 0.40f;      // rad hip flexion at full crouch (both legs)
+  float jump_crouch_drop = 0.10f;     // m pelvis lowers during crouch
   int   default_motion_mode = 0;   // 0=Standing, 1=Walking, 2=Ragdoll (visualizer start; headless uses this)
 };
 
