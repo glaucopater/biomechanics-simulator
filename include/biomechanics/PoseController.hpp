@@ -19,8 +19,18 @@ enum class MotionMode : int {
   Walking = 1,
   Ragdoll = 2,
   /** Static stance: stand still with one leg raised (same root pinning as Standing). */
-  StandingRaiseLeg = 3
+  StandingRaiseLeg = 3,
+  /** Guard stance with a forward punch (right arm). */
+  Fist = 4,
+  /** Front kick with the right leg. */
+  FrontKick = 5
 };
+
+/** Modes that pin root XZ like Standing (kinematic root anchor in Visualizer). */
+inline bool is_pinned_stance_mode(MotionMode mode) {
+  return mode == MotionMode::Standing || mode == MotionMode::StandingRaiseLeg
+      || mode == MotionMode::Fist || mode == MotionMode::FrontKick;
+}
 
 /** Per-frame state for the pose controller (mode, phase, jump trigger). */
 struct ControllerState {
@@ -39,6 +49,8 @@ struct ControllerState {
   bool jump_in_air = false;
   bool jump_was_airborne = false;
   int jump_air_steps = 0;
+  /** Elapsed time in the current pinned action pose (raise leg / fist / kick). */
+  float action_time = 0.f;
 };
 
 /** Landing anchor for Visualizer standing pin after jump recovery. */

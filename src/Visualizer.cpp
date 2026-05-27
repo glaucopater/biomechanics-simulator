@@ -244,6 +244,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     }
     else if (key == GLFW_KEY_4)
       app->ctrl->mode = MotionMode::StandingRaiseLeg;
+    else if (key == GLFW_KEY_5)
+      app->ctrl->mode = MotionMode::Fist;
+    else if (key == GLFW_KEY_6)
+      app->ctrl->mode = MotionMode::FrontKick;
     else if (key == GLFW_KEY_SPACE)
       app->ctrl->jump_triggered = true;
   });
@@ -269,6 +273,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       ctrl_state.mode = MotionMode::Standing;
     if (ImGui::Button("Raise leg", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::StandingRaiseLeg;
+    if (ImGui::Button("Fist", ImVec2(160, 0)))
+      ctrl_state.mode = MotionMode::Fist;
+    if (ImGui::Button("Front kick", ImVec2(160, 0)))
+      ctrl_state.mode = MotionMode::FrontKick;
     if (ImGui::Button("Walk", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::Walking;
     if (ImGui::Button("Ragdoll", ImVec2(160, 0))) {
@@ -296,6 +304,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         ctrl_state.jump_in_air = false;
         ctrl_state.jump_crouching = false;
         ctrl_state.jump_crouch_time = 0.f;
+        ctrl_state.action_time = 0.f;
         standing_anchor_valid = false;
       }
     }
@@ -373,6 +382,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         log("[UI] Mode -> Standing");
       else if (ctrl_state.mode == MotionMode::StandingRaiseLeg)
         log("[UI] Mode -> Raise leg");
+      else if (ctrl_state.mode == MotionMode::Fist)
+        log("[UI] Mode -> Fist");
+      else if (ctrl_state.mode == MotionMode::FrontKick)
+        log("[UI] Mode -> Front kick");
       else if (ctrl_state.mode == MotionMode::Walking)
         log("[UI] Mode -> Walking");
       else
@@ -381,6 +394,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     // Human ragdoll body indices: 0=LowerBody, 1=MidBody, 2=UpperBody, 3=Head, 4-7=arms, 8-11=legs
     const size_t num_bodies = scene.ragdoll ? scene.ragdoll->GetBodyIDs().size() : 0;
     bool using_walk_anim = (scene.walking_anim.GetPtr() != nullptr);
+    if (ctrl_state.mode != last_frame_mode) {
+      if (is_pinned_stance_mode(ctrl_state.mode) || is_pinned_stance_mode(last_frame_mode))
+        ctrl_state.action_time = 0.f;
+    }
     if (ctrl_state.mode == MotionMode::Walking && last_frame_mode != MotionMode::Walking && num_bodies >= 1) {
       ctrl_state.walk_time = 0.f;
       ctrl_state.walk_phase = 0.f;
@@ -594,8 +611,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
           }
         }
 #endif
-        // Anchor root XZ and rotation, zero root linear/angular velocity (Standing and Raise leg: same pinning)
-        if ((ctrl_state.mode == MotionMode::Standing || ctrl_state.mode == MotionMode::StandingRaiseLeg) && scene.ragdoll) {
+        // Anchor root XZ and rotation, zero root linear/angular velocity (pinned stance modes)
+        if (is_pinned_stance_mode(ctrl_state.mode) && scene.ragdoll) {
           JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
           if (!root_id.IsInvalid()) {
             bi.SetMotionType(root_id, JPH::EMotionType::Kinematic, JPH::EActivation::DontActivate);

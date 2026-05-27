@@ -32,6 +32,15 @@ struct SimulatorConfig {
   float jump_crouch_knee = 0.95f;     // rad knee flexion at full crouch (both legs)
   float jump_crouch_hip = 0.40f;      // rad hip flexion at full crouch (both legs)
   float jump_crouch_drop = 0.10f;     // m pelvis lowers during crouch
+  float action_pose_duration = 0.40f;  // seconds to ease into raise-leg / fist / kick
+  float raise_leg_hip = 0.85f;        // rad hip flexion (raised leg)
+  float raise_leg_knee = 0.90f;       // rad knee flexion (raised leg)
+  float fist_punch_arm = 1.35f;       // rad right upper arm forward
+  float fist_punch_elbow = 0.55f;     // rad right elbow bend at full punch
+  float fist_guard_arm = 0.75f;       // rad left upper arm guard
+  float kick_hip = 1.05f;             // rad kicking hip flexion
+  float kick_knee = 0.08f;            // rad kicking knee (near straight)
+  float kick_plant_knee = 0.15f;      // rad support knee bend
   int   default_motion_mode = 0;   // 0=Standing, 1=Walking, 2=Ragdoll (visualizer start; headless uses this)
 };
 
