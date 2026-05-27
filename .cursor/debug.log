@@ -1,65 +1,497 @@
 [log cleared]
-[1779572929512] App started. Stance: Standing / Walk / Ragdoll. Log file: .cursor/debug.log
-[1779572929517] [Limbs] pelvis 0.00,0.97,-0.02 spine 0.10,0.97,-0.02 head 0.15,0.12,0.00 L_foot 0.00,1.22,-0.02 R_foot -0.01,1.43,-0.05 L_hand -0.15,0.12,0.00 R_hand 0.00,1.03,-0.02
-[1779572929517] [Standing] MidBody pos 0.1049,0.9709,-0.0231 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
-[1779572929517] [Standing] Anchor set root_x=0.000 root_z=-0.023 root_y=0.950 (entering/re-entering Standing)
-[1779572929641] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572929774] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572929774] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572929896] Initial standing pose captured (settled) for reset
-[1779572929899] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930024] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572930024] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930149] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930274] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572930274] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930399] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930524] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572930524] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930648] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930773] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572930773] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572930898] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572931023] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
-[1779572931023] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572931148] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572931232] [Pose] Jump crouch
-[1779572931273] [Limbs] pelvis 0.00,0.91,-0.02 spine 0.10,0.91,-0.02 head 0.14,0.07,-0.00 L_foot 0.01,1.16,-0.02 R_foot 0.02,1.33,-0.13 L_hand -0.08,0.09,-0.01 R_hand 0.00,0.96,-0.02
-[1779572931273] [Standing] MidBody pos 0.1047,0.9136,-0.0231 vel -0.0158,-0.2671,0.0859 (only root is pinned; MidBody can wobble)
-[1779572931332] [Pose] Jump launch vy=5.50 m/s
-[1779572931336] [UI] Mode -> Ragdoll
-[1779572931523] [Limbs] pelvis -0.15,0.37,-0.27 spine -0.07,0.39,-0.33 head -0.46,1.07,-0.66 L_foot -0.04,0.50,-0.11 R_foot 0.04,0.69,-0.15 L_hand -0.25,0.10,-0.67 R_hand -0.12,0.38,-0.22
-[1779572931536] [Pose] Jump landed -> Standing at (-0.15, -0.31)
-[1779572931540] [UI] Mode -> Standing
-[1779572931648] [Standing] MidBody pos -0.2552,0.9498,-0.3137 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572931773] [Limbs] pelvis -0.15,0.95,-0.31 spine -0.26,0.95,-0.31 head -0.30,0.10,-0.34 L_foot -0.15,1.21,-0.31 R_foot -0.13,1.42,-0.29 L_hand -0.00,0.10,-0.34 R_hand -0.15,1.01,-0.31
-[1779572931773] [Standing] MidBody pos -0.2552,0.9498,-0.3137 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572931898] [Standing] MidBody pos -0.2552,0.9498,-0.3137 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572932023] [Limbs] pelvis -0.15,0.95,-0.31 spine -0.26,0.95,-0.31 head -0.30,0.10,-0.34 L_foot -0.15,1.21,-0.31 R_foot -0.14,1.42,-0.29 L_hand -0.00,0.10,-0.34 R_hand -0.15,1.01,-0.31
-[1779572932023] [Standing] MidBody pos -0.2552,0.9498,-0.3137 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572932057] [Pose] Jump crouch
-[1779572932148] [Standing] MidBody pos -0.0777,0.9145,0.0409 vel -1.6268,6.2227,20.0503 (only root is pinned; MidBody can wobble)
-[1779572932157] [Pose] Jump launch vy=5.50 m/s
-[1779572932161] [UI] Mode -> Ragdoll
-[1779572932273] [Limbs] pelvis -0.20,0.99,-0.45 spine -0.10,1.03,-0.43 head 0.24,0.28,-0.28 L_foot -0.17,1.23,-0.38 R_foot -0.03,1.39,-0.38 L_hand -0.00,0.32,-0.41 R_hand -0.22,1.05,-0.44
-[1779572932349] [Pose] Jump landed -> Standing at (-0.20, -0.63)
-[1779572932352] [UI] Mode -> Standing
-[1779572932398] [Standing] MidBody pos -0.3094,0.9493,-0.6307 vel 0.0001,-0.0004,-0.0002 (only root is pinned; MidBody can wobble)
-[1779572932523] [Limbs] pelvis -0.20,0.95,-0.63 spine -0.31,0.95,-0.63 head -0.35,0.10,-0.66 L_foot -0.20,1.21,-0.63 R_foot -0.19,1.42,-0.61 L_hand -0.06,0.10,-0.66 R_hand -0.20,1.01,-0.63
-[1779572932523] [Standing] MidBody pos -0.3093,0.9498,-0.6308 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
-[1779572932623] [Pose] Jump crouch
-[1779572932648] [Standing] MidBody pos -0.1023,1.0203,-0.2734 vel -1.5025,8.3952,23.5003 (only root is pinned; MidBody can wobble)
-[1779572932723] [Pose] Jump launch vy=5.50 m/s
-[1779572932727] [UI] Mode -> Ragdoll
-[1779572932773] [Limbs] pelvis -0.28,1.20,-0.57 spine -0.24,1.20,-0.67 head -0.11,0.45,-0.63 L_foot -0.14,1.43,-0.64 R_foot -0.06,1.58,-0.76 L_hand -0.25,0.43,-0.50 R_hand -0.27,1.26,-0.57
-[1779572932936] [Pose] Jump landed -> Standing at (-0.32, -0.77)
-[1779572932940] [UI] Mode -> Standing
-[1779572933023] [Limbs] pelvis -0.32,0.95,-0.77 spine -0.43,0.95,-0.77 head -0.47,0.10,-0.79 L_foot -0.32,1.22,-0.76 R_foot -0.31,1.43,-0.75 L_hand -0.18,0.10,-0.79 R_hand -0.32,1.01,-0.77
-[1779572933023] [Standing] MidBody pos -0.4282,0.9498,-0.7665 vel 0.0000,-0.0000,-0.0001 (only root is pinned; MidBody can wobble)
-[1779572933103] [Pose] Jump crouch
-[1779572933148] [Standing] MidBody pos -0.2730,0.9757,-0.4639 vel -21.8908,11.3133,-4.2193 (only root is pinned; MidBody can wobble)
-[1779572933202] [Pose] Jump launch vy=5.50 m/s
-[1779572933207] [UI] Mode -> Ragdoll
-[1779572933273] [Limbs] pelvis -0.43,1.34,-0.72 spine -0.39,1.32,-0.82 head -0.25,0.66,-0.81 L_foot -0.27,1.54,-0.80 R_foot -0.19,1.68,-0.94 L_hand -0.47,0.59,-0.75 R_hand -0.40,1.39,-0.72
-[1779572933486] [Pose] Jump landed -> Standing at (-0.26, -0.76)
-[1779572933490] [UI] Mode -> Standing
+[1779909111575] App started. Stance: Standing / Walk / Ragdoll. Log file: .cursor/debug.log
+[1779909111579] [Limbs] pelvis 0.00,0.97,-0.02 spine 0.10,0.97,-0.02 head 0.15,0.12,0.00 L_foot 0.00,1.22,-0.02 R_foot -0.01,1.43,-0.05 L_hand -0.15,0.12,0.00 R_hand 0.00,1.03,-0.02
+[1779909111579] [Standing] MidBody pos 0.1049,0.9709,-0.0231 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909111579] [Standing] Anchor set root_x=0.000 root_z=-0.023 root_y=0.950 (entering/re-entering Standing)
+[1779909111705] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909111830] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909111830] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909111971] Initial standing pose captured (settled) for reset
+[1779909111975] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112109] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909112109] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112255] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112396] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909112396] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112559] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112725] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909112725] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909112892] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909113638] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909113638] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909113764] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909113889] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909113889] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114013] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114138] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909114139] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114264] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114389] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909114389] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114514] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114639] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909114639] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114764] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114889] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909114889] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909114993] [UI] Mode -> Punch R
+[1779909115139] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909115389] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909115639] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909115894] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909116144] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909116394] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909116643] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909116893] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909117144] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909117394] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909117644] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909117893] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909118143] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909118393] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909118643] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909118893] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909119143] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909119393] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909119644] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909119898] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.20,-0.02 R_foot -0.01,1.41,-0.05 L_hand -0.15,0.10,0.00 R_hand 0.00,1.01,-0.02
+[1779909120152] [UI] Mode -> Standing
+[1779909120157] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.20,-0.02 R_foot -0.03,1.41,-0.07 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909120157] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120285] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120414] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909120414] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120552] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120677] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909120677] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120802] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909120927] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909120927] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909121052] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909121143] [UI] Mode -> Punch L
+[1779909121177] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909121427] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909121677] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.00,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909121931] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.00,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909122186] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.00,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909122435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909122498] [UI] Mode -> Punch R
+[1779909122685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909122935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.04 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909123185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.04 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909123435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909123685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.04 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909123707] [UI] Mode -> Standing
+[1779909123810] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909123935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909123935] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909124060] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909124185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909124185] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel 0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909124298] [UI] Mode -> Raise leg
+[1779909124435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.70,0.62 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909124685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.68,0.59 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909124935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909125185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909125435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909125685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.60 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909125935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909126185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909126435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909126685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.70,0.62 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909126935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.68,0.59 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909127185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909127435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909127685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909127935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.60 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909128185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909128435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909128685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909128935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.70,0.61 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909129185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.68,0.59 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909129435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909129685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909129935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909130185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.68,0.59 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909130435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909130685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909130935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909131185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.60 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909131435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909131685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909131935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909132185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.70,0.61 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909132435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.68,0.59 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909132685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909132935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909133185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909133435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.60 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909133685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909133935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909134185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909134435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.61 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909134685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909134935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909135185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909135435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.67,0.57 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909135685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.69,0.60 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909135935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909136185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.68,0.58 L_foot 0.00,1.21,-0.02 R_foot -0.04,1.42,-0.04 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909136402] [UI] Mode -> Standing
+[1779909136435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909136435] [Standing] MidBody pos 0.1049,0.9488,-0.0232 vel 0.0001,-0.0009,0.0008 (only root is pinned; MidBody can wobble)
+[1779909136560] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909136685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909136685] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909136810] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909136935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot 0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909136935] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909137060] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909137152] [UI] Mode -> Front kick
+[1779909137185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.14,0.10,0.02 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.04 L_hand -0.15,0.10,0.02 R_hand -0.00,1.01,-0.02
+[1779909137435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909137685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909137935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909138185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909138435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909138685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909138935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.02 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909139185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.02 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909139435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909139685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909139935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909140185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.11,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909140435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.06,0.11,0.04 L_foot -0.00,1.22,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909140685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.03 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909140935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.06,0.11,0.05 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.02 L_hand -0.14,0.11,0.06 R_hand -0.00,1.01,-0.02
+[1779909141065] [UI] Mode -> Standing
+[1779909141185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909141185] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141310] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909141435] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141560] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909141685] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141810] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909141935] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909141935] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142060] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142185] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909142185] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142310] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142435] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.02,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909142435] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142560] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142685] [Limbs] pelvis 0.00,0.95,-0.02 spine 0.10,0.95,-0.02 head 0.15,0.10,0.00 L_foot -0.00,1.21,-0.02 R_foot -0.01,1.42,-0.05 L_hand -0.15,0.10,0.00 R_hand -0.00,1.01,-0.02
+[1779909142685] [Standing] MidBody pos 0.1049,0.9498,-0.0231 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909142794] Test: applying upward force 2s - character should RISE
+[1779909142794] [UI] Mode -> Ragdoll
+[1779909142935] [Limbs] pelvis 0.01,0.92,-0.13 spine 0.11,0.92,-0.12 head 0.14,0.08,0.03 L_foot 0.01,1.15,-0.12 R_foot -0.02,1.29,0.03 L_hand -0.15,0.10,0.01 R_hand 0.01,0.98,-0.14
+[1779909143185] [Limbs] pelvis -0.01,0.44,0.31 spine 0.09,0.44,0.32 head 0.19,0.08,-0.39 L_foot -0.01,0.24,0.36 R_foot 0.00,0.08,0.23 L_hand -0.12,0.07,-0.42 R_hand -0.01,0.42,0.36
+[1779909143435] [Limbs] pelvis 0.00,0.62,0.08 spine 0.11,0.61,0.09 head 0.20,0.10,-0.44 L_foot -0.01,0.43,0.18 R_foot 0.00,0.22,0.16 L_hand -0.12,0.10,-0.46 R_hand -0.00,0.60,0.13
+[1779909143685] [Limbs] pelvis 0.00,0.63,0.04 spine 0.11,0.63,0.05 head 0.20,0.10,-0.45 L_foot -0.01,0.44,0.14 R_foot 0.00,0.23,0.14 L_hand -0.12,0.10,-0.47 R_hand -0.00,0.62,0.09
+[1779909143935] [Limbs] pelvis 0.00,0.63,0.04 spine 0.11,0.63,0.05 head 0.20,0.10,-0.44 L_foot -0.01,0.44,0.15 R_foot 0.00,0.23,0.15 L_hand -0.12,0.10,-0.47 R_hand -0.00,0.62,0.10
+[1779909144185] [Limbs] pelvis 0.00,0.63,0.05 spine 0.10,0.63,0.06 head 0.20,0.10,-0.44 L_foot -0.01,0.44,0.15 R_foot -0.00,0.23,0.15 L_hand -0.12,0.10,-0.46 R_hand -0.01,0.62,0.10
+[1779909144443] [Limbs] pelvis 0.00,0.63,0.05 spine 0.10,0.62,0.06 head 0.20,0.10,-0.44 L_foot -0.01,0.44,0.15 R_foot -0.00,0.23,0.15 L_hand -0.12,0.10,-0.46 R_hand -0.01,0.62,0.10
+[1779909144693] [Limbs] pelvis -0.00,0.63,0.05 spine 0.10,0.62,0.06 head 0.20,0.10,-0.44 L_foot -0.01,0.44,0.16 R_foot -0.00,0.23,0.15 L_hand -0.12,0.10,-0.46 R_hand -0.01,0.62,0.11
+[1779909144943] [Limbs] pelvis 0.01,0.32,0.47 spine 0.11,0.34,0.46 head 0.18,0.09,-0.19 L_foot 0.04,0.13,0.44 R_foot 0.05,0.03,0.25 L_hand -0.15,0.07,-0.24 R_hand 0.02,0.29,0.51
+[1779909145193] [Limbs] pelvis 0.01,0.32,0.50 spine 0.11,0.34,0.49 head 0.17,0.09,-0.07 L_foot 0.04,0.13,0.45 R_foot 0.05,0.03,0.26 L_hand -0.18,0.08,-0.18 R_hand 0.02,0.28,0.54
+[1779909145443] [Limbs] pelvis 0.01,0.32,0.50 spine 0.11,0.34,0.49 head 0.17,0.09,-0.07 L_foot 0.04,0.13,0.45 R_foot 0.05,0.03,0.26 L_hand -0.18,0.08,-0.18 R_hand 0.02,0.28,0.54
+[1779909145693] [Limbs] pelvis 0.01,0.32,0.50 spine 0.11,0.34,0.49 head 0.17,0.09,-0.07 L_foot 0.04,0.13,0.45 R_foot 0.05,0.03,0.26 L_hand -0.18,0.08,-0.18 R_hand 0.02,0.28,0.54
+[1779909145944] [Limbs] pelvis 0.01,0.32,0.50 spine 0.11,0.34,0.49 head 0.17,0.09,-0.07 L_foot 0.04,0.13,0.45 R_foot 0.05,0.03,0.26 L_hand -0.18,0.08,-0.18 R_hand 0.02,0.28,0.54
+[1779909146193] [Limbs] pelvis 0.01,0.32,0.50 spine 0.11,0.34,0.49 head 0.17,0.09,-0.07 L_foot 0.04,0.13,0.45 R_foot 0.05,0.03,0.26 L_hand -0.18,0.08,-0.18 R_hand 0.02,0.28,0.54
+[1779909146306] [UI] Mode -> Standing
+[1779909146307] [Standing] Anchor set root_x=-0.021 root_z=-0.038 root_y=0.930 (entering/re-entering Standing)
+[1779909146318] [Standing] MidBody pos -0.1725,1.0036,-0.0345 vel 2.1272,-1.4853,-0.7326 (only root is pinned; MidBody can wobble)
+[1779909146444] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909146444] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909146568] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909146693] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909146693] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909146818] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909146944] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909146944] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147068] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147193] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909147193] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147318] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147444] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909147444] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147569] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147693] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909147693] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147818] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909147943] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909147943] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909148068] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909148193] [Limbs] pelvis -0.02,0.95,-0.04 spine -0.12,0.99,-0.04 head -0.46,0.23,0.14 L_foot 0.07,1.19,-0.10 R_foot 0.16,1.38,-0.13 L_hand -0.18,0.13,0.15 R_hand -0.00,1.00,-0.05
+[1779909148193] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909148318] [Standing] MidBody pos -0.1190,0.9867,-0.0427 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909148344] [Standing] Anchor set root_x=0.000 root_z=-0.023 root_y=0.950 (entering/re-entering Standing)
+[1779909148443] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot -0.00,1.22,-0.02 R_foot 0.02,1.43,-0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909148443] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909148507] [Standing] Anchor set root_x=0.000 root_z=-0.023 root_y=0.950 (entering/re-entering Standing)
+[1779909148568] [Standing] MidBody pos -0.1049,0.9497,-0.0230 vel -0.0000,-0.0001,-0.0001 (only root is pinned; MidBody can wobble)
+[1779909148693] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909148693] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909148819] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909148944] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909148944] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149068] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel -0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149194] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909149194] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel -0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149318] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149443] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909149443] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149569] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149693] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909149693] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149818] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909149943] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909149943] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150068] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150193] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.01,1.42,-0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909150193] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150319] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150444] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909150444] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150568] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150693] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.01,1.42,-0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909150693] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150818] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909150943] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.01,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909150943] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151068] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151193] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909151193] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151318] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151444] [Limbs] pelvis 0.00,0.95,-0.02 spine -0.10,0.95,-0.02 head -0.15,0.10,-0.05 L_foot 0.00,1.21,-0.02 R_foot 0.02,1.42,0.00 L_hand 0.14,0.10,-0.05 R_hand 0.00,1.01,-0.02
+[1779909151444] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151568] [Standing] MidBody pos -0.1049,0.9498,-0.0230 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909151631] [Pose] Jump crouch
+[1779909151694] [Limbs] pelvis 0.00,0.88,-0.02 spine -0.10,0.88,-0.02 head -0.14,0.23,-0.47 L_foot 0.00,1.15,-0.02 R_foot 0.02,1.35,0.00 L_hand 0.14,0.23,-0.47 R_hand 0.00,0.94,-0.02
+[1779909151694] [Standing] MidBody pos -0.1049,0.8813,-0.0229 vel 0.0011,-0.2891,-0.3264 (only root is pinned; MidBody can wobble)
+[1779909151731] [Pose] Jump launch vy=5.50 m/s
+[1779909151735] [UI] Mode -> Ragdoll
+[1779909151943] [Limbs] pelvis 0.00,0.25,0.35 spine -0.10,0.26,0.34 head -0.14,0.17,-0.43 L_foot -0.01,0.42,0.25 R_foot -0.01,0.41,0.04 L_hand 0.15,0.18,-0.42 R_hand 0.00,0.30,0.37
+[1779909151948] [Pose] Jump landed -> Standing at (0.00, 0.37)
+[1779909151952] [UI] Mode -> Standing
+[1779909152068] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152194] [Limbs] pelvis 0.00,0.95,0.37 spine -0.10,0.95,0.37 head -0.14,0.10,0.34 L_foot 0.00,1.21,0.37 R_foot 0.02,1.42,0.39 L_hand 0.15,0.10,0.34 R_hand 0.00,1.01,0.37
+[1779909152194] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152318] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152443] [Limbs] pelvis 0.00,0.95,0.37 spine -0.10,0.95,0.37 head -0.14,0.10,0.34 L_foot 0.00,1.21,0.37 R_foot 0.02,1.42,0.39 L_hand 0.15,0.10,0.34 R_hand 0.00,1.01,0.37
+[1779909152443] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152569] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152693] [Limbs] pelvis 0.00,0.95,0.37 spine -0.10,0.95,0.37 head -0.14,0.10,0.34 L_foot 0.00,1.21,0.37 R_foot 0.02,1.42,0.39 L_hand 0.15,0.10,0.34 R_hand 0.00,1.01,0.37
+[1779909152693] [Standing] MidBody pos -0.1034,0.9498,0.3687 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909152715] [Pose] Jump crouch
+[1779909152815] [Pose] Jump launch vy=5.50 m/s
+[1779909152818] [UI] Mode -> Ragdoll
+[1779909152943] [Limbs] pelvis 0.00,0.65,0.37 spine -0.10,0.65,0.37 head -0.14,0.21,-0.14 L_foot 0.00,0.90,0.35 R_foot 0.01,1.12,0.37 L_hand 0.13,0.21,-0.14 R_hand 0.00,0.71,0.36
+[1779909153032] [Pose] Jump landed -> Standing at (0.01, 0.76)
+[1779909153035] [UI] Mode -> Standing
+[1779909153068] [Standing] MidBody pos -0.0980,0.9486,0.7563 vel -0.0002,-0.0016,-0.0003 (only root is pinned; MidBody can wobble)
+[1779909153193] [Limbs] pelvis 0.01,0.95,0.76 spine -0.10,0.95,0.76 head -0.14,0.10,0.73 L_foot 0.01,1.21,0.76 R_foot 0.02,1.42,0.78 L_hand 0.15,0.10,0.73 R_hand 0.01,1.01,0.76
+[1779909153193] [Standing] MidBody pos -0.0976,0.9498,0.7561 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909153318] [Standing] MidBody pos -0.0976,0.9498,0.7561 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909153443] [Limbs] pelvis 0.01,0.95,0.76 spine -0.10,0.95,0.76 head -0.14,0.10,0.73 L_foot 0.01,1.21,0.76 R_foot 0.02,1.42,0.78 L_hand 0.15,0.10,0.73 R_hand 0.01,1.01,0.76
+[1779909153443] [Standing] MidBody pos -0.0976,0.9498,0.7561 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909153568] [Standing] MidBody pos -0.0976,0.9498,0.7561 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909153594] [Pose] Jump crouch
+[1779909153693] [Limbs] pelvis 0.01,0.85,0.76 spine -0.10,0.85,0.76 head -0.13,0.37,0.20 L_foot 0.01,1.11,0.76 R_foot 0.02,1.32,0.78 L_hand 0.14,0.37,0.20 R_hand 0.01,0.91,0.76
+[1779909153693] [Standing] MidBody pos -0.0976,0.8498,0.7561 vel 0.0001,-0.0054,-0.0070 (only root is pinned; MidBody can wobble)
+[1779909153694] [Pose] Jump launch vy=5.50 m/s
+[1779909153698] [UI] Mode -> Ragdoll
+[1779909153915] [Pose] Jump landed -> Standing at (0.01, 1.15)
+[1779909153918] [UI] Mode -> Standing
+[1779909153943] [Limbs] pelvis 0.01,0.95,1.15 spine -0.10,0.95,1.15 head -0.14,0.09,1.13 L_foot 0.01,1.25,1.16 R_foot 0.05,1.46,1.15 L_hand 0.16,0.12,1.13 R_hand 0.01,1.02,1.16
+[1779909153944] [Standing] MidBody pos -0.0962,0.9467,1.1549 vel -0.0008,-0.0039,-0.0059 (only root is pinned; MidBody can wobble)
+[1779909154068] [Standing] MidBody pos -0.0936,0.9498,1.1539 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909154193] [Limbs] pelvis 0.01,0.95,1.15 spine -0.09,0.95,1.15 head -0.13,0.10,1.13 L_foot 0.01,1.21,1.15 R_foot 0.03,1.42,1.18 L_hand 0.16,0.10,1.13 R_hand 0.01,1.01,1.15
+[1779909154193] [Standing] MidBody pos -0.0936,0.9498,1.1539 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909154318] [Standing] MidBody pos -0.0936,0.9498,1.1539 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909154335] [Pose] Jump crouch
+[1779909154435] [Pose] Jump launch vy=5.50 m/s
+[1779909154439] [UI] Mode -> Ragdoll
+[1779909154443] [Limbs] pelvis 0.01,0.92,1.15 spine -0.09,0.92,1.15 head -0.13,0.43,0.60 L_foot 0.01,1.19,1.15 R_foot 0.02,1.40,1.17 L_hand 0.15,0.43,0.60 R_hand 0.01,0.98,1.15
+[1779909154656] [Pose] Jump landed -> Standing at (0.02, 1.55)
+[1779909154660] [UI] Mode -> Standing
+[1779909154693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.13,0.10,1.52 L_foot 0.02,1.24,1.56 R_foot 0.05,1.45,1.54 L_hand 0.17,0.11,1.53 R_hand 0.02,1.02,1.55
+[1779909154694] [Standing] MidBody pos -0.0847,0.9484,1.5498 vel -0.0006,-0.0016,-0.0007 (only root is pinned; MidBody can wobble)
+[1779909154818] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909154943] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909154943] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155068] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155193] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909155193] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155318] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155444] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909155444] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155569] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.03,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909155694] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155818] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909155943] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909155943] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156068] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156193] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909156193] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156318] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156444] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909156444] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156568] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156694] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909156694] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156819] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909156943] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909156943] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157068] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157193] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909157193] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157319] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157443] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909157443] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157568] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.21,1.55 R_foot 0.04,1.42,1.57 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909157693] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157818] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel -0.0000,-0.0000,-0.0000 (only root is pinned; MidBody can wobble)
+[1779909157881] [UI] Mode -> Walking
+[1779909157881] [Walk] Entered: root (x,z)=(0.021,1.550) y=0.950 vel=(0.000,0.000,0.000) walk_forward_speed=0.00 walk_speed=1.20 using_anim=1
+[1779909157944] [Walk] phase=0.00 time=0.14 root(0.02,0.95,1.55) v(-0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909157944] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.94,1.55 head 0.10,0.18,1.25 L_foot 0.02,1.19,1.49 R_foot 0.04,1.37,1.38 L_hand -0.04,0.17,1.77 R_hand 0.02,1.00,1.54
+[1779909158068] [Walk] phase=0.00 time=0.41 root(0.02,0.95,1.55) v(-0.01,-0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158193] [Walk] phase=0.00 time=0.69 root(0.02,0.95,1.55) v(-0.01,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim
+[1779909158193] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.56 head 0.10,0.22,1.89 L_foot 0.03,1.19,1.49 R_foot 0.05,1.36,1.37 L_hand -0.06,0.21,1.17 R_hand 0.02,1.00,1.54
+[1779909158319] [Walk] phase=0.00 time=0.96 root(0.02,0.95,1.55) v(0.01,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158444] [Walk] phase=0.00 time=1.24 root(0.02,0.95,1.55) v(0.01,0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158444] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.54 head 0.07,0.21,1.29 L_foot 0.00,1.19,1.50 R_foot 0.02,1.37,1.39 L_hand -0.09,0.31,1.94 R_hand 0.02,1.01,1.55
+[1779909158568] [Walk] phase=0.00 time=1.51 root(0.02,0.95,1.55) v(0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158693] [Walk] phase=0.00 time=1.79 root(0.02,0.95,1.55) v(-0.01,0.00,-0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158693] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.94,1.56 head 0.12,0.34,1.83 L_foot 0.03,1.19,1.50 R_foot 0.06,1.37,1.39 L_hand -0.03,0.18,1.44 R_hand 0.02,1.01,1.55
+[1779909158818] [Walk] phase=0.00 time=2.06 root(0.02,0.95,1.55) v(0.01,-0.00,-0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158943] [Walk] phase=0.00 time=2.34 root(0.02,0.95,1.55) v(-0.01,-0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909158943] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.54 head 0.07,0.17,1.57 L_foot 0.01,1.19,1.50 R_foot 0.02,1.37,1.39 L_hand -0.09,0.28,1.63 R_hand 0.02,1.01,1.55
+[1779909159069] [Walk] phase=0.00 time=2.61 root(0.02,0.95,1.55) v(-0.02,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159194] [Walk] phase=0.00 time=2.89 root(0.02,0.95,1.55) v(-0.01,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159194] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.94,1.55 head 0.10,0.19,1.40 L_foot 0.02,1.19,1.49 R_foot 0.04,1.37,1.38 L_hand -0.04,0.16,1.69 R_hand 0.02,1.01,1.54
+[1779909159318] [Walk] phase=0.00 time=3.16 root(0.02,0.95,1.55) v(0.02,0.00,-0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159443] [Walk] phase=0.00 time=3.44 root(0.02,0.95,1.55) v(-0.01,-0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim
+[1779909159443] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.56 head 0.09,0.19,1.82 L_foot 0.02,1.19,1.49 R_foot 0.05,1.36,1.37 L_hand -0.08,0.21,1.17 R_hand 0.02,1.00,1.54
+[1779909159568] [Walk] phase=0.00 time=3.71 root(0.02,0.95,1.55) v(0.01,-0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159693] [Walk] phase=0.00 time=3.99 root(0.02,0.95,1.55) v(0.03,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159693] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.95,1.54 head 0.08,0.21,1.21 L_foot 0.00,1.19,1.49 R_foot 0.02,1.37,1.38 L_hand -0.07,0.26,1.95 R_hand 0.02,1.01,1.54
+[1779909159818] [Walk] phase=0.00 time=4.26 root(0.02,0.95,1.55) v(0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159943] [Walk] phase=0.00 time=4.54 root(0.02,0.95,1.55) v(-0.02,0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909159944] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.95,1.56 head 0.12,0.33,1.91 L_foot 0.03,1.19,1.50 R_foot 0.06,1.37,1.38 L_hand -0.03,0.20,1.36 R_hand 0.02,1.01,1.55
+[1779909160069] [Walk] phase=0.00 time=4.81 root(0.02,0.95,1.55) v(-0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160193] [Walk] phase=0.00 time=5.09 root(0.02,0.95,1.55) v(-0.01,-0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160193] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.54 head 0.06,0.18,1.49 L_foot 0.00,1.19,1.50 R_foot 0.02,1.37,1.39 L_hand -0.10,0.33,1.75 R_hand 0.01,1.01,1.55
+[1779909160318] [Walk] phase=0.00 time=5.36 root(0.02,0.95,1.55) v(-0.01,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim
+[1779909160443] [Walk] phase=0.00 time=5.64 root(0.02,0.95,1.55) v(-0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160444] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.94,1.56 head 0.10,0.23,1.55 L_foot 0.03,1.19,1.50 R_foot 0.05,1.37,1.39 L_hand -0.04,0.15,1.62 R_hand 0.02,1.01,1.55
+[1779909160568] [Walk] phase=0.00 time=5.91 root(0.02,0.95,1.55) v(0.01,0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160693] [Walk] phase=0.00 time=6.19 root(0.02,0.95,1.55) v(0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160693] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.96,1.55 head 0.08,0.17,1.74 L_foot 0.02,1.19,1.49 R_foot 0.04,1.37,1.37 L_hand -0.09,0.19,1.27 R_hand 0.02,1.00,1.54
+[1779909160819] [Walk] phase=0.00 time=6.46 root(0.02,0.95,1.55) v(-0.01,0.00,-0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160943] [Walk] phase=0.00 time=6.74 root(0.02,0.95,1.55) v(0.03,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909160944] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.94,1.54 head 0.09,0.21,1.17 L_foot 0.01,1.19,1.49 R_foot 0.03,1.37,1.37 L_hand -0.06,0.22,1.89 R_hand 0.02,1.01,1.54
+[1779909161069] [Walk] phase=0.00 time=7.01 root(0.02,0.95,1.55) v(-0.01,-0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909161194] [Walk] phase=0.00 time=7.29 root(0.02,0.95,1.55) v(-0.02,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909161194] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.95,1.56 head 0.11,0.29,1.95 L_foot 0.03,1.19,1.50 R_foot 0.05,1.37,1.38 L_hand -0.04,0.21,1.27 R_hand 0.02,1.01,1.55
+[1779909161318] [Walk] phase=0.00 time=7.56 root(0.02,0.95,1.55) v(-0.01,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909161443] [Walk] phase=0.00 time=7.84 root(0.02,0.95,1.55) v(0.01,0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909161443] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.54 head 0.06,0.20,1.41 L_foot -0.00,1.19,1.50 R_foot 0.02,1.37,1.39 L_hand -0.11,0.35,1.85 R_hand 0.01,1.01,1.55
+[1779909161568] [Walk] phase=0.00 time=8.11 root(0.02,0.95,1.55) v(-0.01,-0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim
+[1779909161594] [UI] Mode -> Standing
+[1779909161694] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909161694] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909161819] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909161943] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909161943] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162068] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162193] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909162193] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162319] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162444] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909162444] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162568] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909162693] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162818] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909162944] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909162944] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163069] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163194] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909163194] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163318] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163443] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909163443] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163568] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909163693] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163818] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909163943] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909163943] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909164068] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909164106] [UI] Mode -> Raise leg
+[1779909164194] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.70,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909164443] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909164693] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909164948] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909165202] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909165452] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909165702] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.74,0.84 L_foot 0.02,1.20,1.55 R_foot 0.05,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909165744] [UI] Mode -> Standing
+[1779909165831] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909165956] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909165956] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166081] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166206] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909166206] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166331] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166456] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909166456] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166581] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166706] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.03,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909166706] [Standing] MidBody pos -0.0843,0.9498,1.5497 vel 0.0000,0.0000,0.0000 (only root is pinned; MidBody can wobble)
+[1779909166752] [UI] Mode -> Punch L
+[1779909166956] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909167206] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909167456] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909167718] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909167974] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909168227] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909168477] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909168727] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909168977] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909169227] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909169477] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909169727] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909169977] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909170227] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909170477] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909170727] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909170977] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909171227] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909171477] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909171727] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909171981] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909172231] [Limbs] pelvis 0.02,0.95,1.55 spine -0.08,0.95,1.55 head -0.12,0.10,1.52 L_foot 0.02,1.20,1.55 R_foot 0.02,1.41,1.58 L_hand 0.17,0.10,1.52 R_hand 0.02,1.01,1.55
+[1779909172327] [UI] Mode -> Walking
+[1779909172327] [Walk] Entered: root (x,z)=(0.021,1.550) y=0.950 vel=(0.000,0.000,0.000) walk_forward_speed=0.00 walk_speed=1.20 using_anim=1
+[1779909172356] [Walk] phase=0.00 time=0.06 root(0.02,0.95,1.55) v(-0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909172481] [Walk] phase=0.00 time=0.34 root(0.02,0.95,1.55) v(0.02,0.00,-0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909172481] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.96,1.54 head 0.06,0.20,1.35 L_foot 0.00,1.19,1.50 R_foot 0.02,1.37,1.39 L_hand -0.10,0.34,1.91 R_hand 0.02,1.01,1.55
+[1779909172606] [Walk] phase=0.00 time=0.61 root(0.02,0.95,1.55) v(-0.00,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim
+[1779909172731] [Walk] phase=0.00 time=0.89 root(0.02,0.95,1.55) v(0.00,-0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909172731] [Limbs] pelvis 0.02,0.95,1.55 spine 0.12,0.94,1.56 head 0.12,0.33,1.76 L_foot 0.03,1.19,1.50 R_foot 0.06,1.37,1.39 L_hand -0.03,0.17,1.50 R_hand 0.02,1.01,1.55
+[1779909172856] [Walk] phase=0.00 time=1.16 root(0.02,0.95,1.55) v(0.03,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909172981] [Walk] phase=0.00 time=1.44 root(0.02,0.95,1.55) v(0.00,0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909172981] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.96,1.54 head 0.07,0.16,1.62 L_foot 0.01,1.19,1.50 R_foot 0.03,1.37,1.38 L_hand -0.09,0.23,1.52 R_hand 0.02,1.01,1.55
+[1779909173106] [Walk] phase=0.00 time=1.71 root(0.02,0.95,1.55) v(-0.02,0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909173231] [Walk] phase=0.00 time=1.99 root(0.02,0.95,1.55) v(-0.01,0.00,0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909173231] [Limbs] pelvis 0.02,0.95,1.55 spine 0.13,0.94,1.55 head 0.10,0.18,1.29 L_foot 0.02,1.19,1.49 R_foot 0.04,1.37,1.38 L_hand -0.04,0.17,1.75 R_hand 0.02,1.00,1.54
+[1779909173356] [Walk] phase=0.00 time=2.26 root(0.02,0.95,1.55) v(0.01,0.00,0.00) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.37 anim
+[1779909173481] [Walk] phase=0.00 time=2.54 root(0.02,0.95,1.55) v(-0.01,-0.00,-0.01) pelvis_y=0.95 L_foot_y=1.19 R_foot_y=1.36 anim

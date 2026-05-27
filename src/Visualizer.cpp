@@ -245,8 +245,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     else if (key == GLFW_KEY_4)
       app->ctrl->mode = MotionMode::StandingRaiseLeg;
     else if (key == GLFW_KEY_5)
-      app->ctrl->mode = MotionMode::Fist;
+      app->ctrl->mode = MotionMode::PunchRight;
     else if (key == GLFW_KEY_6)
+      app->ctrl->mode = MotionMode::PunchLeft;
+    else if (key == GLFW_KEY_7)
       app->ctrl->mode = MotionMode::FrontKick;
     else if (key == GLFW_KEY_SPACE)
       app->ctrl->jump_triggered = true;
@@ -273,8 +275,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       ctrl_state.mode = MotionMode::Standing;
     if (ImGui::Button("Raise leg", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::StandingRaiseLeg;
-    if (ImGui::Button("Fist", ImVec2(160, 0)))
-      ctrl_state.mode = MotionMode::Fist;
+    if (ImGui::Button("Punch R", ImVec2(160, 0)))
+      ctrl_state.mode = MotionMode::PunchRight;
+    if (ImGui::Button("Punch L", ImVec2(160, 0)))
+      ctrl_state.mode = MotionMode::PunchLeft;
     if (ImGui::Button("Front kick", ImVec2(160, 0)))
       ctrl_state.mode = MotionMode::FrontKick;
     if (ImGui::Button("Walk", ImVec2(160, 0)))
@@ -382,8 +386,10 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         log("[UI] Mode -> Standing");
       else if (ctrl_state.mode == MotionMode::StandingRaiseLeg)
         log("[UI] Mode -> Raise leg");
-      else if (ctrl_state.mode == MotionMode::Fist)
-        log("[UI] Mode -> Fist");
+      else if (ctrl_state.mode == MotionMode::PunchRight)
+        log("[UI] Mode -> Punch R");
+      else if (ctrl_state.mode == MotionMode::PunchLeft)
+        log("[UI] Mode -> Punch L");
       else if (ctrl_state.mode == MotionMode::FrontKick)
         log("[UI] Mode -> Front kick");
       else if (ctrl_state.mode == MotionMode::Walking)
