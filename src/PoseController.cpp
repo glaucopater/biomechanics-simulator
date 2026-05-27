@@ -8,6 +8,7 @@
 #include <Jolt/Skeleton/SkeletonPose.h>
 #include <Jolt/Skeleton/SkeletalAnimation.h>
 #include <cmath>
+#include <algorithm>
 #include <cstdio>
 
 namespace biomechanics {
@@ -18,9 +19,8 @@ using namespace JPH;
 
 constexpr float TWO_PI = 6.28318530718f;
 
-// Human ragdoll body indices (from HumanRagdoll): 0=LowerBody, 1=MidBody, 2=UpperBody, 3=Head,
-// 4=UpperArmL, 5=UpperArmR, 6=LowerArmL, 7=LowerArmR, 8=UpperLegL, 9=UpperLegR, 10=LowerLegL, 11=LowerLegR
-enum HumanBodyIndex : int {
+// Procedural 12-bone rig indices (create_human_ragdoll_settings).
+enum ProceduralJoint : int {
   LowerBody = 0,
   MidBody = 1,
   UpperBody = 2,
@@ -35,8 +35,85 @@ enum HumanBodyIndex : int {
   LowerLegR = 11,
 };
 
+/** Resolved skeleton joint indices for pose authoring (Human.tof or procedural). */
+struct RigJoints {
+  int r_thigh = -1;
+  int r_shin = -1;
+  int l_thigh = -1;
+  int l_shin = -1;
+  int r_upper_arm = -1;
+  int r_forearm = -1;
+  int l_upper_arm = -1;
+  int l_forearm = -1;
+  int torso = -1;
+  int torso_upper = -1;
+  int r_foot = -1;
+  int l_foot = -1;
+  /** When true, rotations are composed on top of the sampled neutral pose. */
+  bool compose_on_base = false;
+};
+
 Quat rotation_axis(Vec3Arg axis, float angle_rad) {
   return Quat::sRotation(axis, angle_rad);
+}
+
+RigJoints resolve_rig_joints(const Skeleton* skel) {
+  RigJoints j;
+  if (!skel)
+    return j;
+  if (skel->GetJointIndex("R_Arm_sjnt_0") >= 0) {
+    j.compose_on_base = true;
+    j.r_thigh = skel->GetJointIndex("R_Leg_sjnt_0");
+    j.r_shin = skel->GetJointIndex("R_Leg_sjnt_1");
+    j.l_thigh = skel->GetJointIndex("L_Leg_sjnt_0");
+    j.l_shin = skel->GetJointIndex("L_Leg_sjnt_1");
+    j.r_upper_arm = skel->GetJointIndex("R_Arm_sjnt_0");
+    j.r_forearm = skel->GetJointIndex("R_Arm_sjnt_1");
+    j.l_upper_arm = skel->GetJointIndex("L_Arm_sjnt_0");
+    j.l_forearm = skel->GetJointIndex("L_Arm_sjnt_1");
+    j.torso = skel->GetJointIndex("C_Spine_sjnt_0");
+    j.torso_upper = skel->GetJointIndex("C_Spine_sjnt_4");
+    j.r_foot = skel->GetJointIndex("R_Foot_sjnt_0");
+    j.l_foot = skel->GetJointIndex("L_Foot_sjnt_0");
+    return j;
+  }
+  if (skel->GetJointCount() >= 12) {
+    j.r_thigh = UpperLegR;
+    j.r_shin = LowerLegR;
+    j.l_thigh = UpperLegL;
+    j.l_shin = LowerLegL;
+    j.r_upper_arm = UpperArmR;
+    j.r_forearm = LowerArmR;
+    j.l_upper_arm = UpperArmL;
+    j.l_forearm = LowerArmL;
+    j.torso = MidBody;
+    j.torso_upper = UpperBody;
+  }
+  return j;
+}
+
+bool rig_has_limbs(const RigJoints& rig, bool arms, bool legs) {
+  if (arms && (rig.r_upper_arm < 0 || rig.l_upper_arm < 0 || rig.r_forearm < 0))
+    return false;
+  if (legs && (rig.r_thigh < 0 || rig.r_shin < 0 || rig.l_thigh < 0))
+    return false;
+  return true;
+}
+
+void apply_joint_rotation(SkeletonPose& pose, const RigJoints& rig, int joint_idx,
+                          Vec3Arg axis, float angle_rad, const Quat& absolute_rot) {
+  if (joint_idx < 0)
+    return;
+  auto& joint = pose.GetJoint(static_cast<uint>(joint_idx));
+  if (rig.compose_on_base)
+    joint.mRotation = rotation_axis(axis, angle_rad) * joint.mRotation;
+  else
+    joint.mRotation = absolute_rot;
+}
+
+float smoothstep01(float t) {
+  t = std::clamp(t, 0.f, 1.f);
+  return t * t * (3.f - 2.f * t);
 }
 
 void build_neutral_pose(const Ragdoll* ragdoll, const RagdollSettings* settings, SkeletonPose& pose) {
@@ -60,6 +137,34 @@ void build_neutral_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
   pose.CalculateJointMatrices();
 }
 
+void sample_standing_base_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                               const SkeletalAnimation* standing_anim,
+                               const SimulatorConfig& config, SkeletonPose& pose) {
+  const Skeleton* skel = settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() == 0)
+    return;
+  pose.SetSkeleton(skel);
+  if (standing_anim) {
+    standing_anim->Sample(0.0f, pose);
+    SkeletonPose::JointState& joint0 = pose.GetJoint(0);
+    joint0.mTranslation = Vec3::sZero();
+    RVec3 root_offset;
+    ragdoll->GetRootTransform(root_offset, joint0.mRotation, true);
+    root_offset = RVec3(root_offset.GetX(), (JPH::Real)config.standing_min_height, root_offset.GetZ());
+    pose.SetRootOffset(root_offset);
+  } else {
+    build_neutral_pose(ragdoll, settings, pose);
+    RVec3 root_off = pose.GetRootOffset();
+    root_off = RVec3(root_off.GetX(), (JPH::Real)config.standing_min_height, root_off.GetZ());
+    pose.SetRootOffset(root_off);
+  }
+  pose.CalculateJointMatrices();
+}
+
+void apply_kinematic_pose(Ragdoll* ragdoll, const SkeletonPose& pose, float dt) {
+  ragdoll->DriveToPoseUsingKinematics(pose, dt);
+}
+
 void build_walk_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
                     float phase, const SimulatorConfig& config, SkeletonPose& pose) {
   const Skeleton* skel = settings->GetSkeleton();
@@ -74,59 +179,179 @@ void build_walk_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
     pose.GetJoint(i).mRotation = (i == 0) ? root_rot : Quat::sIdentity();
     pose.GetJoint(i).mTranslation = Vec3::sZero();
   }
-  float hip_l = config.walk_hip_amplitude * std::sin(phase);
-  float hip_r = config.walk_hip_amplitude * std::sin(phase + JPH_PI);
-  float knee_l = config.walk_knee_amplitude * (std::sin(phase) > 0 ? std::sin(phase) : 0.f);
-  float knee_r = config.walk_knee_amplitude * (std::sin(phase + JPH_PI) > 0 ? std::sin(phase + JPH_PI) : 0.f);
-  float arm_l = config.walk_arm_amplitude * std::sin(phase + JPH_PI);
-  float arm_r = config.walk_arm_amplitude * std::sin(phase);
-  // Twist axes from HumanRagdoll: legs -Y, arms left -X right +X
-  pose.GetJoint(UpperLegL).mRotation = rotation_axis(-Vec3::sAxisY(), hip_l);
-  pose.GetJoint(UpperLegR).mRotation = rotation_axis(-Vec3::sAxisY(), hip_r);
-  pose.GetJoint(LowerLegL).mRotation = rotation_axis(Vec3::sAxisX(), knee_l);
-  pose.GetJoint(LowerLegR).mRotation = rotation_axis(Vec3::sAxisX(), knee_r);
-  pose.GetJoint(UpperArmL).mRotation = rotation_axis(-Vec3::sAxisX(), arm_l);
-  pose.GetJoint(UpperArmR).mRotation = rotation_axis(Vec3::sAxisX(), arm_r);
+  const float sin_l = std::sin(phase);
+  const float sin_r = std::sin(phase + JPH_PI);
+  const float hip_l = config.walk_hip_amplitude * sin_l;
+  const float hip_r = config.walk_hip_amplitude * sin_r;
+  const float knee_l = config.walk_knee_amplitude * std::max(0.f, sin_l);
+  const float knee_r = config.walk_knee_amplitude * std::max(0.f, sin_r);
+  const float arm_l = config.walk_arm_amplitude * sin_r;
+  const float arm_r = config.walk_arm_amplitude * sin_l;
+  const float torso_sway = 0.06f * sin_l;
+  const RigJoints rig = resolve_rig_joints(skel);
+  if (!rig_has_limbs(rig, true, true))
+    return;
+  apply_joint_rotation(pose, rig, rig.l_thigh, -Vec3::sAxisY(), hip_l,
+                       rotation_axis(-Vec3::sAxisY(), hip_l));
+  apply_joint_rotation(pose, rig, rig.r_thigh, -Vec3::sAxisY(), hip_r,
+                       rotation_axis(-Vec3::sAxisY(), hip_r));
+  apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisX(), knee_l,
+                       rotation_axis(Vec3::sAxisX(), knee_l));
+  apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee_r,
+                       rotation_axis(Vec3::sAxisX(), knee_r));
+  apply_joint_rotation(pose, rig, rig.l_upper_arm, -Vec3::sAxisX(), arm_l,
+                       rotation_axis(-Vec3::sAxisX(), arm_l));
+  apply_joint_rotation(pose, rig, rig.r_upper_arm, Vec3::sAxisX(), arm_r,
+                       rotation_axis(Vec3::sAxisX(), arm_r));
+  apply_joint_rotation(pose, rig, rig.torso, Vec3::sAxisY(), torso_sway,
+                       rotation_axis(Vec3::sAxisY(), torso_sway));
   pose.CalculateJointMatrices();
 }
 
-void build_standing_raise_leg_pose(const Ragdoll* ragdoll, const RagdollSettings* settings, SkeletonPose& pose) {
+void build_standing_raise_leg_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                                   const SkeletalAnimation* standing_anim,
+                                   float ease, const SimulatorConfig& config, SkeletonPose& pose) {
   const Skeleton* skel = settings->GetSkeleton();
-  if (!skel || skel->GetJointCount() < 12) return;
-  pose.SetSkeleton(skel);
-  RVec3 root_pos;
-  Quat root_rot;
-  ragdoll->GetRootTransform(root_pos, root_rot, true);
-  pose.SetRootOffset(root_pos);
-  for (uint i = 0; i < skel->GetJointCount(); ++i) {
-    pose.GetJoint(i).mRotation = (i == 0) ? root_rot : Quat::sIdentity();
-    pose.GetJoint(i).mTranslation = Vec3::sZero();
+  const RigJoints rig = resolve_rig_joints(skel);
+  if (!skel || !rig_has_limbs(rig, false, true))
+    return;
+  sample_standing_base_pose(ragdoll, settings, standing_anim, config, pose);
+  const float hip_raise = config.raise_leg_hip * ease;
+  const float knee_raise = config.raise_leg_knee * ease;
+  const float lean_support_rad = -0.12f * ease;
+  if (rig.compose_on_base) {
+    apply_joint_rotation(pose, rig, rig.r_thigh, Vec3::sAxisX(), hip_raise, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee_raise, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisZ(), lean_support_rad, Quat::sIdentity());
+  } else {
+    apply_joint_rotation(pose, rig, rig.l_thigh, Vec3::sAxisY(), 0.f, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisY(), 0.f, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_thigh, -Vec3::sAxisY(), hip_raise,
+                         rotation_axis(-Vec3::sAxisY(), hip_raise));
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee_raise,
+                         rotation_axis(Vec3::sAxisX(), knee_raise));
+    apply_joint_rotation(pose, rig, rig.torso, Vec3::sAxisZ(), lean_support_rad,
+                         rotation_axis(Vec3::sAxisZ(), lean_support_rad));
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisZ(), lean_support_rad,
+                         rotation_axis(Vec3::sAxisZ(), lean_support_rad));
   }
-  // Raise right leg: hip flexion (forward) ~0.85 rad, knee flexion ~0.9 rad. Left leg straight.
-  const float hip_raise = 0.85f;
-  const float knee_raise = 0.9f;
-  pose.GetJoint(UpperLegL).mRotation = Quat::sIdentity();
-  pose.GetJoint(UpperLegR).mRotation = rotation_axis(-Vec3::sAxisY(), hip_raise);
-  pose.GetJoint(LowerLegL).mRotation = Quat::sIdentity();
-  pose.GetJoint(LowerLegR).mRotation = rotation_axis(Vec3::sAxisX(), knee_raise);
-  // Lean torso slightly toward support leg (left) so COM stays over standing foot and balance is stable.
-  const float lean_support_rad = -0.12f;  // rotation around Z: lean left
-  pose.GetJoint(MidBody).mRotation = rotation_axis(Vec3::sAxisZ(), lean_support_rad);
-  pose.GetJoint(UpperBody).mRotation = rotation_axis(Vec3::sAxisZ(), lean_support_rad);
   pose.CalculateJointMatrices();
 }
 
-void apply_standing_raise_leg_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
-                                   const SimulatorConfig& config) {
+void build_punch_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                      const SkeletalAnimation* standing_anim, float ease,
+                      const SimulatorConfig& config, bool left_punch, SkeletonPose& pose) {
   const Skeleton* skel = settings->GetSkeleton();
-  if (!skel || skel->GetJointCount() < 12) return;
-  SkeletonPose pose;
-  build_standing_raise_leg_pose(ragdoll, settings, pose);
-  RVec3 root_off = pose.GetRootOffset();
-  root_off = RVec3(root_off.GetX(), (JPH::Real)config.standing_min_height, root_off.GetZ());
-  pose.SetRootOffset(root_off);
+  const RigJoints rig = resolve_rig_joints(skel);
+  if (!skel || !rig_has_limbs(rig, true, false))
+    return;
+  sample_standing_base_pose(ragdoll, settings, standing_anim, config, pose);
+  const float punch = config.punch_arm * ease;
+  const float elbow = config.punch_elbow * ease;
+  const float guard = config.punch_guard_arm * ease;
+  const float torso_twist = 0.18f * ease;
+  const int punch_upper = left_punch ? rig.l_upper_arm : rig.r_upper_arm;
+  const int punch_forearm = left_punch ? rig.l_forearm : rig.r_forearm;
+  const int guard_upper = left_punch ? rig.r_upper_arm : rig.l_upper_arm;
+  const int guard_forearm = left_punch ? rig.r_forearm : rig.l_forearm;
+  // Limbs are already mirrored in the rig; swap sides but keep the same joint deltas as Punch R.
+  const float torso_twist_signed = left_punch ? -torso_twist : torso_twist;
+  if (rig.compose_on_base) {
+    apply_joint_rotation(pose, rig, punch_upper, Vec3::sAxisY(), punch, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, punch_forearm, Vec3::sAxisX(), -elbow, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, guard_upper, Vec3::sAxisY(), -guard, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, guard_forearm, Vec3::sAxisX(), 0.55f * ease, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisY(), torso_twist_signed, Quat::sIdentity());
+  } else {
+    apply_joint_rotation(pose, rig, punch_upper, Vec3::sAxisX(), punch,
+                         rotation_axis(Vec3::sAxisX(), punch));
+    apply_joint_rotation(pose, rig, punch_forearm, Vec3::sAxisX(), -elbow,
+                         rotation_axis(Vec3::sAxisX(), -elbow));
+    apply_joint_rotation(pose, rig, guard_upper, Vec3::sAxisX(), -guard,
+                         rotation_axis(Vec3::sAxisX(), -guard));
+    apply_joint_rotation(pose, rig, guard_forearm, Vec3::sAxisX(), 0.55f * ease,
+                         rotation_axis(Vec3::sAxisX(), 0.55f * ease));
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisY(), torso_twist_signed,
+                         rotation_axis(Vec3::sAxisY(), torso_twist_signed));
+    apply_joint_rotation(pose, rig, rig.torso, Vec3::sAxisY(), 0.5f * torso_twist_signed,
+                         rotation_axis(Vec3::sAxisY(), 0.5f * torso_twist_signed));
+  }
   pose.CalculateJointMatrices();
-  ragdoll->DriveToPoseUsingMotors(pose);
+}
+
+void build_front_kick_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                           const SkeletalAnimation* standing_anim, float ease,
+                           const SimulatorConfig& config, SkeletonPose& pose) {
+  const Skeleton* skel = settings->GetSkeleton();
+  const RigJoints rig = resolve_rig_joints(skel);
+  if (!skel || !rig_has_limbs(rig, true, true))
+    return;
+  sample_standing_base_pose(ragdoll, settings, standing_anim, config, pose);
+  const float hip = config.kick_hip * ease;
+  const float knee = config.kick_knee * ease;
+  const float plant_knee = config.kick_plant_knee * ease;
+  const float lean_back = 0.10f * ease;
+  const float guard = 0.45f * ease;
+  if (rig.compose_on_base) {
+    // Hip flex forward (-Z); +X was driving the foot behind the body.
+    apply_joint_rotation(pose, rig, rig.r_thigh, -Vec3::sAxisY(), hip, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_foot, Vec3::sAxisX(), 0.25f * ease, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisX(), plant_knee, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_upper_arm, Vec3::sAxisY(), -guard, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_upper_arm, Vec3::sAxisY(), guard, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_forearm, Vec3::sAxisX(), 0.35f * ease, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_forearm, Vec3::sAxisX(), -0.35f * ease, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisX(), -lean_back, Quat::sIdentity());
+  } else {
+    apply_joint_rotation(pose, rig, rig.r_thigh, -Vec3::sAxisY(), hip,
+                         rotation_axis(-Vec3::sAxisY(), hip));
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee,
+                         rotation_axis(Vec3::sAxisX(), knee));
+    apply_joint_rotation(pose, rig, rig.l_thigh, Vec3::sAxisY(), 0.f, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisX(), plant_knee,
+                         rotation_axis(Vec3::sAxisX(), plant_knee));
+    apply_joint_rotation(pose, rig, rig.l_upper_arm, -Vec3::sAxisX(), guard,
+                         rotation_axis(-Vec3::sAxisX(), guard));
+    apply_joint_rotation(pose, rig, rig.r_upper_arm, Vec3::sAxisX(), guard,
+                         rotation_axis(Vec3::sAxisX(), guard));
+    apply_joint_rotation(pose, rig, rig.l_forearm, -Vec3::sAxisX(), 0.35f * ease,
+                         rotation_axis(-Vec3::sAxisX(), 0.35f * ease));
+    apply_joint_rotation(pose, rig, rig.r_forearm, Vec3::sAxisX(), 0.35f * ease,
+                         rotation_axis(Vec3::sAxisX(), 0.35f * ease));
+    apply_joint_rotation(pose, rig, rig.torso, Vec3::sAxisX(), -lean_back,
+                         rotation_axis(Vec3::sAxisX(), -lean_back));
+    apply_joint_rotation(pose, rig, rig.torso_upper, Vec3::sAxisX(), -lean_back,
+                         rotation_axis(Vec3::sAxisX(), -lean_back));
+  }
+  pose.CalculateJointMatrices();
+}
+
+void apply_action_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
+                       const SkeletalAnimation* standing_anim, float dt,
+                       const SimulatorConfig& config, ControllerState& state,
+                       MotionMode mode) {
+  state.action_time += dt;
+  const float t = std::min(1.f, state.action_time / config.action_pose_duration);
+  const float ease = smoothstep01(t);
+  SkeletonPose pose;
+  switch (mode) {
+    case MotionMode::StandingRaiseLeg:
+      build_standing_raise_leg_pose(ragdoll, settings, standing_anim, ease, config, pose);
+      break;
+    case MotionMode::PunchRight:
+      build_punch_pose(ragdoll, settings, standing_anim, ease, config, false, pose);
+      break;
+    case MotionMode::PunchLeft:
+      build_punch_pose(ragdoll, settings, standing_anim, ease, config, true, pose);
+      break;
+    case MotionMode::FrontKick:
+      build_front_kick_pose(ragdoll, settings, standing_anim, ease, config, pose);
+      break;
+    default:
+      return;
+  }
+  apply_kinematic_pose(ragdoll, pose, dt);
 }
 
 void apply_standing_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
@@ -161,25 +386,27 @@ void apply_walking_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
   if (!skel || skel->GetJointCount() == 0) return;
   pose.SetSkeleton(skel);
   if (walking_anim) {
-    state.walk_time += dt;
+    state.walk_time += dt * config.walk_anim_playback;
     walking_anim->Sample(state.walk_time, pose);
-    SkeletonPose::JointState& joint0 = pose.GetJoint(0);
-    joint0.mTranslation = Vec3::sZero();
-    RVec3 root_offset;
-    ragdoll->GetRootTransform(root_offset, joint0.mRotation, true);
+    if (!state.walk_root_origin_valid) {
+      Quat root_rot;
+      ragdoll->GetRootTransform(state.walk_root_origin, root_rot, true);
+      state.walk_anim_root_at_start = pose.GetRootOffset();
+      state.walk_root_origin_valid = true;
+    }
+    RVec3 anim_root = pose.GetRootOffset();
+    RVec3 root_offset = state.walk_root_origin + (anim_root - state.walk_anim_root_at_start);
     if (config.walk_forward_speed > 0.f) {
+      SkeletonPose::JointState& joint0 = pose.GetJoint(0);
       Vec3 forward = joint0.mRotation * Vec3(0.f, 0.f, -1.f);
-      root_offset += RVec3(forward * (config.walk_forward_speed * dt));
+      root_offset += RVec3(forward * (config.walk_forward_speed * state.walk_time));
     }
     pose.SetRootOffset(root_offset);
+    SkeletonPose::JointState& joint0 = pose.GetJoint(0);
+    joint0.mTranslation = Vec3::sZero();
     pose.CalculateJointMatrices();
-    // #region agent log
-    debug_instrument_walk("PoseController.cpp:apply_walking_pose", "D,E", "target",
-      0.f, 0.f, 0.f, static_cast<float>(root_offset.GetX()), static_cast<float>(root_offset.GetY()), static_cast<float>(root_offset.GetZ()), dt);
-    // #endregion
-    ragdoll->DriveToPoseUsingKinematics(pose, dt);  // file rig often has no motors; Kinematics holds pose
+    ragdoll->DriveToPoseUsingKinematics(pose, dt);
   } else {
-    // Procedural walk uses 12-joint indices (UpperLegL=8, etc.); use only when skeleton matches.
     const uint joint_count = skel->GetJointCount();
     if (joint_count == 12) {
       build_walk_pose(ragdoll, settings, state.walk_phase, config, pose);
@@ -189,7 +416,7 @@ void apply_walking_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
     } else {
       build_neutral_pose(ragdoll, settings, pose);
     }
-    ragdoll->DriveToPoseUsingMotors(pose);
+    ragdoll->DriveToPoseUsingKinematics(pose, dt);
   }
 }
 
@@ -209,17 +436,84 @@ void reset_ragdoll_to_standing_impl(Ragdoll* ragdoll, const RagdollSettings* set
   ragdoll->ResetWarmStart();
 }
 
-void apply_jump(Ragdoll* ragdoll, BodyInterface& bi, ControllerState& state,
-               const SimulatorConfig& config) {
-  if (!state.jump_triggered)
+void build_jump_crouch_pose(const Ragdoll* ragdoll, const RagdollSettings* settings,
+                            const SkeletalAnimation* standing_anim, float ease,
+                            const SimulatorConfig& config, SkeletonPose& pose) {
+  const Skeleton* skel = settings->GetSkeleton();
+  const RigJoints rig = resolve_rig_joints(skel);
+  if (!skel || !rig_has_limbs(rig, true, true))
     return;
-  state.jump_triggered = false;
+  if (standing_anim)
+    sample_standing_base_pose(ragdoll, settings, standing_anim, config, pose);
+  else
+    build_neutral_pose(ragdoll, settings, pose);
+
+  const float knee = config.jump_crouch_knee * ease;
+  const float hip = config.jump_crouch_hip * ease;
+  const float drop = config.jump_crouch_drop * ease;
+  RVec3 root_offset = pose.GetRootOffset();
+  root_offset = RVec3(root_offset.GetX(), config.standing_min_height - drop, root_offset.GetZ());
+  pose.SetRootOffset(root_offset);
+
+  if (rig.compose_on_base) {
+    apply_joint_rotation(pose, rig, rig.l_thigh, Vec3::sAxisX(), hip, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_thigh, Vec3::sAxisX(), hip, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisX(), knee, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.l_upper_arm, Vec3::sAxisX(), -0.25f * ease, Quat::sIdentity());
+    apply_joint_rotation(pose, rig, rig.r_upper_arm, Vec3::sAxisX(), -0.25f * ease, Quat::sIdentity());
+  } else {
+    apply_joint_rotation(pose, rig, rig.l_thigh, -Vec3::sAxisY(), hip,
+                         rotation_axis(-Vec3::sAxisY(), hip));
+    apply_joint_rotation(pose, rig, rig.r_thigh, -Vec3::sAxisY(), hip,
+                         rotation_axis(-Vec3::sAxisY(), hip));
+    apply_joint_rotation(pose, rig, rig.l_shin, Vec3::sAxisX(), knee,
+                         rotation_axis(Vec3::sAxisX(), knee));
+    apply_joint_rotation(pose, rig, rig.r_shin, Vec3::sAxisX(), knee,
+                         rotation_axis(Vec3::sAxisX(), knee));
+    apply_joint_rotation(pose, rig, rig.l_upper_arm, -Vec3::sAxisX(), -0.25f * ease,
+                         rotation_axis(-Vec3::sAxisX(), -0.25f * ease));
+    apply_joint_rotation(pose, rig, rig.r_upper_arm, Vec3::sAxisX(), -0.25f * ease,
+                         rotation_axis(Vec3::sAxisX(), -0.25f * ease));
+  }
+  pose.CalculateJointMatrices();
+}
+
+void apply_jump_crouch_pose(Ragdoll* ragdoll, const RagdollSettings* settings,
+                            const SkeletalAnimation* standing_anim, float dt,
+                            const SimulatorConfig& config, float ease) {
+  SkeletonPose pose;
+  build_jump_crouch_pose(ragdoll, settings, standing_anim, ease, config, pose);
+  ragdoll->DriveToPoseUsingKinematics(pose, dt);
+}
+
+void launch_jump(Ragdoll* ragdoll, BodyInterface& bi, ControllerState& state,
+                 const SimulatorConfig& config) {
   BodyID root_id = ragdoll->GetBodyID(0);
   if (root_id.IsInvalid())
     return;
-  bi.AddImpulse(root_id, Vec3(0, config.jump_impulse_y, 0));
-  state.jump_frames_hold = 30;
-  log("[Pose] Jump applied (rise then Ragdoll)");
+
+  for (BodyID id : ragdoll->GetBodyIDs()) {
+    if (!id.IsInvalid())
+      bi.SetMotionType(id, EMotionType::Dynamic, EActivation::Activate);
+  }
+
+  constexpr float kLimbJumpVelocityRatio = 0.35f;
+  for (BodyID id : ragdoll->GetBodyIDs()) {
+    if (id.IsInvalid())
+      continue;
+    const float vy = (id == root_id) ? config.jump_velocity_y
+                                     : config.jump_velocity_y * kLimbJumpVelocityRatio;
+    bi.SetLinearVelocity(id, Vec3(0.f, vy, 0.f));
+    bi.SetAngularVelocity(id, Vec3::sZero());
+  }
+
+  state.mode = MotionMode::Ragdoll;
+  state.walk_root_origin_valid = false;
+  state.jump_in_air = true;
+  state.jump_was_airborne = false;
+  state.jump_air_steps = 0;
+  log("[Pose] Jump launch vy=%.2f m/s", config.jump_velocity_y);
 }
 
 }  // namespace
@@ -309,6 +603,95 @@ void capture_standing_pose_as_initial(SimulatorScene& scene) {
   }
 }
 
+namespace {
+
+void recover_standing_at(SimulatorScene& scene, JPH::BodyInterface& bi,
+                         JPH::RVec3 root_offset, JPH::Quat root_rotation) {
+  if (!scene.ragdoll || !scene.ragdoll_settings) return;
+  const JPH::Skeleton* skel = scene.ragdoll_settings->GetSkeleton();
+  if (!skel || skel->GetJointCount() == 0) return;
+  const size_t num_joints = scene.initial_standing_joint_rotations.size();
+  if (num_joints != skel->GetJointCount() || num_joints != scene.initial_standing_joint_translations.size()) {
+    reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings, root_offset, &bi);
+    return;
+  }
+  JPH::SkeletonPose pose;
+  pose.SetSkeleton(skel);
+  pose.SetRootOffset(root_offset);
+  for (size_t i = 0; i < num_joints; ++i) {
+    const JPH::uint ji = static_cast<JPH::uint>(i);
+    pose.GetJoint(ji).mRotation = (i == 0) ? root_rotation : scene.initial_standing_joint_rotations[i];
+    pose.GetJoint(ji).mTranslation = scene.initial_standing_joint_translations[i];
+  }
+  pose.CalculateJointMatrices();
+  scene.ragdoll->SetPose(pose);
+  scene.ragdoll->ResetWarmStart();
+  zero_ragdoll_velocities(scene.ragdoll, bi);
+}
+
+}  // namespace
+
+bool try_recover_standing_after_jump(SimulatorScene& scene,
+                                     ControllerState& state,
+                                     const SimulatorConfig& config,
+                                     JumpLandingResult* out) {
+  if (!state.jump_in_air || state.mode != MotionMode::Ragdoll || !scene.physics || !scene.ragdoll)
+    return false;
+
+  ++state.jump_air_steps;
+  JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
+  JPH::BodyID root_id = scene.ragdoll->GetBodyID(0);
+  if (root_id.IsInvalid())
+    return false;
+
+  JPH::RVec3 root_pos = bi.GetPosition(root_id);
+  JPH::Vec3 root_vel = bi.GetLinearVelocity(root_id);
+  const float root_y = static_cast<float>(root_pos.GetY());
+  const float root_vy = root_vel.GetY();
+
+  if (root_vy > 0.5f || root_y > config.standing_min_height + 0.12f)
+    state.jump_was_airborne = true;
+
+  constexpr int kMinAirSteps = 12;
+  if (!state.jump_was_airborne || state.jump_air_steps < kMinAirSteps)
+    return false;
+
+  const size_t num_bodies = scene.ragdoll->GetBodyIDs().size();
+  float foot_y = root_y;
+  if (num_bodies >= 12) {
+    for (int foot_idx : {10, 11}) {
+      JPH::BodyID foot_id = scene.ragdoll->GetBodyID(foot_idx);
+      if (!foot_id.IsInvalid())
+        foot_y = std::min(foot_y, static_cast<float>(bi.GetPosition(foot_id).GetY()));
+    }
+  }
+
+  const bool feet_on_ground = foot_y < 0.22f;
+  const bool root_low_enough = root_y < config.standing_min_height + 0.18f;
+  const bool settled = root_vy > -2.5f && root_vy < 0.6f;
+  if (!feet_on_ground || !root_low_enough || !settled)
+    return false;
+
+  JPH::RVec3 landing_root(root_pos.GetX(), config.standing_min_height, root_pos.GetZ());
+  recover_standing_at(scene, bi, landing_root, scene.initial_standing_root_rotation);
+  state.mode = MotionMode::Standing;
+  state.jump_in_air = false;
+  state.jump_was_airborne = false;
+  state.jump_air_steps = 0;
+  state.jump_crouching = false;
+  state.jump_crouch_time = 0.f;
+  state.walk_root_origin_valid = false;
+
+  if (out) {
+    out->anchor_x = static_cast<float>(root_pos.GetX());
+    out->anchor_z = static_cast<float>(root_pos.GetZ());
+    out->anchor_rot = scene.initial_standing_root_rotation;
+  }
+  log("[Pose] Jump landed -> Standing at (%.2f, %.2f)", static_cast<double>(root_pos.GetX()),
+      static_cast<double>(root_pos.GetZ()));
+  return true;
+}
+
 void apply_pose_control(SimulatorScene& scene,
                         ControllerState& state,
                         const SimulatorConfig& config,
@@ -318,30 +701,54 @@ void apply_pose_control(SimulatorScene& scene,
   float dt = inDeltaTime >= 0.f ? inDeltaTime : config.time_step;
   JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
 
-  apply_jump(scene.ragdoll, bi, state, config);
+  if (state.jump_triggered && !state.jump_crouching && !state.jump_in_air) {
+    state.jump_triggered = false;
+    state.jump_crouching = true;
+    state.jump_crouch_time = 0.f;
+    state.mode = MotionMode::Standing;
+    state.walk_root_origin_valid = false;
+    log("[Pose] Jump crouch");
+  }
+
+  if (state.jump_crouching) {
+    state.jump_crouch_time += dt;
+    const float t = std::min(1.f, state.jump_crouch_time / config.jump_crouch_duration);
+    const float eased = t * t * (3.f - 2.f * t);  // smoothstep: slow in/out
+    apply_jump_crouch_pose(scene.ragdoll, scene.ragdoll_settings, scene.standing_anim.GetPtr(),
+                           dt, config, eased);
+    if (state.jump_crouch_time >= config.jump_crouch_duration) {
+      launch_jump(scene.ragdoll, bi, state, config);
+      state.jump_crouching = false;
+    }
+    return;
+  }
 
   switch (state.mode) {
     case MotionMode::Standing:
       state.walk_time = 0.f;
+      state.walk_root_origin_valid = false;
       apply_standing_pose(scene.ragdoll, scene.ragdoll_settings,
                           scene.standing_anim.GetPtr(), dt, config);
       break;
     case MotionMode::StandingRaiseLeg:
-      apply_standing_raise_leg_pose(scene.ragdoll, scene.ragdoll_settings, config);
+    case MotionMode::PunchRight:
+    case MotionMode::PunchLeft:
+    case MotionMode::FrontKick:
+      state.walk_root_origin_valid = false;
+      apply_action_pose(scene.ragdoll, scene.ragdoll_settings, scene.standing_anim.GetPtr(),
+                        dt, config, state, state.mode);
       break;
     case MotionMode::Walking:
+      for (JPH::BodyID id : scene.ragdoll->GetBodyIDs()) {
+        if (!id.IsInvalid())
+          bi.SetMotionType(id, EMotionType::Kinematic, EActivation::DontActivate);
+      }
       apply_walking_pose(scene.ragdoll, scene.ragdoll_settings, state, config, dt,
                         scene.walking_anim.GetPtr());
       break;
     case MotionMode::Ragdoll:
+      state.walk_root_origin_valid = false;
       break;
-  }
-  if (state.jump_frames_hold > 0) {
-    state.jump_frames_hold--;
-    if (state.jump_frames_hold == 0) {
-      state.mode = MotionMode::Ragdoll;
-      log("[Pose] Jump hold done -> Ragdoll");
-    }
   }
 }
 

@@ -19,22 +19,62 @@ enum class MotionMode : int {
   Walking = 1,
   Ragdoll = 2,
   /** Static stance: stand still with one leg raised (same root pinning as Standing). */
-  StandingRaiseLeg = 3
+  StandingRaiseLeg = 3,
+  /** Forward punch with the right arm. */
+  PunchRight = 4,
+  /** Forward punch with the left arm. */
+  PunchLeft = 5,
+  /** Front kick with the right leg (foot extends forward). */
+  FrontKick = 6
 };
+
+/** Modes that pin root XZ like Standing (kinematic root anchor in Visualizer). */
+inline bool is_pinned_stance_mode(MotionMode mode) {
+  return mode == MotionMode::Standing || mode == MotionMode::StandingRaiseLeg
+      || mode == MotionMode::PunchRight || mode == MotionMode::PunchLeft
+      || mode == MotionMode::FrontKick;
+}
 
 /** Per-frame state for the pose controller (mode, phase, jump trigger). */
 struct ControllerState {
   MotionMode mode = MotionMode::Standing;
   float walk_phase = 0.f;   // used for procedural walk
   float walk_time = 0.f;   // used for animation-driven walk (seconds)
+  /** World root at walk start; animation root delta is added for locomotion. */
+  JPH::RVec3 walk_root_origin{0, 0, 0};
+  JPH::RVec3 walk_anim_root_at_start{0, 0, 0};
+  bool walk_root_origin_valid = false;
   bool jump_triggered = false;
-  /** Frames to skip after jump before switching to Ragdoll (0 = inactive). */
-  int jump_frames_hold = 0;
+  /** Crouch wind-up before launch. */
+  bool jump_crouching = false;
+  float jump_crouch_time = 0.f;
+  /** True after launch until landing recovery or manual Ragdoll. */
+  bool jump_in_air = false;
+  bool jump_was_airborne = false;
+  int jump_air_steps = 0;
+  /** Elapsed time in the current pinned action pose (raise leg / punch / kick). */
+  float action_time = 0.f;
+};
+
+/** Landing anchor for Visualizer standing pin after jump recovery. */
+struct JumpLandingResult {
+  float anchor_x = 0.f;
+  float anchor_z = 0.f;
+  JPH::Quat anchor_rot = JPH::Quat::sIdentity();
 };
 
 /**
- * Apply pose control using Jolt Ragdoll: Standing = DriveToPoseUsingMotors(neutral or animation),
- * Walking = DriveToPoseUsingMotors(walk pose from phase or animation). Call before each PhysicsSystem::Update.
+ * If a jump is in progress and the ragdoll has landed, reset to Standing at landing XZ.
+ * Returns true when recovery happened. Call once per frame after physics.
+ */
+bool try_recover_standing_after_jump(SimulatorScene& scene,
+                                     ControllerState& state,
+                                     const SimulatorConfig& config,
+                                     JumpLandingResult* out = nullptr);
+
+/**
+ * Apply pose control using Jolt Ragdoll: Standing = kinematics/motors to hold upright,
+ * Walking = DriveToPoseUsingKinematics(walk animation or procedural gait). Call before each PhysicsSystem::Update.
  * Uses scene.standing_anim / scene.walking_anim when set; otherwise procedural poses.
  * inDeltaTime is the time step for this call (use sub-step dt when using multiple sub-steps per frame).
  */

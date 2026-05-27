@@ -31,16 +31,14 @@ const char* get_log_path();
 /** Clear in-memory buffer and optionally the log file. */
 void clear_log(bool clear_file = false);
 
+#ifdef BIOMECH_AGENT_DEBUG
 /** Write one NDJSON line to .cursor/debug.log for debug instrumentation. */
 void debug_instrument(const char* location, const char* message, const char* hypothesis_id, int data_val = -999);
 
 /** Write one NDJSON line for walk debug (root vel, target, dt). phase e.g. "after_drive","after_physics","target". */
 void debug_instrument_walk(const char* location, const char* hypothesis_id, const char* phase,
   float vx, float vy, float vz, float tx, float ty, float tz, float dt_used);
-
-/** Write one NDJSON line for limb motion debug (body index, position, velocity). */
-void debug_instrument_limbs(const char* location, const char* hypothesis_id, int body_idx,
-  float px, float py, float pz, float vx, float vy, float vz);
+#endif
 
 /** Path to project assets directory (repo root + "assets"), resolved from exe location. Empty if repo not found. */
 const char* get_assets_base_path();

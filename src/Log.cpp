@@ -17,6 +17,7 @@ constexpr size_t MAX_LOG_LINES = 200;
 constexpr size_t LOG_BUF_SIZE = 512;
 constexpr size_t LOG_ROTATE_SIZE = 1024 * 1024;  // 1 MB
 constexpr int LOG_ROTATE_KEEP = 2;               // keep .1, .2
+constexpr int LOG_FLUSH_BATCH = 16;
 std::mutex s_log_mutex;
 std::vector<LogEntry> s_log_entries;
 std::vector<std::string> s_log_lines_cache;  // "[ts] msg" built from s_log_entries
@@ -24,6 +25,8 @@ std::string s_log_path = ".cursor/debug.log";
 bool s_log_path_inited = false;
 std::string s_assets_base;
 bool s_assets_base_inited = false;
+std::ofstream s_log_file;
+int s_log_writes_since_flush = 0;
 
 void ensure_log_dir() {
   if (s_log_path.find('/') == std::string::npos && s_log_path.find('\\') == std::string::npos)
@@ -90,6 +93,28 @@ void rotate_log_if_needed(const std::string& path) {
   std::filesystem::rename(p, p1, ec);
 }
 
+void ensure_log_file_open() {
+  if (s_log_file.is_open())
+    return;
+  ensure_log_dir();
+  s_log_file.open(s_log_path, std::ios::app);
+  if (!s_log_file) {
+    s_log_path = "debug.log";
+    s_log_file.open(s_log_path, std::ios::app);
+  }
+}
+
+void flush_log_file() {
+  if (s_log_file.is_open()) {
+    s_log_file.flush();
+    s_log_writes_since_flush = 0;
+  }
+}
+
+static std::string format_log_line(int64_t ts, const std::string& message) {
+  return "[" + std::to_string(ts) + "] " + message;
+}
+
 }  // namespace
 
 void init_log_path() {
@@ -116,36 +141,26 @@ void log(const char* fmt, ...) {
     return;
   std::string message(buf, static_cast<size_t>(n) >= sizeof(buf) ? sizeof(buf) - 1 : static_cast<size_t>(n));
   int64_t ts = now_ms();
+  std::string line = format_log_line(ts, message);
   {
     std::lock_guard<std::mutex> lock(s_log_mutex);
     s_log_entries.push_back({ts, message});
-    if (s_log_entries.size() > MAX_LOG_LINES)
+    s_log_lines_cache.push_back(line);
+    if (s_log_entries.size() > MAX_LOG_LINES) {
       s_log_entries.erase(s_log_entries.begin());
-    s_log_lines_cache.clear();
-    s_log_lines_cache.reserve(s_log_entries.size());
-    for (const auto& e : s_log_entries)
-      s_log_lines_cache.push_back("[" + std::to_string(e.timestamp_ms) + "] " + e.message);
+      s_log_lines_cache.erase(s_log_lines_cache.begin());
+    }
   }
-  ensure_log_dir();
-  std::ofstream f(s_log_path, std::ios::app);
-  if (!f) {
-    s_log_path = "debug.log";
-    f.open(s_log_path, std::ios::app);
-  }
-  if (f) {
-    f << "[" << ts << "] " << message << "\n";
-    f.flush();
+  ensure_log_file_open();
+  if (s_log_file) {
+    s_log_file << line << "\n";
+    if (++s_log_writes_since_flush >= LOG_FLUSH_BATCH)
+      flush_log_file();
   }
 }
 
 const std::vector<std::string>& get_log_lines() {
   std::lock_guard<std::mutex> lock(s_log_mutex);
-  if (s_log_lines_cache.size() != s_log_entries.size()) {
-    s_log_lines_cache.clear();
-    s_log_lines_cache.reserve(s_log_entries.size());
-    for (const auto& e : s_log_entries)
-      s_log_lines_cache.push_back("[" + std::to_string(e.timestamp_ms) + "] " + e.message);
-  }
   return s_log_lines_cache;
 }
 
@@ -173,16 +188,21 @@ void clear_log(bool clear_file) {
   }
   if (clear_file) {
     ensure_log_dir();
+    if (s_log_file.is_open())
+      s_log_file.close();
     std::ofstream f(s_log_path, std::ios::trunc);
     if (f) {
       f << "[log cleared]\n";
       f.flush();
       f.close();
     }
+    ensure_log_file_open();
+  } else {
+    flush_log_file();
   }
 }
 
-// #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
 void debug_instrument(const char* location, const char* message, const char* hypothesis_id, int data_val) {
   resolve_log_path();
   std::error_code ec;
@@ -215,22 +235,6 @@ void debug_instrument_walk(const char* location, const char* hypothesis_id, cons
     << ",\"dt_used\":" << dt_used << "}}\n";
   f.flush();
 }
-
-void debug_instrument_limbs(const char* location, const char* hypothesis_id, int body_idx,
-  float px, float py, float pz, float vx, float vy, float vz) {
-  resolve_log_path();
-  std::error_code ec;
-  std::filesystem::path p(s_log_path);
-  std::filesystem::create_directories(p.parent_path(), ec);
-  auto t = std::chrono::duration_cast<std::chrono::milliseconds>(
-               std::chrono::steady_clock::now().time_since_epoch()).count();
-  std::ofstream f(s_log_path, std::ios::app);
-  if (!f) return;
-  f << "{\"timestamp\":" << t << ",\"location\":\"" << location << "\",\"hypothesisId\":\"" << hypothesis_id
-    << "\",\"runId\":\"run1\",\"data\":{\"body_idx\":" << body_idx << ",\"px\":" << px << ",\"py\":" << py
-    << ",\"pz\":" << pz << ",\"vx\":" << vx << ",\"vy\":" << vy << ",\"vz\":" << vz << "}}\n";
-  f.flush();
-}
-// #endregion
+#endif
 
 }  // namespace biomechanics

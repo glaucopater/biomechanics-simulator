@@ -1,6 +1,6 @@
 {
   "name": "biomechanics-simulator",
   "version": "0.1.0",
-  "description": "C++ biomechanics simulator with ragdoll physics (Jolt)",
+  "description": "C++ biomechanics simulator with ragdoll physics (Jolt). Dependencies are fetched via CMake FetchContent; this manifest is reserved for optional vcpkg use.",
   "dependencies": []
 }

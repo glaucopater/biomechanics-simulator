@@ -17,7 +17,7 @@ namespace biomechanics {
 namespace {
 
 std::mutex g_mutex;
-int g_pending_stance = -1;  // -1 = none, 0 = Standing, 1 = Walking, 2 = Ragdoll, 3 = StandingRaiseLeg
+int g_pending_stance = -1;  // -1=none, 0=Standing, 1=Walking, 2=Ragdoll, 3=RaiseLeg, 4=PunchR, 5=PunchL, 6=Kick
 bool g_pending_jump = false;
 bool g_pending_test_float = false;
 bool g_pending_reset = false;
@@ -35,12 +35,19 @@ const char* stance_to_string(MotionMode m) {
     case MotionMode::Walking: return "walking";
     case MotionMode::Ragdoll: return "ragdoll";
     case MotionMode::StandingRaiseLeg: return "standing_raise_leg";
+    case MotionMode::PunchRight: return "punch_right";
+    case MotionMode::PunchLeft: return "punch_left";
+    case MotionMode::FrontKick: return "front_kick";
     default: return "standing";
   }
 }
 
-/** Returns 0=standing, 1=walking, 2=ragdoll, 3=standing_raise_leg, or -1 if body invalid. */
+/** Returns 0=standing, 1=walking, 2=ragdoll, 3=raise_leg, 4=punch_r, 5=punch_l, 6=kick, or -1. */
 int parse_stance_from_body(const std::string& body) {
+  if (body.find("\"front_kick\"") != std::string::npos) return 6;
+  if (body.find("\"punch_left\"") != std::string::npos) return 5;
+  if (body.find("\"punch_right\"") != std::string::npos) return 4;
+  if (body.find("\"fist\"") != std::string::npos) return 4;
   if (body.find("\"standing_raise_leg\"") != std::string::npos) return 3;
   if (body.find("\"standing\"") != std::string::npos) return 0;
   if (body.find("\"walking\"") != std::string::npos) return 1;
@@ -159,7 +166,7 @@ void http_control_start(int port) {
       res.set_content("{\"stance\":\"" + std::string(stance_to_string(static_cast<MotionMode>(stance))) + "\"}", "application/json");
     } else {
       res.status = 400;
-      res.set_content("{\"error\":\"bad body: use {\\\"stance\\\": \\\"standing\\\" | \\\"standing_raise_leg\\\" | \\\"walking\\\" | \\\"ragdoll\\\"}\"}", "application/json");
+      res.set_content("{\"error\":\"bad body: use {\\\"stance\\\": \\\"standing\\\" | \\\"standing_raise_leg\\\" | \\\"punch_right\\\" | \\\"punch_left\\\" | \\\"front_kick\\\" | \\\"walking\\\" | \\\"ragdoll\\\"}\"}", "application/json");
     }
   });
 
@@ -185,6 +192,26 @@ void http_control_start(int port) {
     std::lock_guard<std::mutex> lock(g_mutex);
     g_pending_stance = 3;
     set_ok(res, "stance", "standing_raise_leg");
+  });
+  g_server->Post("/stance/punch_right", [set_ok](const httplib::Request&, httplib::Response& res) {
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_pending_stance = 4;
+    set_ok(res, "stance", "punch_right");
+  });
+  g_server->Post("/stance/punch_left", [set_ok](const httplib::Request&, httplib::Response& res) {
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_pending_stance = 5;
+    set_ok(res, "stance", "punch_left");
+  });
+  g_server->Post("/stance/fist", [set_ok](const httplib::Request&, httplib::Response& res) {
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_pending_stance = 4;
+    set_ok(res, "stance", "punch_right");
+  });
+  g_server->Post("/stance/front_kick", [set_ok](const httplib::Request&, httplib::Response& res) {
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_pending_stance = 6;
+    set_ok(res, "stance", "front_kick");
   });
   g_server->Post("/jump", [set_ok](const httplib::Request&, httplib::Response& res) {
     std::lock_guard<std::mutex> lock(g_mutex);
@@ -241,7 +268,7 @@ void http_control_stop() {
 
 void http_control_apply_pending_stance(ControllerState& ctrl_state) {
   std::lock_guard<std::mutex> lock(g_mutex);
-  if (g_pending_stance >= 0 && g_pending_stance <= 3) {
+  if (g_pending_stance >= 0 && g_pending_stance <= 6) {
     MotionMode old_mode = ctrl_state.mode;
     MotionMode new_mode = static_cast<MotionMode>(g_pending_stance);
     ctrl_state.mode = new_mode;

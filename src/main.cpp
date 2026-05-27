@@ -12,17 +12,17 @@
 #include <cstring>
 
 int main(int argc, char* argv[]) {
-  // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
   biomechanics::debug_instrument("main.cpp:13", "main_entry", "H1");
-  // #endregion
+#endif
   biomechanics::ensure_jolt_registered();
-  // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
   biomechanics::debug_instrument("main.cpp:17", "after_ensure_jolt_main", "H2");
-  // #endregion
+#endif
   biomechanics::init_log_path();
-  // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
   biomechanics::debug_instrument("main.cpp:18", "after_init_log_path", "H1");
-  // #endregion
+#endif
   bool headless = false;
   bool walk_mode = false;
   int http_port = 0;
@@ -42,15 +42,15 @@ int main(int argc, char* argv[]) {
     config.default_motion_mode = 1;  // Walking
     config.num_steps = 360;           // ~6 s of walk samples
   }
-  // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
   biomechanics::debug_instrument("main.cpp:28", headless ? "calling_run_demo" : "calling_run_demo_visual", "H4");
-  // #endregion
+#endif
   if (headless)
     biomechanics::run_demo(config);
   else
     biomechanics::run_demo_visual(config, http_port);
-  // #region agent log
+#ifdef BIOMECH_AGENT_DEBUG
   biomechanics::debug_instrument("main.cpp:35", "main_exit", "H1");
-  // #endregion
+#endif
   return 0;
 }

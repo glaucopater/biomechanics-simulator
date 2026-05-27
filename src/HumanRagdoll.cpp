@@ -18,9 +18,9 @@ namespace biomechanics {
 using namespace JPH;
 
 namespace {
-const float MOTOR_FREQUENCY = 4.0f;
+const float MOTOR_FREQUENCY = 8.0f;
 const float MOTOR_DAMPING = 1.0f;
-const float MOTOR_TORQUE_LIMIT = 500.0f;
+const float MOTOR_TORQUE_LIMIT = 800.0f;
 
 /** Match Jolt RagdollLoader: only motion type, layer, and init. Do NOT overwrite motor settings. */
 void apply_loader_style(RagdollSettings* settings) {
@@ -62,7 +62,7 @@ JPH::RagdollSettings* load_human_ragdoll_from_file() {
     std::string path = (std::filesystem::path(base) / "Human.tof").string();
     RagdollSettings* settings = nullptr;
     if (ObjectStreamIn::sReadObject(path.c_str(), settings) && settings) {
-      apply_loader_style(settings);  // match Jolt RagdollLoader: do not overwrite motor settings
+      apply_motor_settings_and_layer(settings);
       return settings;
     }
   }
@@ -75,7 +75,7 @@ JPH::RagdollSettings* load_human_ragdoll_from_file() {
   for (const char* path : paths) {
     RagdollSettings* settings = nullptr;
     if (ObjectStreamIn::sReadObject(path, settings) && settings) {
-      apply_loader_style(settings);  // match Jolt RagdollLoader: do not overwrite motor settings
+      apply_motor_settings_and_layer(settings);
       return settings;
     }
   }
