@@ -27,11 +27,16 @@ struct SimulatorConfig {
   float walk_arm_amplitude  = 0.4f;  // rad (counter-swing arms, procedural)
   float walk_joint_spring_stiffness = 25.f;  // soften limb springs so PD can drive walk
   float walk_max_torque  = 140.f;  // max PD torque for limbs during walk (higher than standing)
-  float jump_velocity_y  = 5.5f;  // m/s upward on pelvis at jump (limbs get a fraction)
-  float jump_crouch_duration = 0.40f;  // seconds to bend knees before launch
-  float jump_crouch_knee = 0.95f;     // rad knee flexion at full crouch (both legs)
-  float jump_crouch_hip = 0.40f;      // rad hip flexion at full crouch (both legs)
-  float jump_crouch_drop = 0.10f;     // m pelvis lowers during crouch
+  float jump_velocity_y  = 3.4f;  // m/s takeoff velocity (kinematic parabola; apex = v^2/2g ~ 0.58 m)
+  float jump_crouch_duration = 0.35f;  // seconds counter-movement dip (protocol: fast, ~0.25-0.35 s)
+  // Squat/crouch targets. Keep the triple consistent so feet stay planted:
+  // tests/squat_probe.cpp fine search gives (knee, hip, drop) rows; ankle = hip - knee.
+  float jump_crouch_knee = 1.50f;     // rad knee flexion at full crouch (deep semi-squat)
+  float jump_crouch_hip = 0.66f;      // rad hip flexion at full crouch (thighs incline, chest up)
+  float jump_crouch_drop = 0.26f;     // m pelvis lowers during crouch (geometrically consistent with knee/hip)
+  float jump_extend_duration = 0.18f;  // seconds legs extend from crouch to takeoff
+  float jump_land_duration = 0.35f;    // seconds landing absorb (bend then straighten)
+  float jump_land_knee = 0.90f;        // rad knee flexion at deepest landing absorb
   float action_pose_duration = 0.40f;  // seconds to ease into raise-leg / punch / kick
   float raise_leg_hip = 0.85f;        // rad hip flexion (raised leg)
   float raise_leg_knee = 0.90f;       // rad knee flexion (raised leg)

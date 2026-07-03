@@ -21,6 +21,7 @@
 #include <Physics/Body/BodyID.h>
 #include <Math/Vec3.h>
 #include <Math/Quat.h>
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <fstream>
@@ -226,6 +227,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
   int standing_settle_frames = 0;
   constexpr int STANDING_SETTLE_FRAMES_BEFORE_CAPTURE = 90;  // ~1.5 s at 60 fps
   bool initial_standing_captured = false;
+  int last_layout_w = 0, last_layout_h = 0;  // re-apply panel layout on window resize
 
   glfwSetKeyCallback(window, [](GLFWwindow* win, int key, int /*scancode*/, int action, int /*mods*/) {
     if (action != GLFW_PRESS)
@@ -239,8 +241,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       app->ctrl->mode = MotionMode::Walking;
     else if (key == GLFW_KEY_3) {
       app->ctrl->mode = MotionMode::Ragdoll;
-      app->ctrl->jump_in_air = false;
-      app->ctrl->jump_crouching = false;
+      app->ctrl->jump_phase = JumpPhase::None;
+      app->ctrl->jump_phase_time = 0.f;
     }
     else if (key == GLFW_KEY_4)
       app->ctrl->mode = MotionMode::StandingRaiseLeg;
@@ -250,6 +252,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       app->ctrl->mode = MotionMode::PunchLeft;
     else if (key == GLFW_KEY_7)
       app->ctrl->mode = MotionMode::FrontKick;
+    else if (key == GLFW_KEY_8)
+      app->ctrl->mode = MotionMode::Squat;
     else if (key == GLFW_KEY_SPACE)
       app->ctrl->jump_triggered = true;
   });
@@ -268,34 +272,50 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
 
     update_camera_from_mouse(window, camera);
 
-    ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(200, 0), ImGuiCond_FirstUseEver);
+    // Scale UI with window size: font and panel layout grow/shrink proportionally.
+    int ui_win_w, ui_win_h;
+    glfwGetWindowSize(window, &ui_win_w, &ui_win_h);
+    const float ui_scale = std::clamp(
+        std::min(static_cast<float>(ui_win_w) / 1024.f, static_cast<float>(ui_win_h) / 768.f),
+        0.75f, 3.f);
+    io.FontGlobalScale = ui_scale;
+    const ImGuiCond layout_cond = (ui_win_w != last_layout_w || ui_win_h != last_layout_h)
+                                      ? ImGuiCond_Always
+                                      : ImGuiCond_FirstUseEver;
+    last_layout_w = ui_win_w;
+    last_layout_h = ui_win_h;
+    const ImVec2 btn(160.f * ui_scale, 0.f);
+
+    ImGui::SetNextWindowPos(ImVec2(10.f * ui_scale, 10.f * ui_scale), layout_cond);
+    ImGui::SetNextWindowSize(ImVec2(200.f * ui_scale, 0), layout_cond);
     ImGui::Begin("Stance");
-    if (ImGui::Button("Standing", ImVec2(160, 0)))
+    if (ImGui::Button("Standing", btn))
       ctrl_state.mode = MotionMode::Standing;
-    if (ImGui::Button("Raise leg", ImVec2(160, 0)))
+    if (ImGui::Button("Raise leg", btn))
       ctrl_state.mode = MotionMode::StandingRaiseLeg;
-    if (ImGui::Button("Punch R", ImVec2(160, 0)))
+    if (ImGui::Button("Punch R", btn))
       ctrl_state.mode = MotionMode::PunchRight;
-    if (ImGui::Button("Punch L", ImVec2(160, 0)))
+    if (ImGui::Button("Punch L", btn))
       ctrl_state.mode = MotionMode::PunchLeft;
-    if (ImGui::Button("Front kick", ImVec2(160, 0)))
+    if (ImGui::Button("Front kick", btn))
       ctrl_state.mode = MotionMode::FrontKick;
-    if (ImGui::Button("Walk", ImVec2(160, 0)))
+    if (ImGui::Button("Squat", btn))
+      ctrl_state.mode = MotionMode::Squat;
+    if (ImGui::Button("Walk", btn))
       ctrl_state.mode = MotionMode::Walking;
-    if (ImGui::Button("Ragdoll", ImVec2(160, 0))) {
+    if (ImGui::Button("Ragdoll", btn)) {
       ctrl_state.mode = MotionMode::Ragdoll;
-      ctrl_state.jump_in_air = false;
-      ctrl_state.jump_crouching = false;
+      ctrl_state.jump_phase = JumpPhase::None;
+      ctrl_state.jump_phase_time = 0.f;
     }
-    if (ImGui::Button("Jump", ImVec2(160, 0)))
+    if (ImGui::Button("Jump", btn))
       ctrl_state.jump_triggered = true;
-    if (ImGui::Button("Test (float 2s)", ImVec2(160, 0))) {
+    if (ImGui::Button("Test (float 2s)", btn)) {
       test_float_until = glfwGetTime() + 2.0;
       ctrl_state.mode = MotionMode::Ragdoll;
       log("Test: applying upward force 2s - character should RISE");
     }
-    if (ImGui::Button("Reset", ImVec2(160, 0))) {
+    if (ImGui::Button("Reset", btn)) {
       test_float_until = 0.0;
       drag_body = JPH::BodyID();
       if (scene.physics && scene.ragdoll && scene.ragdoll_settings) {
@@ -305,14 +325,13 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         ctrl_state.walk_phase = 0.f;
         ctrl_state.walk_time = 0.f;
         ctrl_state.jump_triggered = false;
-        ctrl_state.jump_in_air = false;
-        ctrl_state.jump_crouching = false;
-        ctrl_state.jump_crouch_time = 0.f;
+        ctrl_state.jump_phase = JumpPhase::None;
+        ctrl_state.jump_phase_time = 0.f;
         ctrl_state.action_time = 0.f;
         standing_anchor_valid = false;
       }
     }
-    if (ImGui::Button(simulation_frozen ? "Unfreeze" : "Freeze", ImVec2(160, 0))) {
+    if (ImGui::Button(simulation_frozen ? "Unfreeze" : "Freeze", btn)) {
       simulation_frozen = !simulation_frozen;
       log(simulation_frozen ? "[UI] Simulation frozen" : "[UI] Simulation unfrozen");
     }
@@ -392,6 +411,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
         log("[UI] Mode -> Punch L");
       else if (ctrl_state.mode == MotionMode::FrontKick)
         log("[UI] Mode -> Front kick");
+      else if (ctrl_state.mode == MotionMode::Squat)
+        log("[UI] Mode -> Squat");
       else if (ctrl_state.mode == MotionMode::Walking)
         log("[UI] Mode -> Walking");
       else
@@ -457,8 +478,12 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       }
     }
 
-    ImGui::SetNextWindowPos(ImVec2(220, 10), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(400, 220), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(220.f * ui_scale, 10.f * ui_scale), layout_cond);
+    // Log grows with the window: takes the width right of the Stance panel.
+    ImGui::SetNextWindowSize(
+        ImVec2(std::max(400.f * ui_scale, static_cast<float>(ui_win_w) - 240.f * ui_scale),
+               220.f * ui_scale),
+        layout_cond);
     ImGui::Begin("Log");
     if (ImGui::Button("Clear"))
       clear_log(false);
@@ -478,8 +503,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     ImGui::EndChild();
     ImGui::End();
 
-    ImGui::SetNextWindowPos(ImVec2(220, 240), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(340, 320), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(220.f * ui_scale, 240.f * ui_scale), layout_cond);
+    ImGui::SetNextWindowSize(ImVec2(340.f * ui_scale, 320.f * ui_scale), layout_cond);
     ImGui::Begin("Limb positions");
     if (scene.ragdoll && scene.ragdoll->GetBodyIDs().size() >= 12) {
       const char* labels[] = {"LowerBody", "MidBody", "Head",
@@ -560,6 +585,8 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
             ctrl_state.walk_phase = 0.f;
             ctrl_state.walk_time = 0.f;
             ctrl_state.jump_triggered = false;
+            ctrl_state.jump_phase = JumpPhase::None;
+            ctrl_state.jump_phase_time = 0.f;
             standing_anchor_valid = false;
           }
         }
@@ -661,16 +688,6 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
       if (http_port > 0)
         http_control_update_snapshot(scene, ctrl_state);
       last_frame_mode = ctrl_state.mode;
-    }
-
-    if (!simulation_frozen) {
-      JumpLandingResult landing;
-      if (try_recover_standing_after_jump(scene, ctrl_state, config, &landing)) {
-        standing_anchor_x = landing.anchor_x;
-        standing_anchor_z = landing.anchor_z;
-        standing_anchor_rot = landing.anchor_rot;
-        standing_anchor_valid = true;
-      }
     }
 
     frame_count++;
