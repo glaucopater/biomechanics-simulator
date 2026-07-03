@@ -38,12 +38,14 @@ const char* stance_to_string(MotionMode m) {
     case MotionMode::PunchRight: return "punch_right";
     case MotionMode::PunchLeft: return "punch_left";
     case MotionMode::FrontKick: return "front_kick";
+    case MotionMode::Squat: return "squat";
     default: return "standing";
   }
 }
 
-/** Returns 0=standing, 1=walking, 2=ragdoll, 3=raise_leg, 4=punch_r, 5=punch_l, 6=kick, or -1. */
+/** Returns 0=standing, 1=walking, 2=ragdoll, 3=raise_leg, 4=punch_r, 5=punch_l, 6=kick, 7=squat, or -1. */
 int parse_stance_from_body(const std::string& body) {
+  if (body.find("\"squat\"") != std::string::npos) return 7;
   if (body.find("\"front_kick\"") != std::string::npos) return 6;
   if (body.find("\"punch_left\"") != std::string::npos) return 5;
   if (body.find("\"punch_right\"") != std::string::npos) return 4;
@@ -213,6 +215,11 @@ void http_control_start(int port) {
     g_pending_stance = 6;
     set_ok(res, "stance", "front_kick");
   });
+  g_server->Post("/stance/squat", [set_ok](const httplib::Request&, httplib::Response& res) {
+    std::lock_guard<std::mutex> lock(g_mutex);
+    g_pending_stance = 7;
+    set_ok(res, "stance", "squat");
+  });
   g_server->Post("/jump", [set_ok](const httplib::Request&, httplib::Response& res) {
     std::lock_guard<std::mutex> lock(g_mutex);
     g_pending_jump = true;
@@ -268,7 +275,7 @@ void http_control_stop() {
 
 void http_control_apply_pending_stance(ControllerState& ctrl_state) {
   std::lock_guard<std::mutex> lock(g_mutex);
-  if (g_pending_stance >= 0 && g_pending_stance <= 6) {
+  if (g_pending_stance >= 0 && g_pending_stance <= 7) {
     MotionMode old_mode = ctrl_state.mode;
     MotionMode new_mode = static_cast<MotionMode>(g_pending_stance);
     ctrl_state.mode = new_mode;

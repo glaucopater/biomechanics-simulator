@@ -33,6 +33,22 @@ if(MSVC)
 endif()
 add_test(NAME E2EVerification COMMAND e2e_verification WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
+# Squat probe: headless kinematic search for correct squat joint axes (manual tool, not a test)
+set(SQUAT_PROBE_SOURCES
+  squat_probe.cpp
+  ${PROJECT_SOURCE_DIR}/src/Log.cpp
+  ${PROJECT_SOURCE_DIR}/src/HumanRagdoll.cpp
+  ${PROJECT_SOURCE_DIR}/src/SimulatorScene.cpp
+)
+add_executable(squat_probe ${SQUAT_PROBE_SOURCES})
+target_include_directories(squat_probe PRIVATE ${PROJECT_SOURCE_DIR}/include ${joltphysics_SOURCE_DIR}/Jolt)
+target_link_libraries(squat_probe PRIVATE Jolt)
+if(MSVC)
+  set_property(TARGET squat_probe PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+  target_compile_options(squat_probe PRIVATE $<$<CONFIG:Release>:/MD> $<$<CONFIG:Debug>:/MDd>)
+  target_link_options(squat_probe PRIVATE $<$<CONFIG:Release>:/NODEFAULTLIB:LIBCMT> $<$<CONFIG:Debug>:/NODEFAULTLIB:LIBCMTd>)
+endif()
+
 # Headless exe: run real app; script verifies stdout (root Y >= 0.3) so rendered sim is stable
 add_test(NAME HeadlessExe
   COMMAND ${CMAKE_COMMAND}

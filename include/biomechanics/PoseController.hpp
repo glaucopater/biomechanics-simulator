@@ -25,15 +25,30 @@ enum class MotionMode : int {
   /** Forward punch with the left arm. */
   PunchLeft = 5,
   /** Front kick with the right leg (foot extends forward). */
-  FrontKick = 6
+  FrontKick = 6,
+  /** Static semi-squat: knees/hips bent, pelvis lowered, arms slightly back. */
+  Squat = 7
 };
 
 /** Modes that pin root XZ like Standing (kinematic root anchor in Visualizer). */
 inline bool is_pinned_stance_mode(MotionMode mode) {
   return mode == MotionMode::Standing || mode == MotionMode::StandingRaiseLeg
       || mode == MotionMode::PunchRight || mode == MotionMode::PunchLeft
-      || mode == MotionMode::FrontKick;
+      || mode == MotionMode::FrontKick || mode == MotionMode::Squat;
 }
+
+/** Kinematic jump sequence phase (all phases driven with DriveToPoseUsingKinematics). */
+enum class JumpPhase : int {
+  None = 0,
+  /** Knees/hips bend, pelvis drops, arms swing back. */
+  Crouch,
+  /** Legs extend, root rises back to standing height, arms swing up. */
+  Launch,
+  /** Ballistic root Y parabola; legs near-straight, arms up. */
+  Flight,
+  /** Landing absorb: brief knee bend, arms come down, then Standing. */
+  Land
+};
 
 /** Per-frame state for the pose controller (mode, phase, jump trigger). */
 struct ControllerState {
@@ -45,32 +60,13 @@ struct ControllerState {
   JPH::RVec3 walk_anim_root_at_start{0, 0, 0};
   bool walk_root_origin_valid = false;
   bool jump_triggered = false;
-  /** Crouch wind-up before launch. */
-  bool jump_crouching = false;
-  float jump_crouch_time = 0.f;
-  /** True after launch until landing recovery or manual Ragdoll. */
-  bool jump_in_air = false;
-  bool jump_was_airborne = false;
-  int jump_air_steps = 0;
+  /** Current phase of the kinematic jump sequence (None = not jumping). */
+  JumpPhase jump_phase = JumpPhase::None;
+  /** Elapsed time in the current jump phase (seconds). */
+  float jump_phase_time = 0.f;
   /** Elapsed time in the current pinned action pose (raise leg / punch / kick). */
   float action_time = 0.f;
 };
-
-/** Landing anchor for Visualizer standing pin after jump recovery. */
-struct JumpLandingResult {
-  float anchor_x = 0.f;
-  float anchor_z = 0.f;
-  JPH::Quat anchor_rot = JPH::Quat::sIdentity();
-};
-
-/**
- * If a jump is in progress and the ragdoll has landed, reset to Standing at landing XZ.
- * Returns true when recovery happened. Call once per frame after physics.
- */
-bool try_recover_standing_after_jump(SimulatorScene& scene,
-                                     ControllerState& state,
-                                     const SimulatorConfig& config,
-                                     JumpLandingResult* out = nullptr);
 
 /**
  * Apply pose control using Jolt Ragdoll: Standing = kinematics/motors to hold upright,
