@@ -1,19 +1,27 @@
 #include "biomechanics/PoseController.hpp"
 #include "biomechanics/HumanRagdoll.hpp"
+#include "biomechanics/Config.hpp"
+#include "biomechanics/SimulatorScene.hpp"
 #include <Jolt/Physics/Body/Body.h>
 #include <Jolt/Physics/Body/BodyInterface.h>
 
+
 namespace biomechanics
 {
+
+// Static PoseController instance (created on first use)
+static PoseController* g_pose_controller = nullptr;
 
 PoseController::PoseController(HumanRagdoll* ragdoll, JPH::PhysicsSystem* physicsSystem)
     : ragdoll(ragdoll), physicsSystem(physicsSystem)
 {
 }
 
+
 PoseController::~PoseController()
 {
 }
+
 
 void PoseController::StartAction(ActionType action)
 {
@@ -30,6 +38,7 @@ void PoseController::StartAction(ActionType action)
     }
 }
 
+
 void PoseController::Update(float deltaTime)
 {
     // If no current action but queue has items, start next action
@@ -39,6 +48,7 @@ void PoseController::Update(float deltaTime)
         state = State::Prepare;
         timer = 0.0f;
     }
+
 
     switch (currentAction)
     {
@@ -63,9 +73,11 @@ void PoseController::Update(float deltaTime)
     }
 }
 
+
 void PoseController::UpdateJump(float deltaTime)
 {
     timer += deltaTime;
+
 
     switch (state)
     {
@@ -75,6 +87,7 @@ void PoseController::UpdateJump(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_right", -0.5f);
         ragdoll->SetJointTargetAngle("knee_left", -0.8f);
         ragdoll->SetJointTargetAngle("knee_right", -0.8f);
+
 
         if (timer >= prepareDuration)
         {
@@ -90,12 +103,14 @@ void PoseController::UpdateJump(float deltaTime)
         ragdoll->SetJointTargetAngle("knee_left", 0.0f);
         ragdoll->SetJointTargetAngle("knee_right", 0.0f);
 
+
         auto* rootBody = ragdoll->GetRootBody();
         if (rootBody && rootBody->IsActive())
         {
             JPH::BodyInterface& bodyInterface = physicsSystem->GetBodyInterface();
             bodyInterface.AddImpulse(rootBody->GetID(), JPH::Vec3(0, 8.0f, 0));
         }
+
 
         if (timer >= executeDuration)
         {
@@ -111,6 +126,7 @@ void PoseController::UpdateJump(float deltaTime)
         ragdoll->SetJointTargetAngle("knee_left", 0.0f);
         ragdoll->SetJointTargetAngle("knee_right", 0.0f);
 
+
         if (timer >= recoverDuration)
         {
             currentAction = ActionType::None;
@@ -124,9 +140,11 @@ void PoseController::UpdateJump(float deltaTime)
     }
 }
 
+
 void PoseController::UpdateRaiseArms(float deltaTime)
 {
     timer += deltaTime;
+
 
     switch (state)
     {
@@ -134,6 +152,7 @@ void PoseController::UpdateRaiseArms(float deltaTime)
     {
         ragdoll->SetJointTargetAngle("hip_left", -0.1f);
         ragdoll->SetJointTargetAngle("hip_right", -0.1f);
+
 
         if (timer >= prepareDuration)
         {
@@ -147,6 +166,7 @@ void PoseController::UpdateRaiseArms(float deltaTime)
         ragdoll->SetJointTargetAngle("shoulder_left", 2.5f);
         ragdoll->SetJointTargetAngle("shoulder_right", 2.5f);
 
+
         if (timer >= executeDuration)
         {
             state = State::Recover;
@@ -161,6 +181,7 @@ void PoseController::UpdateRaiseArms(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_left", 0.0f);
         ragdoll->SetJointTargetAngle("hip_right", 0.0f);
 
+
         if (timer >= recoverDuration)
         {
             currentAction = ActionType::None;
@@ -174,9 +195,11 @@ void PoseController::UpdateRaiseArms(float deltaTime)
     }
 }
 
+
 void PoseController::UpdateLowerArms(float deltaTime)
 {
     timer += deltaTime;
+
 
     switch (state)
     {
@@ -194,6 +217,7 @@ void PoseController::UpdateLowerArms(float deltaTime)
         ragdoll->SetJointTargetAngle("shoulder_left", 0.0f);
         ragdoll->SetJointTargetAngle("shoulder_right", 0.0f);
 
+
         if (timer >= executeDuration)
         {
             state = State::Recover;
@@ -216,9 +240,11 @@ void PoseController::UpdateLowerArms(float deltaTime)
     }
 }
 
+
 void PoseController::UpdateKickRightLeg(float deltaTime)
 {
     timer += deltaTime;
+
 
     switch (state)
     {
@@ -229,6 +255,7 @@ void PoseController::UpdateKickRightLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("knee_left", 0.0f);
         ragdoll->SetJointTargetAngle("hip_right", -0.2f);
         ragdoll->SetJointTargetAngle("knee_right", -0.3f);
+
 
         if (timer >= prepareDuration)
         {
@@ -243,6 +270,7 @@ void PoseController::UpdateKickRightLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_right", 0.8f);
         ragdoll->SetJointTargetAngle("knee_right", -0.1f);
 
+
         if (timer >= executeDuration)
         {
             state = State::Recover;
@@ -258,6 +286,7 @@ void PoseController::UpdateKickRightLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_left", 0.0f);
         ragdoll->SetJointTargetAngle("knee_left", 0.0f);
 
+
         if (timer >= recoverDuration)
         {
             currentAction = ActionType::None;
@@ -271,9 +300,11 @@ void PoseController::UpdateKickRightLeg(float deltaTime)
     }
 }
 
+
 void PoseController::UpdateKickLeftLeg(float deltaTime)
 {
     timer += deltaTime;
+
 
     switch (state)
     {
@@ -284,6 +315,7 @@ void PoseController::UpdateKickLeftLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("knee_right", 0.0f);
         ragdoll->SetJointTargetAngle("hip_left", -0.2f);
         ragdoll->SetJointTargetAngle("knee_left", -0.3f);
+
 
         if (timer >= prepareDuration)
         {
@@ -298,6 +330,7 @@ void PoseController::UpdateKickLeftLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_left", 0.8f);
         ragdoll->SetJointTargetAngle("knee_left", -0.1f);
 
+
         if (timer >= executeDuration)
         {
             state = State::Recover;
@@ -313,6 +346,7 @@ void PoseController::UpdateKickLeftLeg(float deltaTime)
         ragdoll->SetJointTargetAngle("hip_right", 0.0f);
         ragdoll->SetJointTargetAngle("knee_right", 0.0f);
 
+
         if (timer >= recoverDuration)
         {
             currentAction = ActionType::None;
@@ -326,6 +360,7 @@ void PoseController::UpdateKickLeftLeg(float deltaTime)
     }
 }
 
+
 void PoseController::EnqueueAction(ActionType action)
 {
     if (action != ActionType::None)
@@ -334,14 +369,38 @@ void PoseController::EnqueueAction(ActionType action)
     }
 }
 
+
 PoseController::ActionType PoseController::DequeueAction()
 {
     if (actionQueue.empty())
         return ActionType::None;
 
+
     ActionType nextAction = actionQueue.front();
     actionQueue.erase(actionQueue.begin());
     return nextAction;
 }
+
+
+// apply_pose_control implementation using PoseController class
+void apply_pose_control(SimulatorScene& scene,
+                        ControllerState& state,
+                        const SimulatorConfig& config,
+                        float inDeltaTime) {
+    if (!scene.physics || !scene.human_ragdoll || !scene.ragdoll_settings)
+        return;
+    
+    float dt = inDeltaTime >= 0.f ? inDeltaTime : config.time_step;
+    
+    // Create PoseController on first call
+    if (!g_pose_controller) {
+        g_pose_controller = new PoseController(scene.human_ragdoll.get(), scene.physics.get());
+    }
+    
+    // For now, just update the controller (no action triggered)
+    // To trigger actions, call g_pose_controller->StartAction(ActionType::Jump) etc.
+    g_pose_controller->Update(dt);
+}
+
 
 } // namespace biomechanics
