@@ -73,13 +73,6 @@ Then use `GET http://127.0.0.1:8765/status`, `PATCH http://127.0.0.1:8765/stance
 
 The model supports **standing**, **raise leg**, **punch** (left/right), **front kick**, **walking**, and **ragdoll**. With `assets/Human.tof` and `assets/Human/neutral.tof`, poses are driven by **kinematics** on the file rig; a procedural 12-bone fallback is used when those assets are missing.
 
-<<<<<<< HEAD
-- **Standing** – Pose control holds the ragdoll upright (default when the window opens). Root is pinned.
-- **Raise leg** – Static stance with one leg raised; root pinned, other limbs driven by motors.
-- **Walking** – Cyclic gait: hip/knee/arm targets drive a walking motion.
-- **Ragdoll** – No pose control; full physics.
-- **Jump** – Bends knees (crouch ~0.2 s), launches upward, ragdoll in the air, then **auto-recovers to Standing** on landing.
-=======
 | Mode | Description |
 |------|-------------|
 | **Standing** | Neutral pose sampled from `neutral.tof`; root XZ pinned. Default on launch. |
@@ -89,7 +82,6 @@ The model supports **standing**, **raise leg**, **punch** (left/right), **front 
 | **Walking** | `walk.tof` animation (or procedural gait); kinematic drive, optional forward drift. |
 | **Ragdoll** | Full physics; no pose hold. Right-drag to pull bodies. |
 | **Jump** | Brief crouch, then upward launch; auto-recovers to **Standing** at landing XZ. |
->>>>>>> b8969e3 (Update README to enhance clarity on build commands and stance capabilities)
 
 **Stance panel (top-left):** **Standing**, **Raise leg**, **Punch R**, **Punch L**, **Front kick**, **Walk**, **Ragdoll**, **Jump**, **Reset**, **Test (float 2s)**, **Freeze/Unfreeze**.
 
@@ -140,31 +132,18 @@ Other actions: `POST /jump`, `POST /reset`, `PATCH /position`, `GET /status`, `G
 
 - `CMakeLists.txt` – root build; Jolt, GLFW, ImGui (FetchContent); `biomechanics_simulator`, optional tests.
 - `vcpkg.json` – vcpkg manifest (optional).
-<<<<<<< HEAD
+- `assets/` – `Human.tof`, `Human/neutral.tof`, `Human/walk.tof` (copy from Jolt Physics assets if needed).
 - `include/biomechanics/` – public API: `Config.hpp`, `HttpControl.hpp`, `JoltLayers.hpp`, `Log.hpp`, `PoseController.hpp`, `ShapeWireframeSupport.hpp`, `Simulator.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, `OpenGLDebugDrawer.hpp`, etc.
 - `src/main.cpp` – entry point; parses `--headless`, `--http-port`, calls `run_demo_visual()` (default) or `run_demo()`.
-- `src/PoseController.cpp` – stance logic: standing, standing raise-leg, walking, ragdoll; jump impulse.
-- `src/Visualizer.cpp` – GLFW window, orbit camera, ImGui stance panel, key bindings (1–4, Space), step-and-draw loop.
+- `src/PoseController.cpp` – standing, walk, raise leg, punch L/R, front kick, jump crouch/launch/landing recovery.
+- `src/Visualizer.cpp` – GLFW window, orbit camera, ImGui stance panel, key bindings (1–7, Space), step-and-draw loop.
 - `src/HttpControl.cpp` – HTTP server: `/status`, `/log`, `/stance`, `/stance/standing`, `/stance/standing_raise_leg`, `/stance/walking`, `/stance/ragdoll`, `/jump`, `/reset`, `/position`, `/openapi.yaml`.
-- `src/SimulatorScene.cpp` – scene setup (ground, ragdoll from Human.tof or procedural).
-- `src/HumanRagdoll.cpp` – Human.tof loading, procedural human rig.
+- `src/SimulatorScene.cpp` – scene setup (ground, ragdoll from Human.tof or procedural, animations).
+- `src/HumanRagdoll.cpp` – Human.tof loading and procedural human rig fallback.
 - `src/OpenGLDebugDrawer.cpp` – wireframe rendering of Jolt bodies.
 - `docs/openapi.yaml` – OpenAPI 3.0 spec for the HTTP API.
-- `docs/PROJECT_STRUCTURE.md`, `docs/MILESTONES.md` – layout and milestones.
-- `tests/` – optional tests; enabled by default (`BUILD_TESTS=ON`, disable with `-DBUILD_TESTS=OFF`).
-=======
-- `assets/` – `Human.tof`, `Human/neutral.tof`, `Human/walk.tof` (copy from Jolt Physics assets if needed).
-- `include/biomechanics/` – `Config.hpp`, `PoseController.hpp`, `HttpControl.hpp`, `SimulatorScene.hpp`, `Visualizer.hpp`, etc.
-- `src/main.cpp` – entry point; `--headless`, `--http-port`.
-- `src/PoseController.cpp` – standing, walk, raise leg, punch L/R, front kick, jump crouch/launch/landing recovery.
-- `src/Visualizer.cpp` – GLFW, ImGui stance panel, camera, keys 1–7 and Space.
-- `src/HttpControl.cpp` – HTTP server and stance/action endpoints.
-- `src/SimulatorScene.cpp` – scene setup (ground, ragdoll, animations).
-- `src/HumanRagdoll.cpp` – Human.tof loading and procedural rig fallback.
-- `docs/openapi.yaml` – OpenAPI 3.0 spec for the HTTP API.
-- `docs/PROJECT_STRUCTURE.md`, `docs/DEBUG_WALKING.md` – layout and tuning notes.
-- `tests/` – optional tests; build with `-DBUILD_TESTS=ON`.
->>>>>>> b8969e3 (Update README to enhance clarity on build commands and stance capabilities)
+- `docs/PROJECT_STRUCTURE.md`, `docs/MILESTONES.md`, `docs/DEBUG_WALKING.md` – layout, milestones, and tuning notes.
+- `tests/` – smoke, E2E, and headless verification tests; enabled by default (`BUILD_TESTS=ON`, disable with `-DBUILD_TESTS=OFF`).
 
 ## License
 
