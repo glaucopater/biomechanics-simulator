@@ -1,43 +1,29 @@
 #pragma once
 
-namespace biomechanics::config
+#include <string>
+#include <filesystem>
+
+namespace biomechanics
 {
-// Physics simulation settings
-struct PhysicsSettings
+
+struct SimulatorConfig
 {
-    // Time step
-    float timeStep = 1.0f / 60.0f;
+    // Physics
+    float dt = 1.0f / 240.0f;
+    int substeps = 4;
 
-    // Substeps for more stable integration (increase for ragdoll stability)
-    int numSubSteps = 4;
+    // Ragdoll
+    float ragdoll_mass = 70.0f;
+    float height = 1.75f;
 
-    // Solver iterations (higher = more stable joints, more CPU)
-    int velocityIterations = 12;
-    int positionIterations = 8;
+    // Control
+    float control_frequency = 60.0f; // Hz
 
-    // Sleep thresholds (tune if bodies jitter or fall asleep too early)
-    float linearSleepThreshold = 0.05f;
-    float angularSleepThreshold = 0.05f;
+    // Simulation
+    float simulation_duration = 10.0f; // seconds
+
+    // Paths
+    std::filesystem::path output_dir = "output";
 };
 
-// Window / rendering settings
-struct WindowSettings
-{
-    int width = 1280;
-    int height = 720;
-    const char* title = "Biomechanics Simulator";
-};
-
-inline PhysicsSettings getPhysicsSettings()
-{
-    PhysicsSettings settings;
-    return settings;
-}
-
-inline WindowSettings getWindowSettings()
-{
-    WindowSettings settings;
-    return settings;
-}
-
-} // namespace biomechanics::config
+} // namespace biomechanics
