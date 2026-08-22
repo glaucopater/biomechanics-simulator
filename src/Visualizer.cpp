@@ -631,7 +631,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
             bi.AddForce(drag_body, force);
           }
         }
-        scene.physics->Update(sub_dt, 1, scene.temp_allocator, scene.job_system);
+        scene.physics->Update(sub_dt, 1, scene.temp_allocator.get(), scene.job_system.get());
 #ifdef BIOMECH_AGENT_DEBUG
         if (ctrl_state.mode == MotionMode::Walking && scene.ragdoll && s == 0 && frame_count % 15 == 0) {
           JPH::BodyID rid = scene.ragdoll->GetBodyID(0);
@@ -693,7 +693,7 @@ void run_demo_visual(const SimulatorConfig& config, int http_port) {
     frame_count++;
 
     glBegin(GL_LINES);
-    debug_drawer.draw_bodies(scene.physics, scene.ragdoll, scene.ground_id);
+    debug_drawer.draw_bodies(scene.physics.get(), scene.ragdoll, scene.ground_id);
     glEnd();
 
     glDisable(GL_DEPTH_TEST);

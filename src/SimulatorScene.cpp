@@ -35,9 +35,9 @@ void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out) 
   unsigned num_threads = std::thread::hardware_concurrency();
   if (num_threads > 0)
     num_threads -= 1;  // leave one for main thread
-  out.job_system = new JPH::JobSystemThreadPool(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, num_threads);
-  out.temp_allocator = new JPH::TempAllocatorImpl(10 * 1024 * 1024);
-  out.physics = new JPH::PhysicsSystem();
+  out.job_system = std::make_unique<JPH::JobSystemThreadPool>(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, num_threads);
+  out.temp_allocator = std::make_unique<JPH::TempAllocatorImpl>(10 * 1024 * 1024);
+  out.physics = std::make_unique<JPH::PhysicsSystem>();
   out.physics->Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints,
                    out.bp_layer_interface, out.object_vs_bp_filter, out.object_layer_pair_filter);
   out.physics->SetGravity(JPH::Vec3(0.f, config.gravity_y, 0.f));
@@ -56,11 +56,11 @@ void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out) 
   }
 
   // Prefer JoltPhysics Human.tof model when available (copy from JoltPhysics/Assets/Human.tof to assets/)
-  out.ragdoll_settings = load_human_ragdoll_from_file();
+  out.ragdoll_settings.reset(load_human_ragdoll_from_file());
   bool from_file = (out.ragdoll_settings != nullptr);
   if (!out.ragdoll_settings)
-    out.ragdoll_settings = create_human_ragdoll_settings();
-  out.ragdoll = out.ragdoll_settings->CreateRagdoll(0, 0, out.physics);
+    out.ragdoll_settings.reset(create_human_ragdoll_settings());
+  out.ragdoll = out.ragdoll_settings->CreateRagdoll(0, 0, out.physics.get());
   if (from_file)
     load_human_animations(out.standing_anim, out.walking_anim);
   if (out.ragdoll) {
@@ -95,7 +95,7 @@ void destroy_simulator_scene(SimulatorScene& scene) {
     scene.ragdoll = nullptr;
   }
   if (scene.ragdoll_settings) {
-    delete scene.ragdoll_settings;
+    scene.ragdoll_settings.reset();
     scene.ragdoll_settings = nullptr;
   }
   scene.standing_anim = nullptr;
@@ -106,11 +106,11 @@ void destroy_simulator_scene(SimulatorScene& scene) {
     bi.RemoveBody(scene.ground_id);
     bi.DestroyBody(scene.ground_id);
   }
-  delete scene.physics;
+  scene.physics.reset();
   scene.physics = nullptr;
-  delete scene.temp_allocator;
+  scene.temp_allocator.reset();
   scene.temp_allocator = nullptr;
-  delete scene.job_system;
+  scene.job_system.reset();
   scene.job_system = nullptr;
   scene.ground_id = JPH::BodyID();
 }
