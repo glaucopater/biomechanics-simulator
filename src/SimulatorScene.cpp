@@ -1,118 +1,113 @@
 #include "biomechanics/SimulatorScene.hpp"
+#include "biomechanics/Config.hpp"
 #include "biomechanics/HumanRagdoll.hpp"
+#include "biomechanics/PoseController.hpp"
 #include "biomechanics/Log.hpp"
-#include <RegisterTypes.h>
-#include <Core/Memory.h>
-#include <Core/Factory.h>
-#include <Physics/Collision/Shape/BoxShape.h>
-#include <Physics/Body/BodyCreationSettings.h>
-#include <Physics/Body/Body.h>
-#include <Skeleton/SkeletonPose.h>
-#include <thread>
-#include <fstream>
+#include <Jolt/Physics/PhysicsSystem.h>
 
-namespace biomechanics {
+namespace biomechanics
+{
 
-void ensure_jolt_registered() {
-  static bool done = false;
-  if (done)
-    return;
-  JPH::RegisterDefaultAllocator();
-  if (!JPH::Factory::sInstance)
-    JPH::Factory::sInstance = new JPH::Factory();
-  JPH::RegisterTypes();
-  done = true;
+SimulatorScene::SimulatorScene()
+    : physicsSystem(nullptr)
+    , ragdoll(nullptr)
+    , poseController(nullptr)
+{
 }
 
-void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out) {
-  ensure_jolt_registered();
+SimulatorScene::~SimulatorScene()
+{
+    delete poseController;
+    delete ragdoll;
+    delete physicsSystem;
+}
 
-  constexpr JPH::uint cMaxBodies = 64;
-  constexpr JPH::uint cNumBodyMutexes = 0;
-  constexpr JPH::uint cMaxBodyPairs = 1024;
-  constexpr JPH::uint cMaxContactConstraints = 512;
+void SimulatorScene::Initialize()
+{
+    LOG_INFO("SimulatorScene::Initialize()");
 
-  unsigned num_threads = std::thread::hardware_concurrency();
-  if (num_threads > 0)
-    num_threads -= 1;  // leave one for main thread
-  out.job_system = std::make_unique<JPH::JobSystemThreadPool>(JPH::cMaxPhysicsJobs, JPH::cMaxPhysicsBarriers, num_threads);
-  out.temp_allocator = std::make_unique<JPH::TempAllocatorImpl>(10 * 1024 * 1024);
-  out.physics = std::make_unique<JPH::PhysicsSystem>();
-  out.physics->Init(cMaxBodies, cNumBodyMutexes, cMaxBodyPairs, cMaxContactConstraints,
-                   out.bp_layer_interface, out.object_vs_bp_filter, out.object_layer_pair_filter);
-  out.physics->SetGravity(JPH::Vec3(0.f, config.gravity_y, 0.f));
+    // Initialize physics system
+    physicsSystem = new JPH::PhysicsSystem();
+    physicsSystem->Init(
+        cMaxBodies,
+        cNumBodyMutexes,
+        cMaxBodyPairs,
+        cMaxConstraints
+    );
 
-  JPH::BodyInterface& bi = out.physics->GetBodyInterface();
+    // Create ragdoll
+    ragdoll = new HumanRagdoll(physicsSystem);
+    ragdoll->Create();
 
-  JPH::BoxShapeSettings box_settings(JPH::Vec3(50.f, 0.5f, 50.f));
-  JPH::ShapeSettings::ShapeResult box_result = box_settings.Create();
-  JPH::ShapeRefC ground_shape = box_result.Get();
-  JPH::BodyCreationSettings ground_bcs(ground_shape, JPH::RVec3(0.f, -0.5f, 0.f), JPH::Quat::sIdentity(), JPH::EMotionType::Static, Layers::NON_MOVING);
-  JPH::Body* ground_body = bi.CreateBody(ground_bcs);
-  if (ground_body) {
-    out.ground_id = ground_body->GetID();
-    if (!out.ground_id.IsInvalid())
-      bi.AddBody(out.ground_id, JPH::EActivation::DontActivate);
-  }
+    // Create pose controller
+    poseController = new PoseController(ragdoll, physicsSystem);
 
-  // Prefer JoltPhysics Human.tof model when available (copy from JoltPhysics/Assets/Human.tof to assets/)
-  out.ragdoll_settings.reset(load_human_ragdoll_from_file());
-  bool from_file = (out.ragdoll_settings != nullptr);
-  if (!out.ragdoll_settings)
-    out.ragdoll_settings.reset(create_human_ragdoll_settings());
-  out.ragdoll = out.ragdoll_settings->CreateRagdoll(0, 0, out.physics.get());
-  if (from_file)
-    load_human_animations(out.standing_anim, out.walking_anim);
-  if (out.ragdoll) {
-    out.ragdoll->AddToPhysicsSystem(JPH::EActivation::Activate);
-    JPH::SkeletonPose pose;
-    const JPH::Skeleton* skel = out.ragdoll_settings->GetSkeleton();
-    pose.SetSkeleton(skel);
-    out.ragdoll->GetPose(pose);
-    pose.SetRootOffset(pose.GetRootOffset() + JPH::RVec3(0.f, config.ragdoll_height, 0.f));
-    out.ragdoll->SetPose(pose);
-    out.ragdoll->ResetWarmStart();
-    // Store initial standing pose so reset (Ragdoll->Standing) restores same limb positions in space
-    out.initial_standing_root_offset = pose.GetRootOffset();
-    const JPH::uint num_joints = skel ? skel->GetJointCount() : 0;
-    out.initial_standing_joint_rotations.resize(num_joints);
-    out.initial_standing_joint_translations.resize(num_joints);
-    for (JPH::uint i = 0; i < num_joints; ++i) {
-      const JPH::SkeletonPose::JointState& j = pose.GetJoint(i);
-      out.initial_standing_joint_rotations[i] = j.mRotation;
-      out.initial_standing_joint_translations[i] = j.mTranslation;
+    LOG_INFO("SimulatorScene initialized successfully");
+}
+
+void SimulatorScene::Update(float deltaTime)
+{
+    // Get physics settings from config for stability
+    auto settings = config::getPhysicsSettings();
+
+    // Substepped physics update for better ragdoll stability
+    float subStepDt = deltaTime / static_cast<float>(settings.numSubSteps);
+
+    for (int i = 0; i < settings.numSubSteps; ++i)
+    {
+        physicsSystem->Update(
+            subStepDt,
+            settings.velocityIterations,
+            settings.positionIterations,
+            tempAllocator,
+            jobSystem
+        );
     }
-  }
+
+    // Update pose controller (actions)
+    if (poseController)
+    {
+        poseController->Update(deltaTime);
+    }
 }
 
-void destroy_simulator_scene(SimulatorScene& scene) {
-  if (!scene.physics)
-    return;
-  JPH::BodyInterface& bi = scene.physics->GetBodyInterface();
-  if (scene.ragdoll) {
-    scene.ragdoll->RemoveFromPhysicsSystem();
-    delete scene.ragdoll;
-    scene.ragdoll = nullptr;
-  }
-  if (scene.ragdoll_settings) {
-    scene.ragdoll_settings.reset();
-    scene.ragdoll_settings = nullptr;
-  }
-  scene.standing_anim = nullptr;
-  scene.walking_anim = nullptr;
-  scene.initial_standing_joint_rotations.clear();
-  scene.initial_standing_joint_translations.clear();
-  if (!scene.ground_id.IsInvalid()) {
-    bi.RemoveBody(scene.ground_id);
-    bi.DestroyBody(scene.ground_id);
-  }
-  scene.physics.reset();
-  scene.physics = nullptr;
-  scene.temp_allocator.reset();
-  scene.temp_allocator = nullptr;
-  scene.job_system.reset();
-  scene.job_system = nullptr;
-  scene.ground_id = JPH::BodyID();
+void SimulatorScene::Reset()
+{
+    LOG_INFO("SimulatorScene::Reset()");
+
+    if (ragdoll)
+    {
+        ragdoll->Reset();
+    }
+
+    if (poseController)
+    {
+        delete poseController;
+        poseController = new PoseController(ragdoll, physicsSystem);
+    }
 }
 
-}  // namespace biomechanics
+void SimulatorScene::StartAction(PoseController::ActionType action)
+{
+    if (poseController)
+    {
+        poseController->StartAction(action);
+    }
+}
+
+HumanRagdoll* SimulatorScene::GetRagdoll() const
+{
+    return ragdoll;
+}
+
+PoseController* SimulatorScene::GetPoseController() const
+{
+    return poseController;
+}
+
+JPH::PhysicsSystem* SimulatorScene::GetPhysicsSystem() const
+{
+    return physicsSystem;
+}
+
+} // namespace biomechanics
