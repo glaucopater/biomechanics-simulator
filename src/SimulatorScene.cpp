@@ -1,5 +1,4 @@
 #include "biomechanics/SimulatorScene.hpp"
-#include "biomechanics/Config.hpp"
 #include "biomechanics/HumanRagdoll.hpp"
 #include "biomechanics/PoseController.hpp"
 #include "biomechanics/Log.hpp"
@@ -47,22 +46,14 @@ void SimulatorScene::Initialize()
 
 void SimulatorScene::Update(float deltaTime)
 {
-    // Get physics settings from config for stability
-    auto settings = config::getPhysicsSettings();
-
-    // Substepped physics update for better ragdoll stability
-    float subStepDt = deltaTime / static_cast<float>(settings.numSubSteps);
-
-    for (int i = 0; i < settings.numSubSteps; ++i)
-    {
-        physicsSystem->Update(
-            subStepDt,
-            settings.velocityIterations,
-            settings.positionIterations,
-            tempAllocator,
-            jobSystem
-        );
-    }
+    // Physics update
+    physicsSystem->Update(
+        deltaTime,
+        velocityIterations,
+        positionIterations,
+        tempAllocator,
+        jobSystem
+    );
 
     // Update pose controller (actions)
     if (poseController)
