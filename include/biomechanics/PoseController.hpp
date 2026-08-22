@@ -2,6 +2,7 @@
 
 #include <Jolt/Jolt.h>
 #include <Jolt/Physics/PhysicsSystem.h>
+#include <vector>
 
 namespace biomechanics
 {
@@ -16,7 +17,9 @@ public:
         None,
         Jump,
         RaiseArms,
-        LowerArms
+        LowerArms,
+        KickRightLeg,
+        KickLeftLeg
     };
 
     enum class State
@@ -53,9 +56,18 @@ private:
 
     float timer = 0.0f;
 
+    // Action queue for sequential execution
+    std::vector<ActionType> actionQueue;
+
     void UpdateJump(float deltaTime);
     void UpdateRaiseArms(float deltaTime);
     void UpdateLowerArms(float deltaTime);
+    void UpdateKickRightLeg(float deltaTime);
+    void UpdateKickLeftLeg(float deltaTime);
+
+    void EnqueueAction(ActionType action);
+    ActionType DequeueAction();
+    bool HasQueuedActions() const { return !actionQueue.empty(); }
 };
 
 } // namespace biomechanics
