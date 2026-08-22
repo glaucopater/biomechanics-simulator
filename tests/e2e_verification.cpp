@@ -74,7 +74,7 @@ int main() {
 
   for (int i = 0; i < config.num_steps; ++i) {
     biomech::apply_pose_control(scene, ctrl_state, config, dt);
-    scene.physics->Update(dt, 1, scene.temp_allocator, scene.job_system);
+    scene.physics->Update(dt, 1, scene.temp_allocator.get(), scene.job_system.get());
     biomech::clamp_ragdoll_velocities(scene.ragdoll, bi);
   }
 
@@ -99,7 +99,7 @@ int main() {
   }
 
   std::fprintf(stderr, "E2E: checking drawable bodies...\n");
-  int drawable = biomech::count_drawable_bodies(scene.physics, scene.ragdoll, scene.ground_id);
+  int drawable = biomech::count_drawable_bodies(scene.physics.get(), scene.ragdoll, scene.ground_id);
   int expected_drawable = 1 + static_cast<int>(ragdoll_bodies);  // ground + all ragdoll
   std::fprintf(stderr, "E2E: drawable=%d expected=%d (allow %d-%d)\n", drawable, expected_drawable, expected_drawable - 2, expected_drawable);
   // Allow up to 2 bodies with unsupported shape types (e.g. ConvexHull in some rigs)
@@ -130,7 +130,7 @@ int main() {
   ctrl_state.walk_time = 0.f;
   for (int i = 0; i < 90; ++i) {
     biomech::apply_pose_control(scene, ctrl_state, config, dt);
-    scene.physics->Update(dt, 1, scene.temp_allocator, scene.job_system);
+    scene.physics->Update(dt, 1, scene.temp_allocator.get(), scene.job_system.get());
     biomech::clamp_ragdoll_velocities(scene.ragdoll, bi_walk);
   }
   root_pos = bi_walk.GetPosition(scene.ragdoll->GetBodyID(0));

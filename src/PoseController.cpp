@@ -636,7 +636,7 @@ void apply_jump_sequence(SimulatorScene& scene, ControllerState& state,
   }
 
   SkeletonPose pose;
-  build_jump_pose(scene.ragdoll, scene.ragdoll_settings, scene.standing_anim.GetPtr(),
+  build_jump_pose(scene.ragdoll, scene.ragdoll_settings.get(), scene.standing_anim.GetPtr(),
                   p, config, pose);
   scene.ragdoll->DriveToPoseUsingKinematics(pose, dt);
 }
@@ -692,7 +692,7 @@ void reset_ragdoll_to_initial_standing(SimulatorScene& scene,
   if (!skel || skel->GetJointCount() == 0) return;
   const size_t num_joints = scene.initial_standing_joint_rotations.size();
   if (num_joints != skel->GetJointCount() || num_joints != scene.initial_standing_joint_translations.size()) {
-    reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings, scene.initial_standing_root_offset, body_interface);
+    reset_ragdoll_to_standing(scene.ragdoll, scene.ragdoll_settings.get(), scene.initial_standing_root_offset, body_interface);
     return;
   }
   JPH::SkeletonPose pose;
@@ -761,7 +761,7 @@ void apply_pose_control(SimulatorScene& scene,
     case MotionMode::Standing:
       state.walk_time = 0.f;
       state.walk_root_origin_valid = false;
-      apply_standing_pose(scene.ragdoll, scene.ragdoll_settings,
+      apply_standing_pose(scene.ragdoll, scene.ragdoll_settings.get(),
                           scene.standing_anim.GetPtr(), dt, config);
       break;
     case MotionMode::StandingRaiseLeg:
@@ -770,7 +770,7 @@ void apply_pose_control(SimulatorScene& scene,
     case MotionMode::FrontKick:
     case MotionMode::Squat:
       state.walk_root_origin_valid = false;
-      apply_action_pose(scene.ragdoll, scene.ragdoll_settings, scene.standing_anim.GetPtr(),
+      apply_action_pose(scene.ragdoll, scene.ragdoll_settings.get(), scene.standing_anim.GetPtr(),
                         dt, config, state, state.mode);
       break;
     case MotionMode::Walking:
@@ -778,7 +778,7 @@ void apply_pose_control(SimulatorScene& scene,
         if (!id.IsInvalid())
           bi.SetMotionType(id, EMotionType::Kinematic, EActivation::DontActivate);
       }
-      apply_walking_pose(scene.ragdoll, scene.ragdoll_settings, state, config, dt,
+      apply_walking_pose(scene.ragdoll, scene.ragdoll_settings.get(), state, config, dt,
                         scene.walking_anim.GetPtr());
       break;
     case MotionMode::Ragdoll:

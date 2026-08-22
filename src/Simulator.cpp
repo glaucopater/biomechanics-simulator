@@ -32,7 +32,7 @@ void run_demo(const SimulatorConfig& config) {
   const float dt = static_cast<float>(config.time_step);
   for (int i = 0; i < config.num_steps; ++i) {
     apply_pose_control(scene, ctrl_state, config, dt);
-    scene.physics->Update(dt, 1, scene.temp_allocator, scene.job_system);
+    scene.physics->Update(dt, 1, scene.temp_allocator.get(), scene.job_system.get());
     clamp_ragdoll_velocities(scene.ragdoll, bi);
   }
 
