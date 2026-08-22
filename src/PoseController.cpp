@@ -23,10 +23,23 @@ void PoseController::StartAction(ActionType action)
         state = State::Prepare;
         timer = 0.0f;
     }
+    else
+    {
+        // Queue the action for sequential execution
+        EnqueueAction(action);
+    }
 }
 
 void PoseController::Update(float deltaTime)
 {
+    // If no current action but queue has items, start next action
+    if (currentAction == ActionType::None && state == State::Idle && HasQueuedActions())
+    {
+        currentAction = DequeueAction();
+        state = State::Prepare;
+        timer = 0.0f;
+    }
+
     switch (currentAction)
     {
     case ActionType::Jump:
@@ -37,6 +50,12 @@ void PoseController::Update(float deltaTime)
         break;
     case ActionType::LowerArms:
         UpdateLowerArms(deltaTime);
+        break;
+    case ActionType::KickRightLeg:
+        UpdateKickRightLeg(deltaTime);
+        break;
+    case ActionType::KickLeftLeg:
+        UpdateKickLeftLeg(deltaTime);
         break;
     case ActionType::None:
     default:
@@ -195,6 +214,134 @@ void PoseController::UpdateLowerArms(float deltaTime)
     default:
         break;
     }
+}
+
+void PoseController::UpdateKickRightLeg(float deltaTime)
+{
+    timer += deltaTime;
+
+    switch (state)
+    {
+    case State::Prepare:
+    {
+        // Shift weight to left leg, slight bend in right knee
+        ragdoll->SetJointTargetAngle("hip_left", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_left", 0.0f);
+        ragdoll->SetJointTargetAngle("hip_right", -0.2f);
+        ragdoll->SetJointTargetAngle("knee_right", -0.3f);
+
+        if (timer >= prepareDuration)
+        {
+            state = State::Execute;
+            timer = 0.0f;
+        }
+        break;
+    }
+    case State::Execute:
+    {
+        // Kick: extend right hip and knee forward
+        ragdoll->SetJointTargetAngle("hip_right", 0.8f);
+        ragdoll->SetJointTargetAngle("knee_right", -0.1f);
+
+        if (timer >= executeDuration)
+        {
+            state = State::Recover;
+            timer = 0.0f;
+        }
+        break;
+    }
+    case State::Recover:
+    {
+        // Return to neutral stance
+        ragdoll->SetJointTargetAngle("hip_right", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_right", 0.0f);
+        ragdoll->SetJointTargetAngle("hip_left", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_left", 0.0f);
+
+        if (timer >= recoverDuration)
+        {
+            currentAction = ActionType::None;
+            state = State::Idle;
+            timer = 0.0f;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void PoseController::UpdateKickLeftLeg(float deltaTime)
+{
+    timer += deltaTime;
+
+    switch (state)
+    {
+    case State::Prepare:
+    {
+        // Shift weight to right leg, slight bend in left knee
+        ragdoll->SetJointTargetAngle("hip_right", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_right", 0.0f);
+        ragdoll->SetJointTargetAngle("hip_left", -0.2f);
+        ragdoll->SetJointTargetAngle("knee_left", -0.3f);
+
+        if (timer >= prepareDuration)
+        {
+            state = State::Execute;
+            timer = 0.0f;
+        }
+        break;
+    }
+    case State::Execute:
+    {
+        // Kick: extend left hip and knee forward
+        ragdoll->SetJointTargetAngle("hip_left", 0.8f);
+        ragdoll->SetJointTargetAngle("knee_left", -0.1f);
+
+        if (timer >= executeDuration)
+        {
+            state = State::Recover;
+            timer = 0.0f;
+        }
+        break;
+    }
+    case State::Recover:
+    {
+        // Return to neutral stance
+        ragdoll->SetJointTargetAngle("hip_left", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_left", 0.0f);
+        ragdoll->SetJointTargetAngle("hip_right", 0.0f);
+        ragdoll->SetJointTargetAngle("knee_right", 0.0f);
+
+        if (timer >= recoverDuration)
+        {
+            currentAction = ActionType::None;
+            state = State::Idle;
+            timer = 0.0f;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void PoseController::EnqueueAction(ActionType action)
+{
+    if (action != ActionType::None)
+    {
+        actionQueue.push_back(action);
+    }
+}
+
+PoseController::ActionType PoseController::DequeueAction()
+{
+    if (actionQueue.empty())
+        return ActionType::None;
+
+    ActionType nextAction = actionQueue.front();
+    actionQueue.erase(actionQueue.begin());
+    return nextAction;
 }
 
 } // namespace biomechanics
