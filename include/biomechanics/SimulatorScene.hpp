@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "biomechanics/Config.hpp"
 #include "biomechanics/JoltLayers.hpp"
 #include <Jolt.h>
@@ -16,7 +17,10 @@
 #include <vector>
 #include <memory>
 
+
 namespace biomechanics {
+
+class HumanRagdoll;
 
 /** Owned resources for a simulator scene (physics system, ground, Jolt human ragdoll). Call destroy_simulator_scene when done. */
 struct SimulatorScene {
@@ -29,6 +33,7 @@ struct SimulatorScene {
   JPH::BodyID                       ground_id;
   std::unique_ptr<JPH::RagdollSettings>         ragdoll_settings = nullptr;  // owned; created by create_human_ragdoll_settings
   JPH::Ragdoll*                     ragdoll = nullptr;           // owned; created from ragdoll_settings
+  std::unique_ptr<HumanRagdoll>     human_ragdoll = nullptr;     // wrapper for ragdoll with SetJointTargetAngle
   JPH::Ref<JPH::SkeletalAnimation>  standing_anim;                // optional; when set, standing uses this
   JPH::Ref<JPH::SkeletalAnimation>  walking_anim;                 // optional; when set, walking uses this
   /** Initial standing pose (limb positions at start); used to reset Ragdoll->Standing to same pose in space. */
@@ -38,13 +43,17 @@ struct SimulatorScene {
   std::vector<JPH::Vec3>            initial_standing_joint_translations;
 };
 
+
 /** Call once per process before using Jolt (allocator + type registration). Safe to call multiple times. */
 void ensure_jolt_registered();
+
 
 /** Create physics world, ground plane, and ragdoll. Caller must call destroy_simulator_scene. */
 void create_simulator_scene(const SimulatorConfig& config, SimulatorScene& out);
 
+
 /** Remove ragdoll, ground, and delete all scene resources. */
 void destroy_simulator_scene(SimulatorScene& scene);
+
 
 }  // namespace biomechanics
